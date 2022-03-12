@@ -1,0 +1,12 @@
+mutation AdminLogin($data: AdminLoginInput!) {
+  adminLogin(data: $data) {
+    message
+    success
+    token {
+      access_token
+      token_type
+    }
+    success
+    code
+  }
+}
