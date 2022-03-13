@@ -1,0 +1,8 @@
+.MenuItem {
+  font-weight: bold;
+}
+
+/* Increase the specificity */
+.MenuItem.Mui-selected {
+  color: blue;
+}
