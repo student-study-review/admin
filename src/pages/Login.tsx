@@ -2,9 +2,7 @@ import {
   Container,
   Box,
   Typography,
-  TextField,
   FormControl,
-  FormHelperText,
   InputAdornment,
   OutlinedInput,
   FormLabel,
@@ -19,7 +17,8 @@ import { useForm } from 'react-hook-form';
 import isEmail from 'validator/lib/isEmail';
 import { useAdminLoginMutation } from '../graphql/graphql';
 import MuiAlert from '@mui/material/Alert';
-import { AUTH_TOKEN } from '../constants';
+import useToken from '../hooks/useToken';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [adminLogin, { loading }] = useAdminLoginMutation();
@@ -38,8 +37,15 @@ const Login = () => {
     register,
     handleSubmit,
     watch,
-    formState: { errors },
+    formState: {  },
   } = useForm<{ email: string; password: string }>();
+
+  const { setToken } = useToken();
+
+  let navigate = useNavigate();
+  let location = useLocation();
+
+  let from = (location.state as any)?.from?.pathname || "/overview";
 
   return (
     <Container
@@ -104,12 +110,13 @@ const Login = () => {
                 loginResponse.data?.adminLogin.token.access_token;
 
               if (access_token) {
-                localStorage.setItem(AUTH_TOKEN, access_token);
+                setToken(access_token);
                 setAlert({
                   message: 'Log in success',
                   status: true,
                   type: 'success',
                 });
+                navigate(from, { replace: true })
               }
             } catch (err: any) {
               setAlert({ message: err.message, status: true, type: 'error' });
