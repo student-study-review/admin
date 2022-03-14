@@ -18,14 +18,18 @@
     "react-router-dom": "^6.2.2",
     "react-scripts": "latest",
     "typescript": "latest",
-    "validator": "^13.7.0"
+    "validator": "^13.7.0",
+    "@types/validator": "^13.7.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "generate": "graphql-codegen --config codegen.yml"
+    "generate": "graphql-codegen --config codegen.yml",
+    "dev:up": "docker-compose -f docker-compose.dev.yml up",
+    "dev:down": "docker-compose -f docker-compose.dev.yml down",
+    "prod": "docker-compose -f docker-compose.prod.yml build"
   },
   "browserslist": {
     "production": [
@@ -44,7 +48,6 @@
     "@graphql-codegen/introspection": "2.1.1",
     "@graphql-codegen/typescript": "2.4.7",
     "@graphql-codegen/typescript-operations": "^2.3.4",
-    "@graphql-codegen/typescript-react-apollo": "3.2.10",
-    "@types/validator": "^13.7.1"
+    "@graphql-codegen/typescript-react-apollo": "3.2.10"
   }
 }

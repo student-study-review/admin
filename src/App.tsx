@@ -61,7 +61,7 @@ export default function App() {
           path="admins"
           element={
             <RequireAuth>
-              <p>Admin</p>
+              <p>Admins</p>
             </RequireAuth>
           }
         />
