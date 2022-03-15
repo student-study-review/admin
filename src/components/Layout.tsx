@@ -18,7 +18,6 @@ import {
 } from '@mui/icons-material';
 import Divider from '@mui/material/Divider';
 import {
-  Link,
   LinkProps,
   Outlet,
   useMatch,
@@ -111,6 +110,7 @@ function Layout() {
         sx={{
           minHeight: '100vh',
           background: (theme) => theme.palette.grey[200],
+          paddingRight: "1rem"
         }}
       >
         <Outlet />
