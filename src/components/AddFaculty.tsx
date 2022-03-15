@@ -15,7 +15,6 @@ import {
 } from '../graphql/graphql';
 import MuiAlert from '@mui/material/Alert';
 import SelectInput, { StyledOption } from './SelectInput';
-import { Watch } from '@mui/icons-material';
 
 const AddFaculty = () => {
   const [createFaculty, { loading }] = useCreateFacultyMutation();

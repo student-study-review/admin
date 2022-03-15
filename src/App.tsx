@@ -6,7 +6,11 @@ import AcceptInvite from './pages/AcceptInvite';
 import useToken from './hooks/useToken';
 import Overview from './pages/Overview';
 import Layout from './components/Layout';
-
+import Requests from "./pages/Requests";
+import AddResource from './pages/AddResource';
+import Resources from './pages/Resources';
+import Admins from './pages/Admin';
+import Settings from './pages/Settings';
 
 function RequireAuth({ children }: { children: any }) {
   let { token } = useToken();
@@ -37,7 +41,7 @@ export default function App() {
           path="requests"
           element={
             <RequireAuth>
-              <p>Requests</p>
+              <Requests />
             </RequireAuth>
           }
         />
@@ -45,7 +49,7 @@ export default function App() {
           path="add"
           element={
             <RequireAuth>
-              <p>Add</p>
+              <AddResource />
             </RequireAuth>
           }
         />
@@ -53,7 +57,7 @@ export default function App() {
           path="resources"
           element={
             <RequireAuth>
-              <p>Resources</p>
+              <Resources />
             </RequireAuth>
           }
         />
@@ -61,7 +65,7 @@ export default function App() {
           path="admins"
           element={
             <RequireAuth>
-              <p>Admins</p>
+              <Admins />
             </RequireAuth>
           }
         />
@@ -69,7 +73,7 @@ export default function App() {
           path="settings"
           element={
             <RequireAuth>
-              <p>Settins</p>
+              <Settings />
             </RequireAuth>
           }
         />
