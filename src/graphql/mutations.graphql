@@ -1,12 +1,69 @@
 mutation AdminLogin($data: AdminLoginInput!) {
   adminLogin(data: $data) {
     message
-    success
     token {
       access_token
       token_type
     }
     success
     code
+  }
+}
+
+mutation CreateSchool($data: CreateSchoolInput!) {
+  createSchool(data: $data) {
+    message
+    success
+    code
+    school {
+       id
+       name
+       emailSuffix
+       websiteURL
+       lat
+       lng
+       updatedAt
+       createdAt
+    }
+  }
+}
+
+mutation CreateFaculty($data: CreateFacultyInput!) {
+  createFaculty(data: $data) {
+    faculty {
+      createdAt
+      id
+      updatedAt
+      name
+    }
+    success
+    code
+    message
+  }
+}
+
+mutation CreateDepartment($data: CreateDepartmentInput!) {
+  createDepartment(data: $data) {
+    department {
+      id
+      name
+      createdAt
+      updatedAt
+    }
+    success
+    message
+    code
+  }
+}
+
+mutation CreateCourse($data: CreateCourseInput!) {
+  createCourse(data: $data) {
+    course {
+      code 
+      id
+      title
+      updatedAt
+      createdAt
+    }
   }
 }
