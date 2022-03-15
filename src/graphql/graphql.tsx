@@ -879,6 +879,13 @@ export type GetSchoolsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetSchoolsQuery = { __typename?: 'Query', getSchools: Array<{ __typename?: 'School', id?: string | null, name?: string | null, fullAddress?: string | null, lat?: number | null, lng?: number | null, websiteURL?: string | null, emailSuffix?: string | null, updatedAt?: any | null, createdAt?: any | null }> };
 
+export type GetSchoolFacultiesQueryVariables = Exact<{
+  schoolId: Scalars['ID'];
+}>;
+
+
+export type GetSchoolFacultiesQuery = { __typename?: 'Query', getSchoolFaculties: { __typename?: 'SchoolFacultiesQueryResponse', faculties?: Array<{ __typename?: 'Faculty', id?: string | null, name?: string | null, updatedAt?: any | null, createdAt?: any | null, departments?: Array<{ __typename?: 'Department', id?: string | null, name?: string | null } | null> | null } | null> | null } };
+
 
 export const AdminLoginDocument = gql`
     mutation AdminLogin($data: AdminLoginInput!) {
@@ -1127,3 +1134,47 @@ export function useGetSchoolsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type GetSchoolsQueryHookResult = ReturnType<typeof useGetSchoolsQuery>;
 export type GetSchoolsLazyQueryHookResult = ReturnType<typeof useGetSchoolsLazyQuery>;
 export type GetSchoolsQueryResult = Apollo.QueryResult<GetSchoolsQuery, GetSchoolsQueryVariables>;
+export const GetSchoolFacultiesDocument = gql`
+    query GetSchoolFaculties($schoolId: ID!) {
+  getSchoolFaculties(schoolId: $schoolId) {
+    faculties {
+      id
+      name
+      updatedAt
+      createdAt
+      departments {
+        id
+        name
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetSchoolFacultiesQuery__
+ *
+ * To run a query within a React component, call `useGetSchoolFacultiesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSchoolFacultiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSchoolFacultiesQuery({
+ *   variables: {
+ *      schoolId: // value for 'schoolId'
+ *   },
+ * });
+ */
+export function useGetSchoolFacultiesQuery(baseOptions: Apollo.QueryHookOptions<GetSchoolFacultiesQuery, GetSchoolFacultiesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetSchoolFacultiesQuery, GetSchoolFacultiesQueryVariables>(GetSchoolFacultiesDocument, options);
+      }
+export function useGetSchoolFacultiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSchoolFacultiesQuery, GetSchoolFacultiesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetSchoolFacultiesQuery, GetSchoolFacultiesQueryVariables>(GetSchoolFacultiesDocument, options);
+        }
+export type GetSchoolFacultiesQueryHookResult = ReturnType<typeof useGetSchoolFacultiesQuery>;
+export type GetSchoolFacultiesLazyQueryHookResult = ReturnType<typeof useGetSchoolFacultiesLazyQuery>;
+export type GetSchoolFacultiesQueryResult = Apollo.QueryResult<GetSchoolFacultiesQuery, GetSchoolFacultiesQueryVariables>;
