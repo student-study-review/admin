@@ -19,7 +19,7 @@ import { Watch } from '@mui/icons-material';
 
 const AddFaculty = () => {
   const [createFaculty, { loading }] = useCreateFacultyMutation();
-  const { data, loading: schoolLoading } = useGetSchoolsQuery();
+  const { data } = useGetSchoolsQuery();
 
   const [alert, setAlert] = useState<{
     message: string;
@@ -34,38 +34,35 @@ const AddFaculty = () => {
   const {
     register,
     handleSubmit,
-    reset,
-    watch,
+    resetField,
+    // watch,
+    control,
     formState: {},
   } = useForm<CreateFacultyInput>();
-
-  const test = {name: "schoolId"}
 
   return (
     <Container maxWidth="md">
       <form
         onSubmit={handleSubmit(async (data) => {
-            console.log(data, "..data...")
-          // try {
-          //   const createSchoolResponse = await createSchool({
-          //     variables: {
-          //       data,
-          //     },
-          //   });
-          //   console.log(
-          //     createSchoolResponse.data?.createFaculty,
-          //     'createSchoolResponse.data?.createSchool'
-          //   );
-          //   setAlert({
-          //     message: createSchoolResponse.data?.createFaculty
-          //       .message as string,
-          //     status: true,
-          //     type: 'success',
-          //   });
-          //   reset();
-          // } catch (err: any) {
-          //   setAlert({ message: err.message, status: true, type: 'error' });
-          // }
+          try {
+            const createSchoolResponse = await createFaculty({
+              variables: {
+                data,
+              },
+            });
+            console.log(
+              createSchoolResponse.data?.createFaculty,
+              'createSchoolResponse.data?.createSchool'
+            );
+            setAlert({
+              message: createSchoolResponse.data?.createFaculty.message as string,
+              status: true,
+              type: 'success',
+            });
+            resetField("name")
+          } catch (err: any) {
+            setAlert({ message: err.message, status: true, type: 'error' });
+          }
         })}
       >
         <FormControl
@@ -90,7 +87,7 @@ const AddFaculty = () => {
         >
           <FormLabel> School Name </FormLabel>
           
-          <SelectInput {...register("schoolId")}  >
+          <SelectInput name="schoolId" control={control} >
             {data?.getSchools.map((school) => (
               <StyledOption value={school.id} key={school.id} > {school.name} </StyledOption>
             ))}
@@ -111,7 +108,7 @@ const AddFaculty = () => {
             sx={{ borderRadius: '.5rem', textTransform: 'none' }}
             // disabled={}
           >
-            {loading ? 'Adding...' : 'Add School'}
+            {loading ? 'Adding...' : 'Add Faculty'}
           </Button>
         </FormControl>
       </form>

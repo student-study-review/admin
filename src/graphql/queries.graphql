@@ -1,0 +1,13 @@
+query GetSchools {
+  getSchools {
+    id
+    name
+    fullAddress
+    lat
+    lng
+    websiteURL
+    emailSuffix
+    updatedAt
+    createdAt
+  }
+}
