@@ -45,7 +45,7 @@ const Login = () => {
   let navigate = useNavigate();
   let location = useLocation();
 
-  let from = (location.state as any)?.from?.pathname || "/overview";
+  let from = (location.state as any)?.from?.pathname || "/dashboard";
 
   return (
     <Container

@@ -56,8 +56,6 @@ const AddCourse = () => {
     });
   }, [watch('schoolId')]);
 
-  console.log(facultiesData, 'facultiesData..');
-
   return (
     <Container maxWidth="md">
       <form
@@ -181,7 +179,7 @@ const AddCourse = () => {
             sx={{ borderRadius: '.5rem', textTransform: 'none' }}
             // disabled={}
           >
-            {loading ? 'Adding...' : 'Add Department'}
+            {loading ? 'Adding...' : 'Add Course'}
           </Button>
         </FormControl>
       </form>
