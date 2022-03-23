@@ -6,10 +6,43 @@ import {
   FormLabel,
   OutlinedInput,
   InputAdornment,
+  IconButton,
 } from '@mui/material';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import SearchIcon from '@mui/icons-material/Search';
+import { styled } from '@mui/material/styles';
+import Badge from '@mui/material/Badge';
+import ArrowDropDownOutlinedIcon from '@mui/icons-material/ArrowDropDownOutlined';
+import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
+
 import React from 'react';
+
+const StyledBadge = styled(Badge)(({ theme }) => ({
+  '& .MuiBadge-badge': {
+    backgroundColor: '#D50000',
+    color: '#D50000',
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    '&::after': {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      borderRadius: '50%',
+      animation: 'ripple 1.2s infinite ease-in-out',
+      border: '1px solid currentColor',
+      content: '""',
+    },
+  },
+  '@keyframes ripple': {
+    '0%': {
+      transform: 'scale(.8)',
+      opacity: 1,
+    },
+    '100%': {
+      transform: 'scale(2.4)',
+      opacity: 0,
+    },
+  },
+}));
 
 const Nav: React.FC<{ title: string }> = ({ title }) => {
   return (
@@ -18,10 +51,10 @@ const Nav: React.FC<{ title: string }> = ({ title }) => {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: "1rem"
+        marginBottom: '1rem',
       }}
     >
-      <form style={{ width: '65%' }}>
+      <form style={{ width: '50%' }}>
         <FormControl sx={{ width: '100%' }} variant="outlined" size="small">
           <OutlinedInput
             fullWidth
@@ -91,6 +124,58 @@ const Nav: React.FC<{ title: string }> = ({ title }) => {
             fill="#333333"
           />
         </svg>
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          width: "25%"
+        }}
+      >
+        <IconButton>
+          <StyledBadge
+            overlap="circular"
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            variant="dot"
+          >
+            <NotificationsNoneOutlinedIcon color="primary" />
+          </StyledBadge>
+        </IconButton>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Avatar
+            sx={{
+              bgcolor: (t) => t.palette.primary.main,
+              width: 36,
+              height: 36,
+            }}
+            sizes="lg"
+            variant="rounded"
+          >
+            B
+          </Avatar>
+          <Typography
+            sx={{
+              color: '#333',
+              fontWeight: '600',
+              fontSize: '15px',
+              marginLeft: '.5rem',
+            }}
+          >
+            Babatunde
+          </Typography>
+          <IconButton>
+            <ArrowDropDownOutlinedIcon color="info" />
+          </IconButton>
+        </Box>
       </Box>
     </Box>
   );

@@ -51,7 +51,7 @@ function Layout() {
     <Grid container spacing={2} sx={{ marginTop: 0, background: '#F0F7FF' }}>
       <Grid
         item
-        lg={3}
+        md={3}
         sx={{
           height: '100vh',
           background: 'white',
@@ -151,7 +151,7 @@ function Layout() {
       </Grid>
       <Grid
         item
-        lg={6}
+        md={9}
         sx={{
           minHeight: '100vh',
           background: '#F0F7FF',
@@ -159,10 +159,6 @@ function Layout() {
         }}
       >
         <Outlet />
-      </Grid>
-
-      <Grid item lg={3} sx={{background: "white"}} >
-        <p>Some other stuffs..</p>
       </Grid>
     </Grid>
   );

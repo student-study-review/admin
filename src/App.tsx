@@ -11,6 +11,7 @@ import AddResource from './pages/AddResource';
 import Resources from './pages/Resources';
 import Admins from './pages/Admin';
 import Settings from './pages/Settings';
+import NewAdmin from './pages/NewAdmin';
 
 function RequireAuth({ children }: { children: any }) {
   let { token } = useToken();
@@ -66,6 +67,14 @@ export default function App() {
           element={
             <RequireAuth>
               <Admins />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="admins/new"
+          element={
+            <RequireAuth>
+              <NewAdmin />
             </RequireAuth>
           }
         />

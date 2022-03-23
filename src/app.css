@@ -8,3 +8,7 @@
   background: #F0F7FF !important;
   border-left: 3px solid #5285F2;
 }
+
+fieldset {
+  border: 0px !important;
+}

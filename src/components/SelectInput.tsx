@@ -40,6 +40,9 @@ const StyledButton = styled('button')(
   margin-top: 0.5em;
   padding: 10px;
   text-align: left;
+  background: white;
+  border: none;
+  width: 100%;
   line-height: 1.5;
   color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
 

@@ -13,6 +13,9 @@ const theme = createTheme({
     info: {
       main: "#8A8A8A"
     },
+    success: {
+      main: "#16BC13"
+    },
     error: {
       main: red.A400,
     },
