@@ -28,6 +28,8 @@ const grey = {
   900: '#1A2027',
 };
 
+// border: 1px solid ${theme.palette.mode === 'dark' ? '#4a4c4e' : 'rgba(0, 0, 0, 0.23)'};
+
 const StyledButton = styled('button')(
   ({ theme }) => `
   font-family: IBM Plex Sans, sans-serif;
@@ -35,13 +37,12 @@ const StyledButton = styled('button')(
   box-sizing: border-box;
   min-height: calc(1.5em + 22px);
   min-width: 320px;
-  border: 1px solid ${theme.palette.mode === 'dark' ? grey[800] : grey[300]};
+  border: 1px solid ${theme.palette.mode === 'dark' ? '#4a4c4e' : 'white'};
   border-radius: 4px;
   margin-top: 0.5em;
   padding: 10px;
   text-align: left;
-  background: white;
-  border: none;
+  background: ${theme.palette.background.paper};
   width: 100%;
   line-height: 1.5;
   color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};

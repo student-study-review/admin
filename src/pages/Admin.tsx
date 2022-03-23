@@ -18,7 +18,6 @@ import Nav from '../components/Nav';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Paper from '@mui/material/Paper';
-import CheckBoxOutlineBlankOutlinedIcon from '@mui/icons-material/CheckBoxOutlineBlankOutlined';
 import PersonRemoveAlt1OutlinedIcon from '@mui/icons-material/PersonRemoveAlt1Outlined';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 import { CheckBox } from '@mui/icons-material';
@@ -74,7 +73,7 @@ function Row(props: {
           {admin.name[0]}{' '}
         </Avatar>
         <Typography
-          sx={{ color: '#323C47', fontWeight: 500, fontSize: '15px' }}
+          sx={{ color: t => t.palette.text.primary  , fontWeight: 500, fontSize: '15px' }}
         >
           {admin.name}
         </Typography>
@@ -92,14 +91,14 @@ function Row(props: {
       </TableCell>
       <TableCell sx={{ borderBottom: '0px' }}>
         <Typography
-          sx={{ color: '#7D7D7D', fontSize: '13px', fontWeight: '400' }}
+          sx={{ color: t => t.palette.text.disabled, fontSize: '13px', fontWeight: '400' }}
         >
           {admin.position}
         </Typography>
       </TableCell>
       <TableCell sx={{ borderBottom: '0px' }}>
         <Typography
-          sx={{ color: '#7D7D7D', fontSize: '13px', fontWeight: '400' }}
+          sx={{ color: t => t.palette.text.disabled, fontSize: '13px', fontWeight: '400' }}
         >
           {admin.activity}
         </Typography>
@@ -172,8 +171,8 @@ function Admins() {
             sx={{
               fontWeight: '600',
               fontSize: '2.3rem',
-              color: '#333333',
               lineHeight: '39px',
+              color: t => t.palette.text.secondary
             }}
           >
             Admins
@@ -183,11 +182,10 @@ function Admins() {
             <span>
               <Button
                 sx={{
-                  background: '#FFF',
-                  boxShadow:
-                    '0px 10.6075px 15.9113px rgba(167, 209, 233, 0.45)',
+                  background: t => t.palette.background.paper,
+                  color: t => t.palette.text.primary,
+                  boxShadow: '-1px -1px 15.9113px rgb(39 43 45 / 45%)',
                   borderRadius: '5.30375px',
-                  color: '#52575C',
                   fontSize: '14px',
                   fontWeight: 400,
                   lineHeight: '21px',
@@ -204,11 +202,11 @@ function Admins() {
 
               <Button
                 sx={{
-                  background: '#FFF',
+                  background: t => t.palette.background.paper,
+                  color: t => t.palette.text.primary,
                   boxShadow:
-                    '0px 10.6075px 15.9113px rgba(167, 209, 233, 0.45)',
+                    '-1px -1px 15.9113px rgb(39 43 45 / 45%)',
                   borderRadius: '5.30375px',
-                  color: '#52575C',
                   fontSize: '14px',
                   fontWeight: 400,
                   lineHeight: '21px',
@@ -227,10 +225,10 @@ function Admins() {
           {!selectedAdmin && (
             <Button
               sx={{
-                background: '#FFF',
-                boxShadow: '0px 10.6075px 15.9113px rgba(167, 209, 233, 0.45)',
+                boxShadow: '-1px -1px 15.9113px rgb(39 43 45 / 45%)',
                 borderRadius: '5.30375px',
-                color: '#52575C',
+                background: t => t.palette.background.paper,
+                color: t => t.palette.text.primary,
                 fontSize: '14px',
                 fontWeight: 400,
                 lineHeight: '21px',
@@ -256,32 +254,28 @@ function Admins() {
                   sx={{
                     display: 'flex',
                     alignItems: 'center',
-                    color: '#7D7D7D',
+                    color: t => t.palette.text.disabled,
                     fontWeight: '500',
                     fontSize: '14px',
+                    paddingLeft: "3rem"
                   }}
                 >
-                  {' '}
-                  <CheckBoxOutlineBlankOutlinedIcon
-                    color="primary"
-                    sx={{ paddingRight: '.5rem' }}
-                  />{' '}
-                  Admins{' '}
+                  Admins
                 </TableCell>
                 <TableCell
-                  sx={{ color: '#7D7D7D', fontWeight: '500', fontSize: '14px' }}
+                  sx={{ color: t => t.palette.text.disabled, fontWeight: '500', fontSize: '14px' }}
                 >
                   {' '}
                   Status{' '}
                 </TableCell>
                 <TableCell
-                  sx={{ color: '#7D7D7D', fontWeight: '500', fontSize: '14px' }}
+                  sx={{ color: t => t.palette.text.disabled, fontWeight: '500', fontSize: '14px' }}
                 >
                   {' '}
                   Position{' '}
                 </TableCell>
                 <TableCell
-                  sx={{ color: '#7D7D7D', fontWeight: '500', fontSize: '14px' }}
+                  sx={{ color: t => t.palette.text.disabled, fontWeight: '500', fontSize: '14px' }}
                 >
                   {' '}
                   Activity{' '}

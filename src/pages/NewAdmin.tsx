@@ -29,7 +29,7 @@ function NewAdmin() {
           sx={{
             fontWeight: '600',
             fontSize: '2.3rem',
-            color: '#333333',
+            color: (t) => t.palette.text.secondary,
             lineHeight: '39px',
           }}
         >
@@ -52,7 +52,7 @@ function NewAdmin() {
             <FormLabel
               sx={{
                 flexBasis: '35%',
-                color: '#52575C',
+                color: (t) => t.palette.text.secondary,
                 fontSize: '1rem',
                 fontWeight: '600',
               }}
@@ -64,7 +64,7 @@ function NewAdmin() {
               fullWidth
               id="email"
               type="email"
-              sx={{ background: 'white' }}
+              sx={{ background: (t) => t.palette.background.paper }}
               {...register('email')}
               required
             />
@@ -85,7 +85,7 @@ function NewAdmin() {
             <FormLabel
               sx={{
                 flexBasis: '35%',
-                color: '#52575C',
+                color: (t) => t.palette.text.secondary,
                 fontSize: '1rem',
                 fontWeight: '600',
               }}
@@ -105,7 +105,13 @@ function NewAdmin() {
             </SelectInput>
           </FormControl>
           <FormControl
-            sx={{ mb: 3, width: '100%', display: "flex", justifyContent: 'flex-end', flexDirection: "row" }}
+            sx={{
+              mb: 3,
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'flex-end',
+              flexDirection: 'row',
+            }}
             variant="outlined"
             size="small"
           >
@@ -115,10 +121,14 @@ function NewAdmin() {
               variant="contained"
               color="primary"
               size="large"
-              sx={{ borderRadius: '.5rem', textTransform: 'none', padding: "1rem" }}
-            //   disabled={!isEmail(watch('email') || '') || !watch('role')}
+              sx={{
+                borderRadius: '.5rem',
+                textTransform: 'none',
+                padding: '1rem',
+              }}
+              //   disabled={!isEmail(watch('email') || '') || !watch('role')}
             >
-                Send Invite
+              Send Invite
             </Button>
           </FormControl>
         </form>

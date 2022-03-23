@@ -31,7 +31,7 @@ function Overview() {
                   fontSize: '24px',
                   lineHeight: '33px',
                   letterSpacing: '-0.03em',
-                  color: '#FFF',
+                  color: t => t.palette.common.white ,
                   marginBottom: '1rem',
                 }}
               >
@@ -42,7 +42,7 @@ function Overview() {
                   fontWeight: 400,
                   fontSize: '15px',
                   lineHeight: '175.68%',
-                  color: '#FFF',
+                  color: t => t.palette.common.white,
                 }}
               >
                 You’ve processed 874 requests this week! Keep up with the good
@@ -91,19 +91,22 @@ function Overview() {
           >
             <Box
               sx={{
-                background: '#FEFEFF',
+                // background: t => t.palette.background.paper,
                 borderRadius: '10.5747px',
                 minWidth: '222px',
                 minHeight: '79px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
+                boxShadow: "-2px 2px 7px 1px rgb(51 51 51 / 74%)"
+                
+                // border: t => `1px solid ${t.palette.background.paper}`
               }}
             >
               <span>
                 <Typography
                   sx={{
-                    color: '#8A8A8A',
+                    color: t => t.palette.text.primary,
                     opacity: '0.4',
                     textTransform: 'uppercase',
                     lineHeight: '18px',
@@ -119,7 +122,7 @@ function Overview() {
                   sx={{
                     fontSize: '14.8046px',
                     lineHeight: '17px',
-                    color: '#8A8A8A',
+                    color: t => t.palette.text.primary,
                     fontWeight: 'bold',
                     paddingLeft: '1rem',
                   }}
@@ -135,16 +138,18 @@ function Overview() {
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
                   d="M105.459 -25.7598C118.027 -21.6277 121.984 -4.1392 122.338 9.1347C122.649 20.7735 111.893 29.0573 107.209 39.74C103.457 48.2955 103.426 57.994 97.6804 65.3619C90.6812 74.3379 82.3828 83.0783 71.3469 85.7294C59.1773 88.6529 45.1037 87.9499 35.1934 80.3731C25.4557 72.9283 26.5825 58.2966 21.0992 47.3132C14.6038 34.3024 -0.751528 24.8153 0.189761 10.2581C1.15566 -4.67963 11.4171 -21.2758 25.7988 -25.3675C40.5854 -29.5744 52.1586 -8.81822 67.5062 -8.89379C81.662 -8.96349 92.0315 -30.1748 105.459 -25.7598Z"
                   fill="#FDBC64"
                 />
               </svg>
             </Box>
+            
             <Box
               sx={{
-                background: '#FEFEFF',
+                // background: t => t.palette.background.default,
+                boxShadow: "-2px 2px 7px 1px rgb(51 51 51 / 74%)",
                 borderRadius: '10.5747px',
                 minWidth: '222px',
                 minHeight: '79px',
@@ -156,7 +161,7 @@ function Overview() {
               <span>
                 <Typography
                   sx={{
-                    color: '#8A8A8A',
+                    color: t => t.palette.text.primary,
                     opacity: '0.4',
                     textTransform: 'uppercase',
                     lineHeight: '18px',
@@ -172,7 +177,7 @@ function Overview() {
                   sx={{
                     fontSize: '14.8046px',
                     lineHeight: '17px',
-                    color: '#8A8A8A',
+                    color: t => t.palette.text.primary,
                     fontWeight: 'bold',
                     paddingLeft: '1rem',
                   }}
@@ -188,8 +193,8 @@ function Overview() {
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
                   d="M0.441879 1.08968C0.371204 -12.1394 15.6993 -21.4428 28.1742 -25.9924C39.1124 -29.9815 50.3819 -22.4115 61.9992 -21.3599C71.3031 -20.5177 80.5098 -23.5669 89.3205 -20.4574C100.054 -16.6692 110.976 -11.5743 116.993 -1.95064C123.628 8.6617 127.429 22.2307 123.39 34.0335C119.421 45.6306 105.188 49.2065 96.5133 57.8925C86.237 68.1819 82.1146 85.7545 68.0114 89.4826C53.5396 93.3081 34.5445 88.8453 26.0994 76.506C17.4166 63.8195 33.4259 46.2564 28.4826 31.7264C23.9232 18.3249 0.517392 15.2244 0.441879 1.08968Z"
                   fill="#F9896B"
                 />
@@ -197,7 +202,8 @@ function Overview() {
             </Box>
             <Box
               sx={{
-                background: '#FEFEFF',
+                // background: t => t.palette.background.default,
+                boxShadow: "-2px 2px 7px 1px rgb(51 51 51 / 74%)",
                 borderRadius: '10.5747px',
                 minWidth: '222px',
                 minHeight: '79px',
@@ -209,7 +215,7 @@ function Overview() {
               <span>
                 <Typography
                   sx={{
-                    color: '#8A8A8A',
+                    color: t => t.palette.text.primary,
                     opacity: '0.4',
                     textTransform: 'uppercase',
                     lineHeight: '18px',
@@ -225,7 +231,7 @@ function Overview() {
                   sx={{
                     fontSize: '14.8046px',
                     lineHeight: '17px',
-                    color: '#8A8A8A',
+                    color: t => t.palette.text.primary,
                     fontWeight: 'bold',
                     paddingLeft: '1rem',
                   }}
@@ -241,13 +247,14 @@ function Overview() {
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
                   d="M47.2309 -22.0423C69.8632 -28.578 87.4184 -2.34012 105.751 12.3997C118.746 22.8485 131.285 33.6707 136.292 49.5658C141.243 65.2834 138.563 81.6806 132.392 96.9756C125.477 114.113 116.045 130.125 100.043 139.408C79.6477 151.24 55.0393 164.109 33.6364 154.265C11.9857 144.307 4.48375 117.378 0.957724 93.8349C-1.99999 74.0862 8.84862 56.8025 16.26 38.2429C24.9681 16.4362 24.6443 -15.5197 47.2309 -22.0423Z"
                   fill="#84E8F4"
                 />
               </svg>
             </Box>
+            
           </Box>
         </Grid>
         {/* <Grid item lg={3} sx={{ background: 'white' }}>

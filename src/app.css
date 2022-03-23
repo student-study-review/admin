@@ -3,11 +3,11 @@
 }
 
 /* Increase the specificity */
-.MenuItem.Mui-selected {
+/* .MenuItem.Mui-selected {
   color: #5285F2;
   background: #F0F7FF !important;
   border-left: 3px solid #5285F2;
-}
+} */
 
 fieldset {
   border: 0px !important;
