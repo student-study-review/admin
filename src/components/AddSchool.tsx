@@ -14,6 +14,8 @@ import {
   useGetSchoolsQuery,
 } from '../graphql/graphql';
 import MuiAlert from '@mui/material/Alert';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+
 const AddSchool = () => {
   const [createSchool, { loading }] = useCreateSchoolMutation();
 
@@ -36,8 +38,9 @@ const AddSchool = () => {
   } = useForm<CreateSchoolInput>();
 
   return (
-    <Container maxWidth="md">
+    <Container sx={{padding: 0}} >
       <form
+        style={{ width: '75%', marginTop: '3rem' }}
         onSubmit={handleSubmit(async (data) => {
           try {
             const createSchoolResponse = await createSchool({
@@ -65,67 +68,149 @@ const AddSchool = () => {
         })}
       >
         <FormControl
-          sx={{ my: 1, width: '100%' }}
+          sx={{
+            my: 1,
+            mb: 3,
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
           variant="outlined"
           size="small"
         >
-          <FormLabel> School Name </FormLabel>
+          <FormLabel
+            sx={{
+              flexBasis: '35%',
+              color: (t) => t.palette.text.secondary,
+              fontSize: '1rem',
+              fontWeight: '500',
+            }}
+          >
+            {' '}
+            School Name{' '}
+          </FormLabel>
           <OutlinedInput
             fullWidth
             id="name"
             type="text"
             placeholder="School Name"
+            sx={{ background: (t) => t.palette.background.paper }}
             {...register('name')}
             required
           />
         </FormControl>
         <FormControl
-          sx={{ my: 1, width: '100%' }}
+          sx={{
+            my: 1,
+            mb: 3,
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
           variant="outlined"
           size="small"
         >
-          <FormLabel> Full Address </FormLabel>
+          <FormLabel
+            sx={{
+              flexBasis: '35%',
+              color: (t) => t.palette.text.secondary,
+              fontSize: '1rem',
+              fontWeight: '500',
+            }}
+          >
+            {' '}
+            Full Address{' '}
+          </FormLabel>
           <OutlinedInput
             fullWidth
             id="fullAddress"
             type="text"
+            sx={{ background: (t) => t.palette.background.paper }}
             placeholder="Full Address"
             {...register('fullAddress')}
             required
           />
         </FormControl>
         <FormControl
-          sx={{ my: 1, width: '100%' }}
+          sx={{
+            my: 1,
+            mb: 3,
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
           variant="outlined"
           size="small"
         >
-          <FormLabel> Website URL </FormLabel>
+          <FormLabel
+            sx={{
+              flexBasis: '35%',
+              color: (t) => t.palette.text.secondary,
+              fontSize: '1rem',
+              fontWeight: '500',
+            }}
+          >
+            {' '}
+            Website URL{' '}
+          </FormLabel>
           <OutlinedInput
             fullWidth
             id="websiteURL"
             type="text"
             placeholder="Website URL"
+            sx={{ background: (t) => t.palette.background.paper }}
             {...register('websiteURL')}
             required
           />
         </FormControl>
         <FormControl
-          sx={{ my: 1, mb: 3, width: '100%' }}
+          sx={{
+            my: 1,
+            mb: 3,
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
           variant="outlined"
           size="small"
         >
-          <FormLabel> Email Suffix </FormLabel>
+          <FormLabel
+            sx={{
+              flexBasis: '35%',
+              color: (t) => t.palette.text.secondary,
+              fontSize: '1rem',
+              fontWeight: '500',
+            }}
+          >
+            {' '}
+            Email Suffix{' '}
+          </FormLabel>
           <OutlinedInput
             fullWidth
             id="emailSuffix"
             type="text"
             placeholder="Email Suffix"
             {...register('emailSuffix')}
+            sx={{ background: (t) => t.palette.background.paper }}
             required
           />
         </FormControl>
         <FormControl
-          sx={{ mb: 3, width: '100%' }}
+          sx={{
+            mb: 3,
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'flex-end',
+            flexDirection: 'row',
+          }}
           variant="outlined"
           size="small"
         >
@@ -135,10 +220,13 @@ const AddSchool = () => {
             variant="contained"
             color="primary"
             size="large"
-            sx={{ borderRadius: '.5rem', textTransform: 'none' }}
-            // disabled={}
+            sx={{
+              borderRadius: '.5rem',
+              textTransform: 'none',
+              padding: '1rem',
+            }}
           >
-            {loading ? 'Adding...' : 'Add School'}
+            <AddCircleOutlineIcon sx={{paddingLeft: ".25rem"}} /> {loading ? ' Adding...' : ' Add School'}
           </Button>
         </FormControl>
       </form>

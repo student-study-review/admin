@@ -16,6 +16,7 @@ import {
 } from '../graphql/graphql';
 import MuiAlert from '@mui/material/Alert';
 import SelectInput, { StyledOption } from './SelectInput';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 const AddCourse = () => {
   const [createCourse, { loading }] = useCreateCourseMutation();
@@ -57,8 +58,9 @@ const AddCourse = () => {
   }, [watch('schoolId')]);
 
   return (
-    <Container maxWidth="md">
+    <Container sx={{padding: 0}}  >
       <form
+        style={{ width: '75%', marginTop: '3rem' }}
         onSubmit={handleSubmit(async (data) => {
           console.log(data, '..data..');
           delete data.facultyId
@@ -83,43 +85,86 @@ const AddCourse = () => {
         })}
       >
         <FormControl
-          sx={{ my: 1, width: '100%' }}
+          sx={{
+            my: 1,
+            mb: 3,
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
           variant="outlined"
           size="small"
         >
-          <FormLabel> Course Code </FormLabel>
+          <FormLabel
+            sx={{
+              flexBasis: '35%',
+              color: (t) => t.palette.text.secondary,
+              fontSize: '1rem',
+              fontWeight: '500',
+            }}
+          > Course Code </FormLabel>
           <OutlinedInput
             fullWidth
             id="code"
             type="text"
             placeholder="Course Code"
             {...register('code')}
+            sx={{ background: (t) => t.palette.background.paper }}
             required
           />
         </FormControl>
 
         <FormControl
-          sx={{ my: 1, width: '100%' }}
+          sx={{
+            my: 1,
+            mb: 3,
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
           variant="outlined"
           size="small"
         >
-          <FormLabel> Course Title </FormLabel>
+          <FormLabel sx={{
+              flexBasis: '35%',
+              color: (t) => t.palette.text.secondary,
+              fontSize: '1rem',
+              fontWeight: '500',
+            }}> Course Title </FormLabel>
           <OutlinedInput
             fullWidth
             id="title"
             type="text"
             placeholder="Course Title"
             {...register('title')}
+            sx={{ background: (t) => t.palette.background.paper }}
             required
           />
         </FormControl>
 
         <FormControl
-          sx={{ my: 1, width: '100%' }}
+          sx={{
+            my: 1,
+            mb: 3,
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
           variant="outlined"
           size="small"
         >
-          <FormLabel> School Name </FormLabel>
+          <FormLabel sx={{
+              flexBasis: '35%',
+              color: (t) => t.palette.text.secondary,
+              fontSize: '1rem',
+              fontWeight: '500',
+            }}> School Name </FormLabel>
           <SelectInput name="schoolId" control={control}>
             {schoolsData?.getSchools.map((school) => (
               <StyledOption value={school.id} key={school.id}>
@@ -131,11 +176,24 @@ const AddCourse = () => {
         </FormControl>
 
         <FormControl
-          sx={{ my: 1, width: '100%' }}
+          sx={{
+            my: 1,
+            mb: 3,
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
           variant="outlined"
           size="small"
         >
-          <FormLabel> Faculty Name </FormLabel>
+          <FormLabel sx={{
+              flexBasis: '35%',
+              color: (t) => t.palette.text.secondary,
+              fontSize: '1rem',
+              fontWeight: '500',
+            }}> Faculty Name </FormLabel>
           <SelectInput name="facultyId" control={control}>
             {facultiesData?.getSchoolFaculties.faculties?.map((faculty) => (
               <StyledOption value={faculty!.id} key={faculty!.id}>
@@ -147,11 +205,24 @@ const AddCourse = () => {
         </FormControl>
 
         <FormControl
-          sx={{ my: 1, mb: 3, width: '100%' }}
+          sx={{
+            my: 1,
+            mb: 3,
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
           variant="outlined"
           size="small"
         >
-          <FormLabel> Department Name </FormLabel>
+          <FormLabel sx={{
+              flexBasis: '35%',
+              color: (t) => t.palette.text.secondary,
+              fontSize: '1rem',
+              fontWeight: '500',
+            }}> Department Name </FormLabel>
           <SelectInput name="departmentId" control={control}>
             {facultiesData?.getSchoolFaculties.faculties
               ?.find(
@@ -166,7 +237,13 @@ const AddCourse = () => {
         </FormControl>
 
         <FormControl
-          sx={{ mb: 3, width: '100%' }}
+          sx={{
+            mb: 3,
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'flex-end',
+            flexDirection: 'row',
+          }}
           variant="outlined"
           size="small"
         >
@@ -176,10 +253,14 @@ const AddCourse = () => {
             variant="contained"
             color="primary"
             size="large"
-            sx={{ borderRadius: '.5rem', textTransform: 'none' }}
+            sx={{
+              borderRadius: '.5rem',
+              textTransform: 'none',
+              padding: '1rem',
+            }}
             // disabled={}
           >
-            {loading ? 'Adding...' : 'Add Course'}
+            <AddCircleOutlineIcon sx={{paddingLeft: ".25rem"}} /> {loading ? 'Adding...' : 'Add Course'}
           </Button>
         </FormControl>
       </form>

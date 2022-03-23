@@ -15,6 +15,7 @@ import {
 } from '../graphql/graphql';
 import MuiAlert from '@mui/material/Alert';
 import SelectInput, { StyledOption } from './SelectInput';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 const AddFaculty = () => {
   const [createFaculty, { loading }] = useCreateFacultyMutation();
@@ -40,8 +41,9 @@ const AddFaculty = () => {
   } = useForm<CreateFacultyInput>();
 
   return (
-    <Container maxWidth="md">
+    <Container sx={{ padding: 0 }}>
       <form
+        style={{ width: '75%', marginTop: '3rem' }}
         onSubmit={handleSubmit(async (data) => {
           try {
             const createSchoolResponse = await createFaculty({
@@ -54,47 +56,94 @@ const AddFaculty = () => {
               'createSchoolResponse.data?.createSchool'
             );
             setAlert({
-              message: createSchoolResponse.data?.createFaculty.message as string,
+              message: createSchoolResponse.data?.createFaculty
+                .message as string,
               status: true,
               type: 'success',
             });
-            resetField("name")
+            resetField('name');
           } catch (err: any) {
             setAlert({ message: err.message, status: true, type: 'error' });
           }
         })}
       >
         <FormControl
-          sx={{ my: 1, width: '100%' }}
+          sx={{
+            my: 1,
+            mb: 3,
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
           variant="outlined"
           size="small"
         >
-          <FormLabel> Faculty Name </FormLabel>
+          <FormLabel
+            sx={{
+              flexBasis: '35%',
+              color: (t) => t.palette.text.secondary,
+              fontSize: '1rem',
+              fontWeight: '500',
+            }}
+          >
+            {' '}
+            Faculty Name{' '}
+          </FormLabel>
           <OutlinedInput
             fullWidth
             id="name"
             type="text"
             placeholder="Faculty Name"
             {...register('name')}
+            sx={{ background: (t) => t.palette.background.paper }}
             required
           />
         </FormControl>
         <FormControl
-          sx={{ my: 1, mb: 3, width: '100%' }}
+          sx={{
+            my: 1,
+            mb: 3,
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
           variant="outlined"
           size="small"
         >
-          <FormLabel> School Name </FormLabel>
-          
-          <SelectInput name="schoolId" control={control} >
+          <FormLabel
+            sx={{
+              flexBasis: '35%',
+              color: (t) => t.palette.text.secondary,
+              fontSize: '1rem',
+              fontWeight: '500',
+            }}
+          >
+            {' '}
+            School Name{' '}
+          </FormLabel>
+
+          <SelectInput name="schoolId" control={control}>
             {data?.getSchools.map((school) => (
-              <StyledOption value={school.id} key={school.id} > {school.name} </StyledOption>
+              <StyledOption value={school.id} key={school.id}>
+                {' '}
+                {school.name}{' '}
+              </StyledOption>
             ))}
           </SelectInput>
         </FormControl>
 
         <FormControl
-          sx={{ mb: 3, width: '100%' }}
+          sx={{
+            mb: 3,
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'flex-end',
+            flexDirection: 'row',
+          }}
           variant="outlined"
           size="small"
         >
@@ -104,10 +153,13 @@ const AddFaculty = () => {
             variant="contained"
             color="primary"
             size="large"
-            sx={{ borderRadius: '.5rem', textTransform: 'none' }}
-            // disabled={}
+            sx={{
+              borderRadius: '.5rem',
+              textTransform: 'none',
+              padding: '1rem',
+            }}
           >
-            {loading ? 'Adding...' : 'Add Faculty'}
+            <AddCircleOutlineIcon sx={{paddingLeft: ".25rem"}} /> {loading ? 'Adding...' : 'Add Faculty'}
           </Button>
         </FormControl>
       </form>
