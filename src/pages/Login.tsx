@@ -135,6 +135,7 @@ const Login = () => {
               type="email"
               placeholder="Email"
               {...register('email')}
+              sx={{ background: (t) => t.palette.background.paper }}
               required
             />
           </FormControl>

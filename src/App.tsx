@@ -30,7 +30,7 @@ function RequireAuth({ children }: { children: any }) {
 export const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
 export default function App() {
-  const [mode, setMode] = React.useState<PaletteMode>('dark');
+  const [mode, setMode] = React.useState<PaletteMode>('light');
 
   const colorMode = React.useMemo(
     () => ({
