@@ -84,3 +84,19 @@ mutation AcceptInvite($data: AcceptInviteInput!) {
     message
   }
 }
+
+mutation MakeSuperAdmin($adminId: ID!) {
+  makeSuperAdmin(adminId: $adminId) {
+    code
+    success
+    message
+  }
+}
+
+mutation RemoveAdmin($adminId: ID!) {
+  removeAdmin(adminId: $adminId) {
+    code
+    success
+    message
+  }
+}

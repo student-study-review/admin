@@ -26,6 +26,8 @@ import {
   AdminRole,
   useGetAdminQuery,
   useGetAdminsQuery,
+  useMakeSuperAdminMutation,
+  useRemoveAdminMutation,
 } from '../graphql/graphql';
 
 function Row(props: {
@@ -33,8 +35,9 @@ function Row(props: {
   onClick: () => void;
   selectedName: string;
   isSuperAdmin: boolean;
+  isMe: boolean;
 }) {
-  const { admin, onClick, selectedName, isSuperAdmin } = props;
+  const { admin, onClick, selectedName, isSuperAdmin, isMe } = props;
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -49,10 +52,10 @@ function Row(props: {
     <TableRow
       sx={{
         '& > *': { borderBottom: 'unset' },
-        cursor: isSuperAdmin ? 'pointer' : 'default',
+        cursor: (isSuperAdmin && !isMe && admin.role !== AdminRole.SuperAdmin ) ? 'pointer' : 'default',
       }}
       onClick={() => {
-        if (isSuperAdmin) {
+        if (isSuperAdmin && !isMe && admin.role !== AdminRole.SuperAdmin) {
           onClick();
         }
       }}
@@ -153,6 +156,11 @@ function Admins() {
   const { data: adminsData, loading: adminsDataLoading } = useGetAdminsQuery();
   const { data: adminData, loading: adminDataLoading } = useGetAdminQuery();
 
+  const [removeAdmin, { loading: removeAdminLoading }] =
+    useRemoveAdminMutation();
+  const [makeSuperAdmin, { loading: makeSuperAdminLoading }] =
+    useMakeSuperAdminMutation();
+
   const [selectedAdmin, setSelectedAdmin] = useState('');
   const navigate = useNavigate();
 
@@ -194,12 +202,25 @@ function Admins() {
                       textTransform: 'none',
                       marginRight: '1rem',
                     }}
+                    onClick={ async (e) => {
+                      try {
+                        const response = await makeSuperAdmin({
+                          variables: {
+                            adminId: selectedAdmin,
+                          },
+                        });
+
+                        setSelectedAdmin('');
+                      } catch (err: any) {
+                        console.log('An error occurred!!!');
+                      }
+                    }}
                   >
                     <AdminPanelSettingsOutlinedIcon
                       sx={{ paddingRight: '5px' }}
                       color="primary"
                     />{' '}
-                    Make super admin
+                    {makeSuperAdminLoading ? 'Adding...' : 'Make super admin'}
                   </Button>
 
                   <Button
@@ -213,12 +234,26 @@ function Admins() {
                       lineHeight: '21px',
                       textTransform: 'none',
                     }}
+                    onClick={ async (e) => {
+                      try {
+                        const response = await removeAdmin({
+                          variables: {
+                            adminId: selectedAdmin,
+                          },
+                        });
+
+                        setSelectedAdmin('');
+                        console.log(response, 'makeSuperAdmin');
+                      } catch (err: any) {
+                        console.log('An error occurred!!!');
+                      }
+                    }}
                   >
                     <PersonRemoveAlt1OutlinedIcon
                       sx={{ paddingRight: '5px' }}
                       color="error"
                     />{' '}
-                    Remove Admin
+                    {removeAdminLoading ? 'Removing...' : 'Remove Admin'}
                   </Button>
                 </span>
               )}
@@ -306,7 +341,10 @@ function Admins() {
                   key={admin.id!}
                   admin={admin}
                   selectedName={selectedAdmin}
-                  isSuperAdmin={adminData?.getAdmin.role === AdminRole.SuperAdmin}
+                  isSuperAdmin={
+                    adminData?.getAdmin.role === AdminRole.SuperAdmin
+                  }
+                  isMe={ admin.id === adminData?.getAdmin.id  }
                   onClick={() => {
                     setSelectedAdmin((prev) => {
                       if (prev === admin.id) return '';

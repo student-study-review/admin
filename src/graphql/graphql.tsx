@@ -435,6 +435,13 @@ export type ForgotPasswordMutationResponse = MutationResponse & {
   success: Scalars['Boolean'];
 };
 
+export type MakeSuperAdminMutationResponse = MutationResponse & {
+  __typename?: 'MakeSuperAdminMutationResponse';
+  code: Scalars['String'];
+  message: Scalars['String'];
+  success: Scalars['Boolean'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   acceptInvite: AcceptInviteMutationResponse;
@@ -465,6 +472,8 @@ export type Mutation = {
   editFaculty: EditFacultyMutationResponse;
   editSchool: EditSchoolMutationResponse;
   forgotPassword: ForgotPasswordMutationResponse;
+  makeSuperAdmin: MakeSuperAdminMutationResponse;
+  removeAdmin: RemoveAdminMutationResponse;
   resetPassword: ResetPasswordMutationResponse;
   sendInvite: SendInviteMutationResponse;
   updateProfile?: Maybe<UserMutationResponse>;
@@ -613,6 +622,16 @@ export type MutationForgotPasswordArgs = {
 };
 
 
+export type MutationMakeSuperAdminArgs = {
+  adminId: Scalars['ID'];
+};
+
+
+export type MutationRemoveAdminArgs = {
+  adminId: Scalars['ID'];
+};
+
+
 export type MutationResetPasswordArgs = {
   data: ResetPasswordInput;
 };
@@ -679,6 +698,13 @@ export type QueryGetSchoolFacultiesArgs = {
 
 export type QueryResponse = {
   code: Scalars['String'];
+  success: Scalars['Boolean'];
+};
+
+export type RemoveAdminMutationResponse = MutationResponse & {
+  __typename?: 'RemoveAdminMutationResponse';
+  code: Scalars['String'];
+  message: Scalars['String'];
   success: Scalars['Boolean'];
 };
 
@@ -908,6 +934,20 @@ export type AcceptInviteMutationVariables = Exact<{
 
 
 export type AcceptInviteMutation = { __typename?: 'Mutation', acceptInvite: { __typename?: 'AcceptInviteMutationResponse', code: string, success: boolean, message: string } };
+
+export type MakeSuperAdminMutationVariables = Exact<{
+  adminId: Scalars['ID'];
+}>;
+
+
+export type MakeSuperAdminMutation = { __typename?: 'Mutation', makeSuperAdmin: { __typename?: 'MakeSuperAdminMutationResponse', code: string, success: boolean, message: string } };
+
+export type RemoveAdminMutationVariables = Exact<{
+  adminId: Scalars['ID'];
+}>;
+
+
+export type RemoveAdminMutation = { __typename?: 'Mutation', removeAdmin: { __typename?: 'RemoveAdminMutationResponse', code: string, success: boolean, message: string } };
 
 export type GetSchoolsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1208,6 +1248,76 @@ export function useAcceptInviteMutation(baseOptions?: Apollo.MutationHookOptions
 export type AcceptInviteMutationHookResult = ReturnType<typeof useAcceptInviteMutation>;
 export type AcceptInviteMutationResult = Apollo.MutationResult<AcceptInviteMutation>;
 export type AcceptInviteMutationOptions = Apollo.BaseMutationOptions<AcceptInviteMutation, AcceptInviteMutationVariables>;
+export const MakeSuperAdminDocument = gql`
+    mutation MakeSuperAdmin($adminId: ID!) {
+  makeSuperAdmin(adminId: $adminId) {
+    code
+    success
+    message
+  }
+}
+    `;
+export type MakeSuperAdminMutationFn = Apollo.MutationFunction<MakeSuperAdminMutation, MakeSuperAdminMutationVariables>;
+
+/**
+ * __useMakeSuperAdminMutation__
+ *
+ * To run a mutation, you first call `useMakeSuperAdminMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMakeSuperAdminMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [makeSuperAdminMutation, { data, loading, error }] = useMakeSuperAdminMutation({
+ *   variables: {
+ *      adminId: // value for 'adminId'
+ *   },
+ * });
+ */
+export function useMakeSuperAdminMutation(baseOptions?: Apollo.MutationHookOptions<MakeSuperAdminMutation, MakeSuperAdminMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<MakeSuperAdminMutation, MakeSuperAdminMutationVariables>(MakeSuperAdminDocument, options);
+      }
+export type MakeSuperAdminMutationHookResult = ReturnType<typeof useMakeSuperAdminMutation>;
+export type MakeSuperAdminMutationResult = Apollo.MutationResult<MakeSuperAdminMutation>;
+export type MakeSuperAdminMutationOptions = Apollo.BaseMutationOptions<MakeSuperAdminMutation, MakeSuperAdminMutationVariables>;
+export const RemoveAdminDocument = gql`
+    mutation RemoveAdmin($adminId: ID!) {
+  removeAdmin(adminId: $adminId) {
+    code
+    success
+    message
+  }
+}
+    `;
+export type RemoveAdminMutationFn = Apollo.MutationFunction<RemoveAdminMutation, RemoveAdminMutationVariables>;
+
+/**
+ * __useRemoveAdminMutation__
+ *
+ * To run a mutation, you first call `useRemoveAdminMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveAdminMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeAdminMutation, { data, loading, error }] = useRemoveAdminMutation({
+ *   variables: {
+ *      adminId: // value for 'adminId'
+ *   },
+ * });
+ */
+export function useRemoveAdminMutation(baseOptions?: Apollo.MutationHookOptions<RemoveAdminMutation, RemoveAdminMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveAdminMutation, RemoveAdminMutationVariables>(RemoveAdminDocument, options);
+      }
+export type RemoveAdminMutationHookResult = ReturnType<typeof useRemoveAdminMutation>;
+export type RemoveAdminMutationResult = Apollo.MutationResult<RemoveAdminMutation>;
+export type RemoveAdminMutationOptions = Apollo.BaseMutationOptions<RemoveAdminMutation, RemoveAdminMutationVariables>;
 export const GetSchoolsDocument = gql`
     query GetSchools {
   getSchools {
