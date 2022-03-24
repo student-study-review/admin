@@ -4,7 +4,6 @@ import {
   Button,
   IconButton,
   Menu,
-  MenuItem,
   Table,
   TableBody,
   TableCell,
@@ -22,20 +21,20 @@ import PersonRemoveAlt1OutlinedIcon from '@mui/icons-material/PersonRemoveAlt1Ou
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 import { CheckBox } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-
-type Admin = {
-  name: string;
-  status: string;
-  position: string;
-  activity: string;
-};
+import {
+  Admin,
+  AdminRole,
+  useGetAdminQuery,
+  useGetAdminsQuery,
+} from '../graphql/graphql';
 
 function Row(props: {
   admin: Admin;
   onClick: () => void;
   selectedName: string;
+  isSuperAdmin: boolean;
 }) {
-  const { admin, onClick, selectedName } = props;
+  const { admin, onClick, selectedName, isSuperAdmin } = props;
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -48,8 +47,15 @@ function Row(props: {
 
   return (
     <TableRow
-      sx={{ '& > *': { borderBottom: 'unset' }, cursor: 'pointer' }}
-      onClick={onClick}
+      sx={{
+        '& > *': { borderBottom: 'unset' },
+        cursor: isSuperAdmin ? 'pointer' : 'default',
+      }}
+      onClick={() => {
+        if (isSuperAdmin) {
+          onClick();
+        }
+      }}
     >
       <TableCell
         component="th"
@@ -59,7 +65,7 @@ function Row(props: {
         <CheckBox
           color="primary"
           sx={{
-            visibility: selectedName === admin.name ? 'visible' : 'hidden',
+            visibility: selectedName === admin.id ? 'visible' : 'hidden',
             marginRight: '.5rem',
           }}
         />{' '}
@@ -70,12 +76,16 @@ function Row(props: {
           }}
         >
           {' '}
-          {admin.name[0]}{' '}
+          {admin.fullName![0]}{' '}
         </Avatar>
         <Typography
-          sx={{ color: t => t.palette.text.primary  , fontWeight: 500, fontSize: '15px' }}
+          sx={{
+            color: (t) => t.palette.text.primary,
+            fontWeight: 500,
+            fontSize: '15px',
+          }}
         >
-          {admin.name}
+          {admin.fullName}
         </Typography>
       </TableCell>
       <TableCell sx={{ borderBottom: '0px' }}>
@@ -91,16 +101,24 @@ function Row(props: {
       </TableCell>
       <TableCell sx={{ borderBottom: '0px' }}>
         <Typography
-          sx={{ color: t => t.palette.text.disabled, fontSize: '13px', fontWeight: '400' }}
+          sx={{
+            color: (t) => t.palette.text.disabled,
+            fontSize: '13px',
+            fontWeight: '400',
+          }}
         >
-          {admin.position}
+          {admin.role}
         </Typography>
       </TableCell>
       <TableCell sx={{ borderBottom: '0px' }}>
         <Typography
-          sx={{ color: t => t.palette.text.disabled, fontSize: '13px', fontWeight: '400' }}
+          sx={{
+            color: (t) => t.palette.text.disabled,
+            fontSize: '13px',
+            fontWeight: '400',
+          }}
         >
-          {admin.activity}
+          {admin.lastSeen}
         </Typography>
       </TableCell>
       <TableCell align="right" sx={{ borderBottom: '0px' }}>
@@ -131,28 +149,10 @@ function Row(props: {
   );
 }
 
-const admins = [
-  {
-    name: 'Babatunde Ololade',
-    status: 'Active',
-    position: 'super admin',
-    activity: '12 mins ago',
-  },
-  {
-    name: 'Owolabi Ola',
-    status: 'Active',
-    position: 'Admin',
-    activity: '78 mins ago',
-  },
-  {
-    name: 'Tunde JS',
-    status: 'Active',
-    position: 'Admin',
-    activity: '12 mins ago',
-  },
-];
-
 function Admins() {
+  const { data: adminsData, loading: adminsDataLoading } = useGetAdminsQuery();
+  const { data: adminData, loading: adminDataLoading } = useGetAdminQuery();
+
   const [selectedAdmin, setSelectedAdmin] = useState('');
   const navigate = useNavigate();
 
@@ -172,78 +172,81 @@ function Admins() {
               fontWeight: '600',
               fontSize: '2.3rem',
               lineHeight: '39px',
-              color: t => t.palette.text.secondary
+              color: (t) => t.palette.text.secondary,
             }}
           >
             Admins
           </Typography>
 
-          {selectedAdmin && (
-            <span>
-              <Button
-                sx={{
-                  background: t => t.palette.background.paper,
-                  color: t => t.palette.text.primary,
-                  boxShadow: '-1px -1px 15.9113px rgb(39 43 45 / 45%)',
-                  borderRadius: '5.30375px',
-                  fontSize: '14px',
-                  fontWeight: 400,
-                  lineHeight: '21px',
-                  textTransform: 'none',
-                  marginRight: '1rem',
-                }}
-              >
-                <AdminPanelSettingsOutlinedIcon
-                  sx={{ paddingRight: '5px' }}
-                  color="primary"
-                />{' '}
-                Make super admin
-              </Button>
+          {adminData?.getAdmin.role === AdminRole.SuperAdmin && (
+            <>
+              {selectedAdmin && (
+                <span>
+                  <Button
+                    sx={{
+                      background: (t) => t.palette.background.paper,
+                      color: (t) => t.palette.text.primary,
+                      boxShadow: '-1px -1px 15.9113px rgb(39 43 45 / 45%)',
+                      borderRadius: '5.30375px',
+                      fontSize: '14px',
+                      fontWeight: 400,
+                      lineHeight: '21px',
+                      textTransform: 'none',
+                      marginRight: '1rem',
+                    }}
+                  >
+                    <AdminPanelSettingsOutlinedIcon
+                      sx={{ paddingRight: '5px' }}
+                      color="primary"
+                    />{' '}
+                    Make super admin
+                  </Button>
 
-              <Button
-                sx={{
-                  background: t => t.palette.background.paper,
-                  color: t => t.palette.text.primary,
-                  boxShadow:
-                    '-1px -1px 15.9113px rgb(39 43 45 / 45%)',
-                  borderRadius: '5.30375px',
-                  fontSize: '14px',
-                  fontWeight: 400,
-                  lineHeight: '21px',
-                  textTransform: 'none',
-                }}
-              >
-                <PersonRemoveAlt1OutlinedIcon
-                  sx={{ paddingRight: '5px' }}
-                  color="error"
-                />{' '}
-                Remove Admin
-              </Button>
-            </span>
-          )}
+                  <Button
+                    sx={{
+                      background: (t) => t.palette.background.paper,
+                      color: (t) => t.palette.text.primary,
+                      boxShadow: '-1px -1px 15.9113px rgb(39 43 45 / 45%)',
+                      borderRadius: '5.30375px',
+                      fontSize: '14px',
+                      fontWeight: 400,
+                      lineHeight: '21px',
+                      textTransform: 'none',
+                    }}
+                  >
+                    <PersonRemoveAlt1OutlinedIcon
+                      sx={{ paddingRight: '5px' }}
+                      color="error"
+                    />{' '}
+                    Remove Admin
+                  </Button>
+                </span>
+              )}
 
-          {!selectedAdmin && (
-            <Button
-              sx={{
-                boxShadow: '-1px -1px 15.9113px rgb(39 43 45 / 45%)',
-                borderRadius: '5.30375px',
-                background: t => t.palette.background.paper,
-                color: t => t.palette.text.primary,
-                fontSize: '14px',
-                fontWeight: 400,
-                lineHeight: '21px',
-                textTransform: 'none',
-              }}
-              onClick={() => {
-                navigate("new")
-              }}
-            >
-              <AddCircleOutlineOutlinedIcon
-                sx={{ paddingRight: '5px' }}
-                color="primary"
-              />{' '}
-              Add new admin
-            </Button>
+              {!selectedAdmin && (
+                <Button
+                  sx={{
+                    boxShadow: '-1px -1px 15.9113px rgb(39 43 45 / 45%)',
+                    borderRadius: '5.30375px',
+                    background: (t) => t.palette.background.paper,
+                    color: (t) => t.palette.text.primary,
+                    fontSize: '14px',
+                    fontWeight: 400,
+                    lineHeight: '21px',
+                    textTransform: 'none',
+                  }}
+                  onClick={() => {
+                    navigate('new');
+                  }}
+                >
+                  <AddCircleOutlineOutlinedIcon
+                    sx={{ paddingRight: '5px' }}
+                    color="primary"
+                  />{' '}
+                  Add new admin
+                </Button>
+              )}
+            </>
           )}
         </Box>
         <TableContainer component={Paper} sx={{ marginTop: '1.5rem' }}>
@@ -254,28 +257,40 @@ function Admins() {
                   sx={{
                     display: 'flex',
                     alignItems: 'center',
-                    color: t => t.palette.text.disabled,
+                    color: (t) => t.palette.text.disabled,
                     fontWeight: '500',
                     fontSize: '14px',
-                    paddingLeft: "3rem"
+                    paddingLeft: '3rem',
                   }}
                 >
                   Admins
                 </TableCell>
                 <TableCell
-                  sx={{ color: t => t.palette.text.disabled, fontWeight: '500', fontSize: '14px' }}
+                  sx={{
+                    color: (t) => t.palette.text.disabled,
+                    fontWeight: '500',
+                    fontSize: '14px',
+                  }}
                 >
                   {' '}
                   Status{' '}
                 </TableCell>
                 <TableCell
-                  sx={{ color: t => t.palette.text.disabled, fontWeight: '500', fontSize: '14px' }}
+                  sx={{
+                    color: (t) => t.palette.text.disabled,
+                    fontWeight: '500',
+                    fontSize: '14px',
+                  }}
                 >
                   {' '}
                   Position{' '}
                 </TableCell>
                 <TableCell
-                  sx={{ color: t => t.palette.text.disabled, fontWeight: '500', fontSize: '14px' }}
+                  sx={{
+                    color: (t) => t.palette.text.disabled,
+                    fontWeight: '500',
+                    fontSize: '14px',
+                  }}
                 >
                   {' '}
                   Activity{' '}
@@ -286,15 +301,16 @@ function Admins() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {admins.map((admin) => (
+              {adminsData?.getAdmins.map((admin) => (
                 <Row
-                  key={admin.name}
+                  key={admin.id!}
                   admin={admin}
                   selectedName={selectedAdmin}
+                  isSuperAdmin={adminData?.getAdmin.role === AdminRole.SuperAdmin}
                   onClick={() => {
                     setSelectedAdmin((prev) => {
-                      if (prev === admin.name) return '';
-                      return admin.name;
+                      if (prev === admin.id) return '';
+                      return admin.id!;
                     });
                   }}
                 />

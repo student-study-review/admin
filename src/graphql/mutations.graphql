@@ -16,14 +16,14 @@ mutation CreateSchool($data: CreateSchoolInput!) {
     success
     code
     school {
-       id
-       name
-       emailSuffix
-       websiteURL
-       lat
-       lng
-       updatedAt
-       createdAt
+      id
+      name
+      emailSuffix
+      websiteURL
+      lat
+      lng
+      updatedAt
+      createdAt
     }
   }
 }
@@ -59,11 +59,28 @@ mutation CreateDepartment($data: CreateDepartmentInput!) {
 mutation CreateCourse($data: CreateCourseInput!) {
   createCourse(data: $data) {
     course {
-      code 
+      code
       id
       title
       updatedAt
       createdAt
     }
+  }
+}
+
+mutation SendInvite($data: SendInviteInput!) {
+  sendInvite(data: $data) {
+    code
+    success
+    message
+    requestHashId
+  }
+}
+
+mutation AcceptInvite($data: AcceptInviteInput!) {
+  acceptInvite(data: $data) {
+    code
+    success
+    message
   }
 }

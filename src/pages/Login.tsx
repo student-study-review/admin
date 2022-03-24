@@ -23,6 +23,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 const Login = () => {
   const [adminLogin, { loading }] = useAdminLoginMutation();
   const [passwordVisibility, setPasswordVisibility] = useState(false);
+  
   const [alert, setAlert] = useState<{
     message: string;
     status: boolean;

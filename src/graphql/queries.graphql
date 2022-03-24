@@ -26,3 +26,32 @@ query GetSchoolFaculties($schoolId: ID!) {
     }
   }
 }
+
+query GetAdmin {
+  getAdmin {
+    id
+    email
+    fullName
+    role
+    updatedAt
+    createdAt
+    status
+    profileImage
+    lastSeen
+  }
+}
+
+
+query GetAdmins {
+  getAdmins {
+    createdAt
+    updatedAt
+    fullName
+    email
+    id
+    role
+    status
+    profileImage
+    lastSeen
+  }
+}

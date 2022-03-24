@@ -2,20 +2,48 @@ import {
     Container,
     Box,
     Typography,
-    TextField,
     FormControl,
-    FormHelperText,
     InputAdornment,
     OutlinedInput,
     FormLabel,
     IconButton,
     Button,
+    Snackbar,
   } from '@mui/material';
-  import React from 'react';
+  import React, { useState } from 'react';
   import Visibility from '@mui/icons-material/Visibility';
   import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { useForm } from 'react-hook-form';
+import { useAcceptInviteMutation } from '../graphql/graphql';
+import { useLocation, useNavigate } from 'react-router-dom';
+import MuiAlert from '@mui/material/Alert';
   
   const AcceptInvite = () => {
+
+    const [passwordVisibility, setPasswordVisibility] = useState(false);
+    const [ acceptInvite, { loading } ] = useAcceptInviteMutation()
+    const [alert, setAlert] = useState<{
+      message: string;
+      status: boolean;
+      type: 'error' | 'success' | 'info' | 'warning';
+    }>({
+      message: '',
+      status: false,
+      type: 'success',
+    });
+
+    const location = useLocation()
+    let navigate = useNavigate();
+
+    let params = new URLSearchParams(location.search);
+
+    const {
+      register,
+      handleSubmit,
+      watch,
+      formState: {  },
+    } = useForm<{ fullName: string; password: string }>();
+
     return (
       <Container
         maxWidth={false}
@@ -60,7 +88,33 @@ import {
               }}
             >Enter your details below to become an admin </Typography>
           </Box>
-          <form>
+          <form
+            onSubmit={handleSubmit(async (data) => {
+              console.log(data, "data..")
+
+              try {
+
+                const response = await acceptInvite({variables: {
+                  data: {
+                    fullName: data.fullName,
+                    password: data.password,
+                    requestHashId: params.get("invitationId") || ""
+                  }
+                }})
+
+                setAlert({
+                  message: response.data?.acceptInvite.message || 'Invitation Accepted',
+                  status: true,
+                  type: 'success',
+                });
+                navigate("/")
+
+              } catch(err: any) {
+                setAlert({ message: err.message, status: true, type: 'error' });
+              }
+
+            } ) }
+          >
             <FormControl
               sx={{ my: 1, width: '100%' }}
               variant="outlined"
@@ -72,8 +126,7 @@ import {
                 id="fullName"
                 type="fullName"
                 placeholder="Full Name"
-                // value={values.weight}
-                // onChange={handleChange('weight')}
+                {...register('fullName')}
                 required
               />
             </FormControl>
@@ -84,33 +137,53 @@ import {
             >
               <FormLabel> Password </FormLabel>
               <OutlinedInput
-                fullWidth
-                id="password"
-                type="password"
-                placeholder="Password"
-                // value={values.weight}
-                // onChange={handleChange('weight')}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton>
-                      <Visibility />
-                    </IconButton>
-                  </InputAdornment>
-                }
-                required
-              />
+              fullWidth
+              id="password"
+              type={passwordVisibility ? 'text' : 'password'}
+              placeholder="Password"
+              {...register('password')}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setPasswordVisibility((prev) => !prev)}
+                  >
+                    {!passwordVisibility ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              required
+            />
             </FormControl>
             <FormControl
               sx={{ mb: 3, width: '100%' }}
               variant="outlined"
               size="small"
             >
-              <Button disableElevation variant="contained" color="primary" size='large' sx={{ borderRadius: ".5rem", textTransform: "none"  }}  >
+              <Button type='submit' disableElevation variant="contained" color="primary" size='large' sx={{ borderRadius: ".5rem", textTransform: "none"  }}  >
                 Accept
               </Button>
             </FormControl>
           </form>
         </Box>
+        <Snackbar
+        open={alert.status}
+        autoHideDuration={6000}
+        onClose={() =>
+          setAlert({ status: false, message: '', type: alert.type })
+        }
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={() =>
+            setAlert({ status: false, message: '', type: alert.type })
+          }
+          severity={alert.type}
+          sx={{ width: '100%' }}
+        >
+          {alert.message}
+        </MuiAlert>
+      </Snackbar>
       </Container>
     );
   };

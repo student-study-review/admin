@@ -90,6 +90,10 @@ export type Admin = {
   email?: Maybe<Scalars['String']>;
   fullName?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['ID']>;
+  lastSeen?: Maybe<Scalars['Date']>;
+  profileImage?: Maybe<Scalars['String']>;
+  role?: Maybe<AdminRole>;
+  status?: Maybe<AdminStatus>;
   updatedAt?: Maybe<Scalars['Date']>;
 };
 
@@ -115,6 +119,16 @@ export type AdminRequest = {
   requestHashId?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['Date']>;
 };
+
+export enum AdminRole {
+  Admin = 'ADMIN',
+  SuperAdmin = 'SUPER_ADMIN'
+}
+
+export enum AdminStatus {
+  Available = 'Available',
+  NotAvailable = 'NotAvailable'
+}
 
 export type Course = {
   __typename?: 'Course';
@@ -605,7 +619,7 @@ export type MutationResetPasswordArgs = {
 
 
 export type MutationSendInviteArgs = {
-  email: Scalars['String'];
+  data: SendInviteInput;
 };
 
 
@@ -631,10 +645,12 @@ export type MutationResponse = {
 
 export type Query = {
   __typename?: 'Query';
+  getAdmin: Admin;
   getAdminCourseRequests?: Maybe<Array<CourseRequest>>;
   getAdminDepartmentRequests?: Maybe<Array<DepartmentRequest>>;
   getAdminFacultyRequests?: Maybe<Array<FacultyRequest>>;
   getAdminSchoolRequests?: Maybe<Array<SchoolRequest>>;
+  getAdmins: Array<Admin>;
   getSchoolCourses: SchoolCoursesQueryResponse;
   getSchoolDepartments: SchoolDepartmentsQueryResponse;
   getSchoolFaculties: SchoolFacultiesQueryResponse;
@@ -728,6 +744,11 @@ export type SchoolRequest = {
   status?: Maybe<RequestStatus>;
   updatedAt?: Maybe<Scalars['Date']>;
   websiteURL?: Maybe<Scalars['String']>;
+};
+
+export type SendInviteInput = {
+  email: Scalars['String'];
+  role: AdminRole;
 };
 
 export type SendInviteMutationResponse = MutationResponse & {
@@ -874,6 +895,20 @@ export type CreateCourseMutationVariables = Exact<{
 
 export type CreateCourseMutation = { __typename?: 'Mutation', createCourse: { __typename?: 'CreateCourseMutationResponse', course?: { __typename?: 'Course', code?: string | null, id?: string | null, title?: string | null, updatedAt?: any | null, createdAt?: any | null } | null } };
 
+export type SendInviteMutationVariables = Exact<{
+  data: SendInviteInput;
+}>;
+
+
+export type SendInviteMutation = { __typename?: 'Mutation', sendInvite: { __typename?: 'SendInviteMutationResponse', code: string, success: boolean, message: string, requestHashId: string } };
+
+export type AcceptInviteMutationVariables = Exact<{
+  data: AcceptInviteInput;
+}>;
+
+
+export type AcceptInviteMutation = { __typename?: 'Mutation', acceptInvite: { __typename?: 'AcceptInviteMutationResponse', code: string, success: boolean, message: string } };
+
 export type GetSchoolsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -885,6 +920,16 @@ export type GetSchoolFacultiesQueryVariables = Exact<{
 
 
 export type GetSchoolFacultiesQuery = { __typename?: 'Query', getSchoolFaculties: { __typename?: 'SchoolFacultiesQueryResponse', faculties?: Array<{ __typename?: 'Faculty', id?: string | null, name?: string | null, updatedAt?: any | null, createdAt?: any | null, departments?: Array<{ __typename?: 'Department', id?: string | null, name?: string | null } | null> | null } | null> | null } };
+
+export type GetAdminQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAdminQuery = { __typename?: 'Query', getAdmin: { __typename?: 'Admin', id?: string | null, email?: string | null, fullName?: string | null, role?: AdminRole | null, updatedAt?: any | null, createdAt?: any | null, status?: AdminStatus | null, profileImage?: string | null, lastSeen?: any | null } };
+
+export type GetAdminsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAdminsQuery = { __typename?: 'Query', getAdmins: Array<{ __typename?: 'Admin', createdAt?: any | null, updatedAt?: any | null, fullName?: string | null, email?: string | null, id?: string | null, role?: AdminRole | null, status?: AdminStatus | null, profileImage?: string | null, lastSeen?: any | null }> };
 
 
 export const AdminLoginDocument = gql`
@@ -1092,6 +1137,77 @@ export function useCreateCourseMutation(baseOptions?: Apollo.MutationHookOptions
 export type CreateCourseMutationHookResult = ReturnType<typeof useCreateCourseMutation>;
 export type CreateCourseMutationResult = Apollo.MutationResult<CreateCourseMutation>;
 export type CreateCourseMutationOptions = Apollo.BaseMutationOptions<CreateCourseMutation, CreateCourseMutationVariables>;
+export const SendInviteDocument = gql`
+    mutation SendInvite($data: SendInviteInput!) {
+  sendInvite(data: $data) {
+    code
+    success
+    message
+    requestHashId
+  }
+}
+    `;
+export type SendInviteMutationFn = Apollo.MutationFunction<SendInviteMutation, SendInviteMutationVariables>;
+
+/**
+ * __useSendInviteMutation__
+ *
+ * To run a mutation, you first call `useSendInviteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSendInviteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [sendInviteMutation, { data, loading, error }] = useSendInviteMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useSendInviteMutation(baseOptions?: Apollo.MutationHookOptions<SendInviteMutation, SendInviteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SendInviteMutation, SendInviteMutationVariables>(SendInviteDocument, options);
+      }
+export type SendInviteMutationHookResult = ReturnType<typeof useSendInviteMutation>;
+export type SendInviteMutationResult = Apollo.MutationResult<SendInviteMutation>;
+export type SendInviteMutationOptions = Apollo.BaseMutationOptions<SendInviteMutation, SendInviteMutationVariables>;
+export const AcceptInviteDocument = gql`
+    mutation AcceptInvite($data: AcceptInviteInput!) {
+  acceptInvite(data: $data) {
+    code
+    success
+    message
+  }
+}
+    `;
+export type AcceptInviteMutationFn = Apollo.MutationFunction<AcceptInviteMutation, AcceptInviteMutationVariables>;
+
+/**
+ * __useAcceptInviteMutation__
+ *
+ * To run a mutation, you first call `useAcceptInviteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAcceptInviteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [acceptInviteMutation, { data, loading, error }] = useAcceptInviteMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useAcceptInviteMutation(baseOptions?: Apollo.MutationHookOptions<AcceptInviteMutation, AcceptInviteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AcceptInviteMutation, AcceptInviteMutationVariables>(AcceptInviteDocument, options);
+      }
+export type AcceptInviteMutationHookResult = ReturnType<typeof useAcceptInviteMutation>;
+export type AcceptInviteMutationResult = Apollo.MutationResult<AcceptInviteMutation>;
+export type AcceptInviteMutationOptions = Apollo.BaseMutationOptions<AcceptInviteMutation, AcceptInviteMutationVariables>;
 export const GetSchoolsDocument = gql`
     query GetSchools {
   getSchools {
@@ -1178,3 +1294,87 @@ export function useGetSchoolFacultiesLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type GetSchoolFacultiesQueryHookResult = ReturnType<typeof useGetSchoolFacultiesQuery>;
 export type GetSchoolFacultiesLazyQueryHookResult = ReturnType<typeof useGetSchoolFacultiesLazyQuery>;
 export type GetSchoolFacultiesQueryResult = Apollo.QueryResult<GetSchoolFacultiesQuery, GetSchoolFacultiesQueryVariables>;
+export const GetAdminDocument = gql`
+    query GetAdmin {
+  getAdmin {
+    id
+    email
+    fullName
+    role
+    updatedAt
+    createdAt
+    status
+    profileImage
+    lastSeen
+  }
+}
+    `;
+
+/**
+ * __useGetAdminQuery__
+ *
+ * To run a query within a React component, call `useGetAdminQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAdminQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAdminQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAdminQuery(baseOptions?: Apollo.QueryHookOptions<GetAdminQuery, GetAdminQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAdminQuery, GetAdminQueryVariables>(GetAdminDocument, options);
+      }
+export function useGetAdminLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAdminQuery, GetAdminQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAdminQuery, GetAdminQueryVariables>(GetAdminDocument, options);
+        }
+export type GetAdminQueryHookResult = ReturnType<typeof useGetAdminQuery>;
+export type GetAdminLazyQueryHookResult = ReturnType<typeof useGetAdminLazyQuery>;
+export type GetAdminQueryResult = Apollo.QueryResult<GetAdminQuery, GetAdminQueryVariables>;
+export const GetAdminsDocument = gql`
+    query GetAdmins {
+  getAdmins {
+    createdAt
+    updatedAt
+    fullName
+    email
+    id
+    role
+    status
+    profileImage
+    lastSeen
+  }
+}
+    `;
+
+/**
+ * __useGetAdminsQuery__
+ *
+ * To run a query within a React component, call `useGetAdminsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAdminsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAdminsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAdminsQuery(baseOptions?: Apollo.QueryHookOptions<GetAdminsQuery, GetAdminsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAdminsQuery, GetAdminsQueryVariables>(GetAdminsDocument, options);
+      }
+export function useGetAdminsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAdminsQuery, GetAdminsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAdminsQuery, GetAdminsQueryVariables>(GetAdminsDocument, options);
+        }
+export type GetAdminsQueryHookResult = ReturnType<typeof useGetAdminsQuery>;
+export type GetAdminsLazyQueryHookResult = ReturnType<typeof useGetAdminsLazyQuery>;
+export type GetAdminsQueryResult = Apollo.QueryResult<GetAdminsQuery, GetAdminsQueryVariables>;
