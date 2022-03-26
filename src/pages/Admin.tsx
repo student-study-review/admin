@@ -29,6 +29,7 @@ import {
   useMakeSuperAdminMutation,
   useRemoveAdminMutation,
 } from '../graphql/graphql';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function Row(props: {
   admin: Admin;
@@ -52,7 +53,10 @@ function Row(props: {
     <TableRow
       sx={{
         '& > *': { borderBottom: 'unset' },
-        cursor: (isSuperAdmin && !isMe && admin.role !== AdminRole.SuperAdmin ) ? 'pointer' : 'default',
+        cursor:
+          isSuperAdmin && !isMe && admin.role !== AdminRole.SuperAdmin
+            ? 'pointer'
+            : 'default',
       }}
       onClick={() => {
         if (isSuperAdmin && !isMe && admin.role !== AdminRole.SuperAdmin) {
@@ -202,7 +206,7 @@ function Admins() {
                       textTransform: 'none',
                       marginRight: '1rem',
                     }}
-                    onClick={ async (e) => {
+                    onClick={async (e) => {
                       try {
                         const response = await makeSuperAdmin({
                           variables: {
@@ -234,7 +238,7 @@ function Admins() {
                       lineHeight: '21px',
                       textTransform: 'none',
                     }}
-                    onClick={ async (e) => {
+                    onClick={async (e) => {
                       try {
                         const response = await removeAdmin({
                           variables: {
@@ -284,78 +288,84 @@ function Admins() {
             </>
           )}
         </Box>
-        <TableContainer component={Paper} sx={{ marginTop: '1.5rem' }}>
-          <Table aria-label="collapsible table">
-            <TableHead>
-              <TableRow>
-                <TableCell
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    color: (t) => t.palette.text.disabled,
-                    fontWeight: '500',
-                    fontSize: '14px',
-                    paddingLeft: '3rem',
-                  }}
-                >
-                  Admins
-                </TableCell>
-                <TableCell
-                  sx={{
-                    color: (t) => t.palette.text.disabled,
-                    fontWeight: '500',
-                    fontSize: '14px',
-                  }}
-                >
-                  {' '}
-                  Status{' '}
-                </TableCell>
-                <TableCell
-                  sx={{
-                    color: (t) => t.palette.text.disabled,
-                    fontWeight: '500',
-                    fontSize: '14px',
-                  }}
-                >
-                  {' '}
-                  Position{' '}
-                </TableCell>
-                <TableCell
-                  sx={{
-                    color: (t) => t.palette.text.disabled,
-                    fontWeight: '500',
-                    fontSize: '14px',
-                  }}
-                >
-                  {' '}
-                  Activity{' '}
-                </TableCell>
-                <TableCell align="right">
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {adminsData?.getAdmins.map((admin) => (
-                <Row
-                  key={admin.id!}
-                  admin={admin}
-                  selectedName={selectedAdmin}
-                  isSuperAdmin={
-                    adminData?.getAdmin.role === AdminRole.SuperAdmin
-                  }
-                  isMe={ admin.id === adminData?.getAdmin.id  }
-                  onClick={() => {
-                    setSelectedAdmin((prev) => {
-                      if (prev === admin.id) return '';
-                      return admin.id!;
-                    });
-                  }}
-                />
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        {adminsDataLoading ? (
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <TableContainer component={Paper} sx={{ marginTop: '1.5rem' }}>
+            <Table aria-label="collapsible table">
+              <TableHead>
+                <TableRow>
+                  <TableCell
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      color: (t) => t.palette.text.disabled,
+                      fontWeight: '500',
+                      fontSize: '14px',
+                      paddingLeft: '3rem',
+                    }}
+                  >
+                    Admins
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      color: (t) => t.palette.text.disabled,
+                      fontWeight: '500',
+                      fontSize: '14px',
+                    }}
+                  >
+                    {' '}
+                    Status{' '}
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      color: (t) => t.palette.text.disabled,
+                      fontWeight: '500',
+                      fontSize: '14px',
+                    }}
+                  >
+                    {' '}
+                    Position{' '}
+                  </TableCell>
+                  <TableCell
+                    sx={{
+                      color: (t) => t.palette.text.disabled,
+                      fontWeight: '500',
+                      fontSize: '14px',
+                    }}
+                  >
+                    {' '}
+                    Activity{' '}
+                  </TableCell>
+                  <TableCell align="right">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {adminsData?.getAdmins.map((admin) => (
+                  <Row
+                    key={admin.id!}
+                    admin={admin}
+                    selectedName={selectedAdmin}
+                    isSuperAdmin={
+                      adminData?.getAdmin.role === AdminRole.SuperAdmin
+                    }
+                    isMe={admin.id === adminData?.getAdmin.id}
+                    onClick={() => {
+                      setSelectedAdmin((prev) => {
+                        if (prev === admin.id) return '';
+                        return admin.id!;
+                      });
+                    }}
+                  />
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
       </Box>
     </>
   );
