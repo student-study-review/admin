@@ -40,7 +40,8 @@ function CustomLink({ children, to }: LinkProps) {
   );
 }
 
-function Layout() {
+const Layout: React.FC<{}> =  ({  }) =>  {
+
   return (
     <Grid container spacing={2} sx={{ marginTop: 0, background: t => t.palette.background.default  }}>
       <Grid
@@ -143,7 +144,7 @@ function Layout() {
         sx={{
           minHeight: '100vh',
           background: t => t.palette.background.default,
-          paddingRight: '1rem',
+          // paddingRight: '1rem',
         }}
       >
         <Outlet />
