@@ -157,10 +157,10 @@ const CustomSelect = React.forwardRef((props: any, ref) => {
 
       return (
         <Controller
-        render={({ field }) =><SelectUnstyled {...ref}  {...props} {...field} components={components} />  }
+        render={({ field }) =><SelectUnstyled defaultValue={props.defaultValue} {...ref}  {...props} {...field} components={components} />  }
         name={props.name}
         control={props.control}
-        defaultValue={"Select a value"}
+        defaultValue={props.defaultValue}
       />
       )
 });

@@ -7,10 +7,21 @@ import {
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
-  HttpLink,
+  // HttpLink,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { AUTH_TOKEN } from './constants';
+import { createUploadLink } from 'apollo-upload-client';
+import { transitions, positions, Provider as AlertProvider } from 'react-alert';
+//@ts-ignore
+import AlertTemplate from 'react-alert-template-basic';
+
+const options = {
+  position: positions.BOTTOM_LEFT,
+  timeout: 5000,
+  offset: '30px',
+  transition: transitions.SCALE,
+};
 
 const authLink = setContext((_, { headers }) => {
   const token = sessionStorage.getItem(AUTH_TOKEN);
@@ -22,12 +33,12 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
-const httpLink = new HttpLink({
-  uri: 'https://apidev.universitesi.io/graphql',
+const httpLink = createUploadLink({
+  uri: 'http://localhost:8080/graphql',
 });
 
 const client = new ApolloClient({
-  uri: 'https://apidev.universitesi.io/graphql',
+  uri: 'http://localhost:8080/graphql',
   cache: new InMemoryCache(),
   link: authLink.concat(httpLink),
 });
@@ -36,7 +47,9 @@ ReactDOM.render(
   <BrowserRouter>
     <CssBaseline />
     <ApolloProvider client={client}>
-      <App />
+      <AlertProvider template={AlertTemplate} {...options}>
+        <App />
+      </AlertProvider>
     </ApolloProvider>
   </BrowserRouter>,
   document.querySelector('#root')

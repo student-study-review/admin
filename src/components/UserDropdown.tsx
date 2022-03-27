@@ -1,10 +1,23 @@
 import React from 'react';
 import ArrowDropDownOutlinedIcon from '@mui/icons-material/ArrowDropDownOutlined';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
-import { Box, Typography, Avatar, IconButton } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Avatar,
+  IconButton,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+  Divider,
+} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Badge from '@mui/material/Badge';
 import { useGetAdminQuery } from '../graphql/graphql';
+import { Settings } from '@mui/icons-material';
+import LogoutIcon from '@mui/icons-material/Logout';
+import useToken from '../hooks/useToken';
+import { useNavigate } from 'react-router-dom';
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -37,8 +50,18 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 const UserDropDown = () => {
   const { data: adminData, loading: adminDataLoading } = useGetAdminQuery();
+  const { deleteToken } = useToken();
 
-  // console.log(, "adminData")
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: any) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const navigate = useNavigate();
 
   return (
     <Box
@@ -78,8 +101,9 @@ const UserDropDown = () => {
           }}
           sizes="lg"
           variant="rounded"
+          src={!adminData ? '' : adminData.getAdmin.profileImage as string }
         >
-          { !adminData ? "" :  (adminData.getAdmin.fullName)![0] }
+          {!adminData ? '' : adminData.getAdmin.fullName![0]}
         </Avatar>
         <Typography
           sx={{
@@ -91,9 +115,77 @@ const UserDropDown = () => {
         >
           {adminData?.getAdmin.fullName}
         </Typography>
-        <IconButton>
-          <ArrowDropDownOutlinedIcon color="primary" />
-        </IconButton>
+        <Box>
+          <IconButton onClick={handleClick}>
+            <ArrowDropDownOutlinedIcon color="primary" />
+          </IconButton>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+          >
+            <MenuItem sx={{ width: '100%' }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <Box>
+                  <Typography
+                    sx={{
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                      color: (t) => t.palette.primary.main,
+                      fontSize: '14px',
+                      fontWeight: 600,
+                    }}
+                  >
+                    {!adminData ? '' : adminData.getAdmin.fullName}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      color: (t) => t.palette.text.primary,
+                      fontSize: '12px',
+                      fontWeight: 500,
+                      textTransform: 'lowercase',
+                      lineHeight: '16px',
+                    }}
+                  >
+                    {' '}
+                    {adminData?.getAdmin.role}{' '}
+                  </Typography>
+                </Box>
+              </Box>
+            </MenuItem>
+            <Divider />
+            <MenuItem onClick={() => {
+              navigate("/dashboard/settings")
+              handleClose()
+            }} >
+              <ListItemIcon>
+                <Settings fontSize="medium" />
+              </ListItemIcon>
+              Settings
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                deleteToken();
+                window.location.reload();
+              }}
+            >
+              <ListItemIcon>
+                <LogoutIcon fontSize="medium" />
+              </ListItemIcon>
+              Sign Out
+            </MenuItem>
+          </Menu>
+        </Box>
       </Box>
     </Box>
   );

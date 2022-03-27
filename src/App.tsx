@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './app.css';
-import { Routes, Route, Navigate, useLocation, Router } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Login from './pages/Login';
 import AcceptInvite from './pages/AcceptInvite';
 import useToken from './hooks/useToken';

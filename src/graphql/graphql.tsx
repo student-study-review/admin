@@ -14,6 +14,8 @@ export type Scalars = {
   Int: number;
   Float: number;
   Date: any;
+  /** The `Upload` scalar type represents a file upload. */
+  Upload: any;
 };
 
 export type AcceptInviteInput = {
@@ -108,6 +110,12 @@ export type AdminLoginMutationResponse = MutationResponse & {
   message: Scalars['String'];
   success: Scalars['Boolean'];
   token: Token;
+};
+
+export type AdminProfileUpateInput = {
+  fullName?: InputMaybe<Scalars['String']>;
+  profileImage?: InputMaybe<Scalars['Upload']>;
+  status?: InputMaybe<AdminStatus>;
 };
 
 export type AdminRequest = {
@@ -476,6 +484,7 @@ export type Mutation = {
   removeAdmin: RemoveAdminMutationResponse;
   resetPassword: ResetPasswordMutationResponse;
   sendInvite: SendInviteMutationResponse;
+  updateAdminProfile?: Maybe<Admin>;
   updateProfile?: Maybe<UserMutationResponse>;
   verifyAccountEmail: UserMutationResponse;
   verifySchoolEmail?: Maybe<UserMutationResponse>;
@@ -639,6 +648,11 @@ export type MutationResetPasswordArgs = {
 
 export type MutationSendInviteArgs = {
   data: SendInviteInput;
+};
+
+
+export type MutationUpdateAdminProfileArgs = {
+  data: AdminProfileUpateInput;
 };
 
 
@@ -948,6 +962,13 @@ export type RemoveAdminMutationVariables = Exact<{
 
 
 export type RemoveAdminMutation = { __typename?: 'Mutation', removeAdmin: { __typename?: 'RemoveAdminMutationResponse', code: string, success: boolean, message: string } };
+
+export type UpdateAdminProfileMutationVariables = Exact<{
+  data: AdminProfileUpateInput;
+}>;
+
+
+export type UpdateAdminProfileMutation = { __typename?: 'Mutation', updateAdminProfile?: { __typename?: 'Admin', id?: string | null, email?: string | null, fullName?: string | null, role?: AdminRole | null, updatedAt?: any | null, createdAt?: any | null, status?: AdminStatus | null, profileImage?: string | null, lastSeen?: any | null } | null };
 
 export type GetSchoolsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1318,6 +1339,47 @@ export function useRemoveAdminMutation(baseOptions?: Apollo.MutationHookOptions<
 export type RemoveAdminMutationHookResult = ReturnType<typeof useRemoveAdminMutation>;
 export type RemoveAdminMutationResult = Apollo.MutationResult<RemoveAdminMutation>;
 export type RemoveAdminMutationOptions = Apollo.BaseMutationOptions<RemoveAdminMutation, RemoveAdminMutationVariables>;
+export const UpdateAdminProfileDocument = gql`
+    mutation UpdateAdminProfile($data: AdminProfileUpateInput!) {
+  updateAdminProfile(data: $data) {
+    id
+    email
+    fullName
+    role
+    updatedAt
+    createdAt
+    status
+    profileImage
+    lastSeen
+  }
+}
+    `;
+export type UpdateAdminProfileMutationFn = Apollo.MutationFunction<UpdateAdminProfileMutation, UpdateAdminProfileMutationVariables>;
+
+/**
+ * __useUpdateAdminProfileMutation__
+ *
+ * To run a mutation, you first call `useUpdateAdminProfileMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateAdminProfileMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateAdminProfileMutation, { data, loading, error }] = useUpdateAdminProfileMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateAdminProfileMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAdminProfileMutation, UpdateAdminProfileMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateAdminProfileMutation, UpdateAdminProfileMutationVariables>(UpdateAdminProfileDocument, options);
+      }
+export type UpdateAdminProfileMutationHookResult = ReturnType<typeof useUpdateAdminProfileMutation>;
+export type UpdateAdminProfileMutationResult = Apollo.MutationResult<UpdateAdminProfileMutation>;
+export type UpdateAdminProfileMutationOptions = Apollo.BaseMutationOptions<UpdateAdminProfileMutation, UpdateAdminProfileMutationVariables>;
 export const GetSchoolsDocument = gql`
     query GetSchools {
   getSchools {

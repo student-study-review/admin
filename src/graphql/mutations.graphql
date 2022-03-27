@@ -100,3 +100,17 @@ mutation RemoveAdmin($adminId: ID!) {
     message
   }
 }
+
+mutation UpdateAdminProfile($data: AdminProfileUpateInput!) {
+  updateAdminProfile(data: $data) {
+    id
+    email
+    fullName
+    role
+    updatedAt
+    createdAt
+    status
+    profileImage
+    lastSeen
+  }
+}
