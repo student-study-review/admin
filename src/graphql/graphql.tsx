@@ -152,12 +152,12 @@ export type CourseRequest = {
   code?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['Date']>;
   department?: Maybe<Department>;
-  faculty?: Maybe<Faculty>;
   id?: Maybe<Scalars['ID']>;
   school?: Maybe<School>;
   status?: Maybe<RequestStatus>;
   title?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['Date']>;
+  user?: Maybe<User>;
 };
 
 export type CreateAccountInput = {
@@ -274,6 +274,7 @@ export type CreateSchoolMutationResponse = MutationResponse & {
 };
 
 export type CreateSchoolRequestInput = {
+  emailSuffix: Scalars['String'];
   fullAddress: Scalars['String'];
   name: Scalars['String'];
   websiteURL: Scalars['String'];
@@ -285,6 +286,11 @@ export type CreateSchoolRequestMutationResponse = MutationResponse & {
   message: Scalars['String'];
   schoolRequest?: Maybe<SchoolRequest>;
   success: Scalars['Boolean'];
+};
+
+export type CreateSchoolVerificationRequest = {
+  proofImage: Scalars['Upload'];
+  proofType: SchoolProofType;
 };
 
 export type DeleteCourseMutationResponse = MutationResponse & {
@@ -358,6 +364,7 @@ export type DepartmentRequest = {
   school?: Maybe<School>;
   status?: Maybe<RequestStatus>;
   updatedAt?: Maybe<Scalars['Date']>;
+  user?: Maybe<User>;
 };
 
 export type EditCourseInput = {
@@ -433,6 +440,7 @@ export type FacultyRequest = {
   school?: Maybe<School>;
   status?: Maybe<RequestStatus>;
   updatedAt?: Maybe<Scalars['Date']>;
+  user?: Maybe<User>;
 };
 
 export type ForgotPasswordMutationResponse = MutationResponse & {
@@ -457,17 +465,19 @@ export type Mutation = {
   acceptRejectDepartmentRequest?: Maybe<AcceptRejectDepartmentRequestMutationResponse>;
   acceptRejectFacultyRequest?: Maybe<AcceptRequestFacultyRequestMutationResponse>;
   acceptRejectSchoolRequest?: Maybe<AcceptRejectSchoolRequestMutationResponse>;
+  acceptRejectSchoolVerificationRequest: SchoolVerificationRequest;
   accountLogin: AccountLoginMutationResponse;
   adminLogin: AdminLoginMutationResponse;
   createAccount: CreateAccountMutationResponse;
   createCourse: CreateCourseMutationResponse;
-  createCourseRequest?: Maybe<CreateCourseRequestMutationResponse>;
+  createCourseRequest?: Maybe<CourseRequest>;
   createDepartment: CreateDepartmentMutationResponse;
-  createDepartmentRequest?: Maybe<CreateDepartmentRequestMutationResponse>;
+  createDepartmentRequest?: Maybe<DepartmentRequest>;
   createFaculty: CreateFacultyMutationResponse;
-  createFacultyRequest?: Maybe<CreateFacultyRequestMutationResponse>;
+  createFacultyRequest?: Maybe<FacultyRequest>;
   createSchool: CreateSchoolMutationResponse;
   createSchoolRequest?: Maybe<CreateSchoolRequestMutationResponse>;
+  createSchoolVerificationRequest: SchoolVerificationRequest;
   deleteCourse: DeleteCourseMutationResponse;
   deleteCourseRequest?: Maybe<DeleteCourseRequestMutationResponse>;
   deleteDepartment: DeleteDepartmentMutationResponse;
@@ -475,6 +485,7 @@ export type Mutation = {
   deleteFaculty: DeleteFacultyMutationResponse;
   deleteFacultyRequest?: Maybe<DeleteFacultyRequestMutationResponse>;
   deleteSchoolRequest?: Maybe<DeleteSchoolRequestMutationResponse>;
+  deleteSchoolVerificationRequest: SchoolVerificationRequest;
   editCourse: EditCourseMutationResponse;
   editDepartment: EditDepartmentMutationResponse;
   editFaculty: EditFacultyMutationResponse;
@@ -512,6 +523,11 @@ export type MutationAcceptRejectFacultyRequestArgs = {
 
 
 export type MutationAcceptRejectSchoolRequestArgs = {
+  data: AcceptRejectRequestInput;
+};
+
+
+export type MutationAcceptRejectSchoolVerificationRequestArgs = {
   data: AcceptRejectRequestInput;
 };
 
@@ -571,6 +587,11 @@ export type MutationCreateSchoolRequestArgs = {
 };
 
 
+export type MutationCreateSchoolVerificationRequestArgs = {
+  data: CreateSchoolVerificationRequest;
+};
+
+
 export type MutationDeleteCourseArgs = {
   courseId: Scalars['ID'];
 };
@@ -603,6 +624,11 @@ export type MutationDeleteFacultyRequestArgs = {
 
 export type MutationDeleteSchoolRequestArgs = {
   schoolRequestId: Scalars['ID'];
+};
+
+
+export type MutationDeleteSchoolVerificationRequestArgs = {
+  schoolVerificationRequestId: Scalars['ID'];
 };
 
 
@@ -683,7 +709,10 @@ export type Query = {
   getAdminDepartmentRequests?: Maybe<Array<DepartmentRequest>>;
   getAdminFacultyRequests?: Maybe<Array<FacultyRequest>>;
   getAdminSchoolRequests?: Maybe<Array<SchoolRequest>>;
+  getAdminSchoolVerificationRequests?: Maybe<Array<SchoolVerificationRequest>>;
   getAdmins: Array<Admin>;
+  getDepartmentCourses?: Maybe<Array<Course>>;
+  getFacultyDepartments?: Maybe<Array<Department>>;
   getSchoolCourses: SchoolCoursesQueryResponse;
   getSchoolDepartments: SchoolDepartmentsQueryResponse;
   getSchoolFaculties: SchoolFacultiesQueryResponse;
@@ -692,7 +721,18 @@ export type Query = {
   getUserDepartmentRequests?: Maybe<Array<DepartmentRequest>>;
   getUserFacultyRequests?: Maybe<Array<FacultyRequest>>;
   getUserSchoolRequests?: Maybe<Array<SchoolRequest>>;
+  getUserSchoolVerificationRequests?: Maybe<Array<SchoolVerificationRequest>>;
   myProfile?: Maybe<UserQueryResponse>;
+};
+
+
+export type QueryGetDepartmentCoursesArgs = {
+  departmentId: Scalars['ID'];
+};
+
+
+export type QueryGetFacultyDepartmentsArgs = {
+  facultyId: Scalars['ID'];
 };
 
 
@@ -775,15 +815,38 @@ export type SchoolFacultiesQueryResponse = QueryResponse & {
   success: Scalars['Boolean'];
 };
 
+export enum SchoolProofType {
+  DatedClassScheduleForTheSemester = 'DATED_CLASS_SCHEDULE_FOR_THE_SEMESTER',
+  DatedEnrollmentLetterOnSchoolLetterhead = 'DATED_ENROLLMENT_LETTER_ON_SCHOOL_LETTERHEAD',
+  DatedOfficialUnofficialTranscript = 'DATED_OFFICIAL_UNOFFICIAL_TRANSCRIPT',
+  DatedReceiptFromBursar = 'DATED_RECEIPT_FROM_BURSAR',
+  DatedScholarshipFinancialAidLetter = 'DATED_SCHOLARSHIP_FINANCIAL_AID_LETTER',
+  DatedSchoolId = 'DATED_SCHOOL_ID',
+  DatedSyllabusForAClass = 'DATED_SYLLABUS_FOR_A_CLASS',
+  Other = 'OTHER'
+}
+
 export type SchoolRequest = {
   __typename?: 'SchoolRequest';
   createdAt?: Maybe<Scalars['Date']>;
+  emailSuffix?: Maybe<Scalars['String']>;
   fullAddress?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['ID']>;
   name?: Maybe<Scalars['String']>;
   status?: Maybe<RequestStatus>;
   updatedAt?: Maybe<Scalars['Date']>;
+  user?: Maybe<User>;
   websiteURL?: Maybe<Scalars['String']>;
+};
+
+export type SchoolVerificationRequest = {
+  __typename?: 'SchoolVerificationRequest';
+  createdAt?: Maybe<Scalars['Date']>;
+  id?: Maybe<Scalars['ID']>;
+  proofImage?: Maybe<Scalars['String']>;
+  proofType?: Maybe<SchoolProofType>;
+  status?: Maybe<RequestStatus>;
+  updatedAt?: Maybe<Scalars['Date']>;
 };
 
 export type SendInviteInput = {
@@ -991,6 +1054,40 @@ export type GetAdminsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetAdminsQuery = { __typename?: 'Query', getAdmins: Array<{ __typename?: 'Admin', createdAt?: any | null, updatedAt?: any | null, fullName?: string | null, email?: string | null, id?: string | null, role?: AdminRole | null, status?: AdminStatus | null, profileImage?: string | null, lastSeen?: any | null }> };
+
+export type GetFacultyDepartmentsQueryVariables = Exact<{
+  facultyId: Scalars['ID'];
+}>;
+
+
+export type GetFacultyDepartmentsQuery = { __typename?: 'Query', getFacultyDepartments?: Array<{ __typename?: 'Department', id?: string | null, name?: string | null, updatedAt?: any | null, createdAt?: any | null }> | null };
+
+export type GetDepartmentCoursesQueryVariables = Exact<{
+  departmentId: Scalars['ID'];
+}>;
+
+
+export type GetDepartmentCoursesQuery = { __typename?: 'Query', getDepartmentCourses?: Array<{ __typename?: 'Course', id?: string | null, title?: string | null, code?: string | null, updatedAt?: any | null, createdAt?: any | null }> | null };
+
+export type GetAdminSchoolRequestsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAdminSchoolRequestsQuery = { __typename?: 'Query', getAdminSchoolRequests?: Array<{ __typename?: 'SchoolRequest', id?: string | null, name?: string | null, fullAddress?: string | null, updatedAt?: any | null, createdAt?: any | null, websiteURL?: string | null, status?: RequestStatus | null, user?: { __typename?: 'User', id?: string | null, username?: string | null } | null }> | null };
+
+export type GetAdminFacultyRequestsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAdminFacultyRequestsQuery = { __typename?: 'Query', getAdminFacultyRequests?: Array<{ __typename?: 'FacultyRequest', id?: string | null, name?: string | null, updatedAt?: any | null, createdAt?: any | null, status?: RequestStatus | null, school?: { __typename?: 'School', id?: string | null, name?: string | null } | null, user?: { __typename?: 'User', username?: string | null, id?: string | null } | null }> | null };
+
+export type GetAdminDepartmentRequestsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAdminDepartmentRequestsQuery = { __typename?: 'Query', getAdminDepartmentRequests?: Array<{ __typename?: 'DepartmentRequest', id?: string | null, name?: string | null, updatedAt?: any | null, createdAt?: any | null, status?: RequestStatus | null, school?: { __typename?: 'School', id?: string | null, name?: string | null } | null, faculty?: { __typename?: 'Faculty', id?: string | null, name?: string | null } | null, user?: { __typename?: 'User', id?: string | null, username?: string | null } | null }> | null };
+
+export type GetAdminCourseRequestsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAdminCourseRequestsQuery = { __typename?: 'Query', getAdminCourseRequests?: Array<{ __typename?: 'CourseRequest', id?: string | null, title?: string | null, code?: string | null, updatedAt?: any | null, createdAt?: any | null, status?: RequestStatus | null, school?: { __typename?: 'School', id?: string | null, name?: string | null } | null, department?: { __typename?: 'Department', id?: string | null, name?: string | null } | null, user?: { __typename?: 'User', id?: string | null, username?: string | null } | null }> | null };
 
 
 export const AdminLoginDocument = gql`
@@ -1550,3 +1647,271 @@ export function useGetAdminsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type GetAdminsQueryHookResult = ReturnType<typeof useGetAdminsQuery>;
 export type GetAdminsLazyQueryHookResult = ReturnType<typeof useGetAdminsLazyQuery>;
 export type GetAdminsQueryResult = Apollo.QueryResult<GetAdminsQuery, GetAdminsQueryVariables>;
+export const GetFacultyDepartmentsDocument = gql`
+    query GetFacultyDepartments($facultyId: ID!) {
+  getFacultyDepartments(facultyId: $facultyId) {
+    id
+    name
+    updatedAt
+    createdAt
+  }
+}
+    `;
+
+/**
+ * __useGetFacultyDepartmentsQuery__
+ *
+ * To run a query within a React component, call `useGetFacultyDepartmentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFacultyDepartmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFacultyDepartmentsQuery({
+ *   variables: {
+ *      facultyId: // value for 'facultyId'
+ *   },
+ * });
+ */
+export function useGetFacultyDepartmentsQuery(baseOptions: Apollo.QueryHookOptions<GetFacultyDepartmentsQuery, GetFacultyDepartmentsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetFacultyDepartmentsQuery, GetFacultyDepartmentsQueryVariables>(GetFacultyDepartmentsDocument, options);
+      }
+export function useGetFacultyDepartmentsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetFacultyDepartmentsQuery, GetFacultyDepartmentsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetFacultyDepartmentsQuery, GetFacultyDepartmentsQueryVariables>(GetFacultyDepartmentsDocument, options);
+        }
+export type GetFacultyDepartmentsQueryHookResult = ReturnType<typeof useGetFacultyDepartmentsQuery>;
+export type GetFacultyDepartmentsLazyQueryHookResult = ReturnType<typeof useGetFacultyDepartmentsLazyQuery>;
+export type GetFacultyDepartmentsQueryResult = Apollo.QueryResult<GetFacultyDepartmentsQuery, GetFacultyDepartmentsQueryVariables>;
+export const GetDepartmentCoursesDocument = gql`
+    query GetDepartmentCourses($departmentId: ID!) {
+  getDepartmentCourses(departmentId: $departmentId) {
+    id
+    title
+    code
+    updatedAt
+    createdAt
+  }
+}
+    `;
+
+/**
+ * __useGetDepartmentCoursesQuery__
+ *
+ * To run a query within a React component, call `useGetDepartmentCoursesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDepartmentCoursesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDepartmentCoursesQuery({
+ *   variables: {
+ *      departmentId: // value for 'departmentId'
+ *   },
+ * });
+ */
+export function useGetDepartmentCoursesQuery(baseOptions: Apollo.QueryHookOptions<GetDepartmentCoursesQuery, GetDepartmentCoursesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetDepartmentCoursesQuery, GetDepartmentCoursesQueryVariables>(GetDepartmentCoursesDocument, options);
+      }
+export function useGetDepartmentCoursesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetDepartmentCoursesQuery, GetDepartmentCoursesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetDepartmentCoursesQuery, GetDepartmentCoursesQueryVariables>(GetDepartmentCoursesDocument, options);
+        }
+export type GetDepartmentCoursesQueryHookResult = ReturnType<typeof useGetDepartmentCoursesQuery>;
+export type GetDepartmentCoursesLazyQueryHookResult = ReturnType<typeof useGetDepartmentCoursesLazyQuery>;
+export type GetDepartmentCoursesQueryResult = Apollo.QueryResult<GetDepartmentCoursesQuery, GetDepartmentCoursesQueryVariables>;
+export const GetAdminSchoolRequestsDocument = gql`
+    query GetAdminSchoolRequests {
+  getAdminSchoolRequests {
+    id
+    name
+    fullAddress
+    updatedAt
+    createdAt
+    websiteURL
+    status
+    user {
+      id
+      username
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetAdminSchoolRequestsQuery__
+ *
+ * To run a query within a React component, call `useGetAdminSchoolRequestsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAdminSchoolRequestsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAdminSchoolRequestsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAdminSchoolRequestsQuery(baseOptions?: Apollo.QueryHookOptions<GetAdminSchoolRequestsQuery, GetAdminSchoolRequestsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAdminSchoolRequestsQuery, GetAdminSchoolRequestsQueryVariables>(GetAdminSchoolRequestsDocument, options);
+      }
+export function useGetAdminSchoolRequestsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAdminSchoolRequestsQuery, GetAdminSchoolRequestsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAdminSchoolRequestsQuery, GetAdminSchoolRequestsQueryVariables>(GetAdminSchoolRequestsDocument, options);
+        }
+export type GetAdminSchoolRequestsQueryHookResult = ReturnType<typeof useGetAdminSchoolRequestsQuery>;
+export type GetAdminSchoolRequestsLazyQueryHookResult = ReturnType<typeof useGetAdminSchoolRequestsLazyQuery>;
+export type GetAdminSchoolRequestsQueryResult = Apollo.QueryResult<GetAdminSchoolRequestsQuery, GetAdminSchoolRequestsQueryVariables>;
+export const GetAdminFacultyRequestsDocument = gql`
+    query GetAdminFacultyRequests {
+  getAdminFacultyRequests {
+    id
+    name
+    school {
+      id
+      name
+    }
+    updatedAt
+    createdAt
+    status
+    user {
+      username
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetAdminFacultyRequestsQuery__
+ *
+ * To run a query within a React component, call `useGetAdminFacultyRequestsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAdminFacultyRequestsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAdminFacultyRequestsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAdminFacultyRequestsQuery(baseOptions?: Apollo.QueryHookOptions<GetAdminFacultyRequestsQuery, GetAdminFacultyRequestsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAdminFacultyRequestsQuery, GetAdminFacultyRequestsQueryVariables>(GetAdminFacultyRequestsDocument, options);
+      }
+export function useGetAdminFacultyRequestsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAdminFacultyRequestsQuery, GetAdminFacultyRequestsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAdminFacultyRequestsQuery, GetAdminFacultyRequestsQueryVariables>(GetAdminFacultyRequestsDocument, options);
+        }
+export type GetAdminFacultyRequestsQueryHookResult = ReturnType<typeof useGetAdminFacultyRequestsQuery>;
+export type GetAdminFacultyRequestsLazyQueryHookResult = ReturnType<typeof useGetAdminFacultyRequestsLazyQuery>;
+export type GetAdminFacultyRequestsQueryResult = Apollo.QueryResult<GetAdminFacultyRequestsQuery, GetAdminFacultyRequestsQueryVariables>;
+export const GetAdminDepartmentRequestsDocument = gql`
+    query GetAdminDepartmentRequests {
+  getAdminDepartmentRequests {
+    id
+    name
+    school {
+      id
+      name
+    }
+    faculty {
+      id
+      name
+    }
+    user {
+      id
+      username
+    }
+    updatedAt
+    createdAt
+    status
+  }
+}
+    `;
+
+/**
+ * __useGetAdminDepartmentRequestsQuery__
+ *
+ * To run a query within a React component, call `useGetAdminDepartmentRequestsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAdminDepartmentRequestsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAdminDepartmentRequestsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAdminDepartmentRequestsQuery(baseOptions?: Apollo.QueryHookOptions<GetAdminDepartmentRequestsQuery, GetAdminDepartmentRequestsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAdminDepartmentRequestsQuery, GetAdminDepartmentRequestsQueryVariables>(GetAdminDepartmentRequestsDocument, options);
+      }
+export function useGetAdminDepartmentRequestsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAdminDepartmentRequestsQuery, GetAdminDepartmentRequestsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAdminDepartmentRequestsQuery, GetAdminDepartmentRequestsQueryVariables>(GetAdminDepartmentRequestsDocument, options);
+        }
+export type GetAdminDepartmentRequestsQueryHookResult = ReturnType<typeof useGetAdminDepartmentRequestsQuery>;
+export type GetAdminDepartmentRequestsLazyQueryHookResult = ReturnType<typeof useGetAdminDepartmentRequestsLazyQuery>;
+export type GetAdminDepartmentRequestsQueryResult = Apollo.QueryResult<GetAdminDepartmentRequestsQuery, GetAdminDepartmentRequestsQueryVariables>;
+export const GetAdminCourseRequestsDocument = gql`
+    query GetAdminCourseRequests {
+  getAdminCourseRequests {
+    id
+    title
+    code
+    school {
+      id
+      name
+    }
+    department {
+      id
+      name
+    }
+    user {
+      id
+      username
+    }
+    updatedAt
+    createdAt
+    status
+  }
+}
+    `;
+
+/**
+ * __useGetAdminCourseRequestsQuery__
+ *
+ * To run a query within a React component, call `useGetAdminCourseRequestsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAdminCourseRequestsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAdminCourseRequestsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAdminCourseRequestsQuery(baseOptions?: Apollo.QueryHookOptions<GetAdminCourseRequestsQuery, GetAdminCourseRequestsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAdminCourseRequestsQuery, GetAdminCourseRequestsQueryVariables>(GetAdminCourseRequestsDocument, options);
+      }
+export function useGetAdminCourseRequestsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAdminCourseRequestsQuery, GetAdminCourseRequestsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAdminCourseRequestsQuery, GetAdminCourseRequestsQueryVariables>(GetAdminCourseRequestsDocument, options);
+        }
+export type GetAdminCourseRequestsQueryHookResult = ReturnType<typeof useGetAdminCourseRequestsQuery>;
+export type GetAdminCourseRequestsLazyQueryHookResult = ReturnType<typeof useGetAdminCourseRequestsLazyQuery>;
+export type GetAdminCourseRequestsQueryResult = Apollo.QueryResult<GetAdminCourseRequestsQuery, GetAdminCourseRequestsQueryVariables>;
