@@ -486,10 +486,10 @@ export type Mutation = {
   deleteFacultyRequest?: Maybe<DeleteFacultyRequestMutationResponse>;
   deleteSchoolRequest?: Maybe<DeleteSchoolRequestMutationResponse>;
   deleteSchoolVerificationRequest: SchoolVerificationRequest;
-  editCourse: EditCourseMutationResponse;
-  editDepartment: EditDepartmentMutationResponse;
-  editFaculty: EditFacultyMutationResponse;
-  editSchool: EditSchoolMutationResponse;
+  editCourse: Course;
+  editDepartment: Department;
+  editFaculty: Faculty;
+  editSchool: School;
   forgotPassword: ForgotPasswordMutationResponse;
   makeSuperAdmin: MakeSuperAdminMutationResponse;
   removeAdmin: RemoveAdminMutationResponse;
@@ -1033,6 +1033,34 @@ export type UpdateAdminProfileMutationVariables = Exact<{
 
 export type UpdateAdminProfileMutation = { __typename?: 'Mutation', updateAdminProfile?: { __typename?: 'Admin', id?: string | null, email?: string | null, fullName?: string | null, role?: AdminRole | null, updatedAt?: any | null, createdAt?: any | null, status?: AdminStatus | null, profileImage?: string | null, lastSeen?: any | null } | null };
 
+export type EditSchoolMutationVariables = Exact<{
+  data: EditSchoolInput;
+}>;
+
+
+export type EditSchoolMutation = { __typename?: 'Mutation', editSchool: { __typename?: 'School', id?: string | null, name?: string | null, fullAddress?: string | null, lat?: number | null, lng?: number | null, websiteURL?: string | null, emailSuffix?: string | null, updatedAt?: any | null, createdAt?: any | null } };
+
+export type EditFacultyMutationVariables = Exact<{
+  data: EditFacultyInput;
+}>;
+
+
+export type EditFacultyMutation = { __typename?: 'Mutation', editFaculty: { __typename?: 'Faculty', id?: string | null, name?: string | null, updatedAt?: any | null, createdAt?: any | null } };
+
+export type EditDepartmentMutationVariables = Exact<{
+  data: EditDepartmentInput;
+}>;
+
+
+export type EditDepartmentMutation = { __typename?: 'Mutation', editDepartment: { __typename?: 'Department', id?: string | null, name?: string | null, updatedAt?: any | null, createdAt?: any | null } };
+
+export type EditCourseMutationVariables = Exact<{
+  data: EditCourseInput;
+}>;
+
+
+export type EditCourseMutation = { __typename?: 'Mutation', editCourse: { __typename?: 'Course', id?: string | null, title?: string | null, code?: string | null, updatedAt?: any | null, createdAt?: any | null } };
+
 export type GetSchoolsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1477,6 +1505,156 @@ export function useUpdateAdminProfileMutation(baseOptions?: Apollo.MutationHookO
 export type UpdateAdminProfileMutationHookResult = ReturnType<typeof useUpdateAdminProfileMutation>;
 export type UpdateAdminProfileMutationResult = Apollo.MutationResult<UpdateAdminProfileMutation>;
 export type UpdateAdminProfileMutationOptions = Apollo.BaseMutationOptions<UpdateAdminProfileMutation, UpdateAdminProfileMutationVariables>;
+export const EditSchoolDocument = gql`
+    mutation EditSchool($data: EditSchoolInput!) {
+  editSchool(data: $data) {
+    id
+    name
+    fullAddress
+    lat
+    lng
+    websiteURL
+    emailSuffix
+    updatedAt
+    createdAt
+  }
+}
+    `;
+export type EditSchoolMutationFn = Apollo.MutationFunction<EditSchoolMutation, EditSchoolMutationVariables>;
+
+/**
+ * __useEditSchoolMutation__
+ *
+ * To run a mutation, you first call `useEditSchoolMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditSchoolMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editSchoolMutation, { data, loading, error }] = useEditSchoolMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useEditSchoolMutation(baseOptions?: Apollo.MutationHookOptions<EditSchoolMutation, EditSchoolMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditSchoolMutation, EditSchoolMutationVariables>(EditSchoolDocument, options);
+      }
+export type EditSchoolMutationHookResult = ReturnType<typeof useEditSchoolMutation>;
+export type EditSchoolMutationResult = Apollo.MutationResult<EditSchoolMutation>;
+export type EditSchoolMutationOptions = Apollo.BaseMutationOptions<EditSchoolMutation, EditSchoolMutationVariables>;
+export const EditFacultyDocument = gql`
+    mutation EditFaculty($data: EditFacultyInput!) {
+  editFaculty(data: $data) {
+    id
+    name
+    updatedAt
+    createdAt
+  }
+}
+    `;
+export type EditFacultyMutationFn = Apollo.MutationFunction<EditFacultyMutation, EditFacultyMutationVariables>;
+
+/**
+ * __useEditFacultyMutation__
+ *
+ * To run a mutation, you first call `useEditFacultyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditFacultyMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editFacultyMutation, { data, loading, error }] = useEditFacultyMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useEditFacultyMutation(baseOptions?: Apollo.MutationHookOptions<EditFacultyMutation, EditFacultyMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditFacultyMutation, EditFacultyMutationVariables>(EditFacultyDocument, options);
+      }
+export type EditFacultyMutationHookResult = ReturnType<typeof useEditFacultyMutation>;
+export type EditFacultyMutationResult = Apollo.MutationResult<EditFacultyMutation>;
+export type EditFacultyMutationOptions = Apollo.BaseMutationOptions<EditFacultyMutation, EditFacultyMutationVariables>;
+export const EditDepartmentDocument = gql`
+    mutation EditDepartment($data: EditDepartmentInput!) {
+  editDepartment(data: $data) {
+    id
+    name
+    updatedAt
+    createdAt
+  }
+}
+    `;
+export type EditDepartmentMutationFn = Apollo.MutationFunction<EditDepartmentMutation, EditDepartmentMutationVariables>;
+
+/**
+ * __useEditDepartmentMutation__
+ *
+ * To run a mutation, you first call `useEditDepartmentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditDepartmentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editDepartmentMutation, { data, loading, error }] = useEditDepartmentMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useEditDepartmentMutation(baseOptions?: Apollo.MutationHookOptions<EditDepartmentMutation, EditDepartmentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditDepartmentMutation, EditDepartmentMutationVariables>(EditDepartmentDocument, options);
+      }
+export type EditDepartmentMutationHookResult = ReturnType<typeof useEditDepartmentMutation>;
+export type EditDepartmentMutationResult = Apollo.MutationResult<EditDepartmentMutation>;
+export type EditDepartmentMutationOptions = Apollo.BaseMutationOptions<EditDepartmentMutation, EditDepartmentMutationVariables>;
+export const EditCourseDocument = gql`
+    mutation EditCourse($data: EditCourseInput!) {
+  editCourse(data: $data) {
+    id
+    title
+    code
+    updatedAt
+    createdAt
+  }
+}
+    `;
+export type EditCourseMutationFn = Apollo.MutationFunction<EditCourseMutation, EditCourseMutationVariables>;
+
+/**
+ * __useEditCourseMutation__
+ *
+ * To run a mutation, you first call `useEditCourseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditCourseMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editCourseMutation, { data, loading, error }] = useEditCourseMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useEditCourseMutation(baseOptions?: Apollo.MutationHookOptions<EditCourseMutation, EditCourseMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditCourseMutation, EditCourseMutationVariables>(EditCourseDocument, options);
+      }
+export type EditCourseMutationHookResult = ReturnType<typeof useEditCourseMutation>;
+export type EditCourseMutationResult = Apollo.MutationResult<EditCourseMutation>;
+export type EditCourseMutationOptions = Apollo.BaseMutationOptions<EditCourseMutation, EditCourseMutationVariables>;
 export const GetSchoolsDocument = gql`
     query GetSchools {
   getSchools {

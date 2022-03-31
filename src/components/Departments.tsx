@@ -17,8 +17,7 @@ import {
 import React, { useEffect } from 'react';
 import {
   Department,
-  Faculty,
-  School,
+  useEditDepartmentMutation,
   useGetFacultyDepartmentsLazyQuery,
   useGetSchoolFacultiesLazyQuery,
 } from '../graphql/graphql';
@@ -36,6 +35,8 @@ function Row(props: { department: Department }) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const [editDepartment, { loading }] = useEditDepartmentMutation();
 
   const { register, handleSubmit, control, reset, watch } = useForm({
     defaultValues: {
@@ -113,7 +114,7 @@ function Row(props: { department: Department }) {
                 lineHeight: '31px',
               }}
             >
-              Edit Faculty
+              Edit Department
             </Typography>
             <Typography
               id="transition-modal-description"
@@ -124,12 +125,20 @@ function Row(props: { department: Department }) {
                 color: (t) => t.palette.text.primary,
               }}
             >
-              Kindly edit this faculty information
+              Kindly edit this department information
             </Typography>
             <form
               onSubmit={handleSubmit(async (data) => {
-                // TODO: send to the server!!!
-                console.log(data);
+                await editDepartment({
+                  variables: {
+                    data: {
+                      name: data.name as string,
+                      id: department.id as string,
+                    },
+                  },
+                });
+
+                handleClose();
               })}
             >
               <FormControl
@@ -201,7 +210,7 @@ function Row(props: { department: Department }) {
                     marginLeft: '1rem',
                   }}
                 >
-                  Save
+                  {loading ? <CircularProgress color="inherit" /> : 'Save'}
                 </Button>
               </FormControl>
             </form>
@@ -256,16 +265,8 @@ const Departments = () => {
     }
   }, [facultyId]);
 
-  //   useEffect(() => {
-  //     if (!schoolsLoading) {
-  //       reset({
-  //         schoolId: schoolsData?.getSchools[0].id,
-  //       });
-  //     }
-  //   }, [schoolsLoading]);
-
   return (
-    <Box sx={{ padding: '1rem' }}>
+    <Box sx={{ paddingRight: '1rem' }}>
       <Stack
         direction="row"
         justifyContent="flex-end"

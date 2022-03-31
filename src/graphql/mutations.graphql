@@ -114,3 +114,45 @@ mutation UpdateAdminProfile($data: AdminProfileUpateInput!) {
     lastSeen
   }
 }
+
+mutation EditSchool($data: EditSchoolInput!) {
+  editSchool(data: $data) {
+    id
+    name
+    fullAddress
+    lat
+    lng
+    websiteURL
+    emailSuffix
+    updatedAt
+    createdAt
+  }
+}
+
+mutation EditFaculty($data: EditFacultyInput!) {
+  editFaculty(data: $data) {
+    id
+    name
+    updatedAt
+    createdAt
+  }
+}
+
+mutation EditDepartment($data: EditDepartmentInput!) {
+  editDepartment(data: $data) {
+    id
+    name
+    updatedAt
+    createdAt
+  }
+}
+
+mutation EditCourse($data: EditCourseInput!) {
+  editCourse(data: $data) {
+    id
+    title
+    code
+    updatedAt
+    createdAt
+  }
+}

@@ -14,7 +14,7 @@ import {
   OutlinedInput,
 } from '@mui/material';
 import React from 'react';
-import { School } from '../graphql/graphql';
+import { School, useEditSchoolMutation } from '../graphql/graphql';
 import CircularProgress from '@mui/material/CircularProgress';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
@@ -24,10 +24,13 @@ import { useGetSchoolsQuery } from '../graphql/graphql';
 import { useForm } from 'react-hook-form';
 
 function Row(props: { school: School }) {
+  const [editSchool, { loading }] = useEditSchoolMutation();
+
   const { school } = props;
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
 
   const { register, handleSubmit, control, reset, watch } = useForm({
     defaultValues: {
@@ -158,8 +161,12 @@ function Row(props: { school: School }) {
             </Typography>
             <form
               onSubmit={handleSubmit(async (data) => {
-                // TODO: send to the server!!!
-                console.log(data);
+                await editSchool({
+                  variables: {
+                    data: { ...data, id: school.id as string },
+                  },
+                });
+                handleClose();
               })}
             >
               <FormControl
@@ -327,7 +334,7 @@ function Row(props: { school: School }) {
                     marginLeft: '1rem',
                   }}
                 >
-                  Save
+                  {loading ? <CircularProgress color="inherit" /> : 'Save'}
                 </Button>
               </FormControl>
             </form>
@@ -342,7 +349,7 @@ const Schools = () => {
   const { data, loading } = useGetSchoolsQuery();
 
   return (
-    <Box sx={{ padding: '1rem' }}>
+    <Box sx={{paddingRight: "1rem"}}>
       {loading ? (
         <Box
           sx={{

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import SelectUnstyled, { selectUnstyledClasses } from '@mui/base/SelectUnstyled';
 import OptionUnstyled, { optionUnstyledClasses } from '@mui/base/OptionUnstyled';
 import PopperUnstyled from '@mui/base/PopperUnstyled';
@@ -37,7 +36,7 @@ const StyledButton = styled('button')(
   box-sizing: border-box;
   min-height: calc(1.5em + 22px);
   min-width: 320px;
-  border: 1px solid ${theme.palette.mode === 'dark' ? '#4a4c4e' : 'white'};
+  border: 1px solid ${theme.palette.mode === 'dark' ? '#4a4c4e' : 'rgba(0, 0, 0, 0.23)'};
   border-radius: 4px;
   margin-top: 0.5em;
   padding: 10px;
@@ -128,23 +127,6 @@ const StyledPopper = styled(PopperUnstyled)`
   z-index: 1;
 `;
 
-// function CustomSelect(props: any) {
-//   const components = {
-//     Root: StyledButton,
-//     Listbox: StyledListbox,
-//     Popper: StyledPopper,
-//     ...props.components,
-//   };
-
-//   console.log(props, "props.handler")
-
-//   return (
-//       <>
-//         <SelectUnstyled {...props} components={components} />
-//       </>
-//   ) 
-// }
-
 
 const CustomSelect = React.forwardRef((props: any, ref) => {
     const components = {
@@ -157,10 +139,13 @@ const CustomSelect = React.forwardRef((props: any, ref) => {
 
       return (
         <Controller
-        render={({ field }) =><SelectUnstyled defaultValue={props.defaultValue} {...ref}  {...props} {...field} components={components} />  }
+        render={({ field }) =><SelectUnstyled  {...ref}  {...props} {...field} components={components}  
+        // value={props.defaultValue} 
+        />  
+      }
         name={props.name}
         control={props.control}
-        defaultValue={props.defaultValue}
+        // defaultValue={props.defaultValue}
       />
       )
 });

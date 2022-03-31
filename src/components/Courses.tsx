@@ -20,6 +20,7 @@ import {
   Department,
   Faculty,
   School,
+  useEditCourseMutation,
   useGetDepartmentCoursesLazyQuery,
   useGetFacultyDepartmentsLazyQuery,
   useGetSchoolFacultiesLazyQuery,
@@ -38,6 +39,8 @@ function Row(props: { course: Course }) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const [editCourse, { loading }] = useEditCourseMutation();
 
   const { register, handleSubmit, control, reset, watch } = useForm({
     defaultValues: {
@@ -127,7 +130,7 @@ function Row(props: { course: Course }) {
                 lineHeight: '31px',
               }}
             >
-              Edit Faculty
+              Edit Course
             </Typography>
             <Typography
               id="transition-modal-description"
@@ -138,12 +141,24 @@ function Row(props: { course: Course }) {
                 color: (t) => t.palette.text.primary,
               }}
             >
-              Kindly edit this faculty information
+              Kindly edit this course information
             </Typography>
             <form
               onSubmit={handleSubmit(async (data) => {
                 // TODO: send to the server!!!
                 console.log(data);
+
+                await editCourse({
+                  variables: {
+                    data: {
+                      title: data.title,
+                      code: data.code,
+                      id: course.id as string,
+                    },
+                  },
+                });
+
+                handleClose();
               })}
             >
               <FormControl
@@ -246,7 +261,7 @@ function Row(props: { course: Course }) {
                     marginLeft: '1rem',
                   }}
                 >
-                  Save
+                  {loading ? <CircularProgress color="inherit" /> : 'Save'}
                 </Button>
               </FormControl>
             </form>
@@ -312,14 +327,6 @@ const Courses = () => {
       });
     }
   }, [departmentId]);
-
-  //   useEffect(() => {
-  //     if (!schoolsLoading) {
-  //       reset({
-  //         schoolId: schoolsData?.getSchools[0].id,
-  //       });
-  //     }
-  //   }, [schoolsLoading]);
 
   return (
     <Box sx={{ padding: '1rem' }}>

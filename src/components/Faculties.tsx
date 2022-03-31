@@ -18,6 +18,7 @@ import React, { useEffect } from 'react';
 import {
   Faculty,
   School,
+  useEditFacultyMutation,
   useGetSchoolFacultiesLazyQuery,
 } from '../graphql/graphql';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -35,9 +36,11 @@ function Row(props: { faculty: Faculty }) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const [editFaculty, { loading }] = useEditFacultyMutation();
+
   const { register, handleSubmit, control, reset, watch } = useForm({
     defaultValues: {
-      name: faculty.name,
+      name: faculty.name as string,
     },
   });
 
@@ -126,8 +129,16 @@ function Row(props: { faculty: Faculty }) {
             </Typography>
             <form
               onSubmit={handleSubmit(async (data) => {
-                // TODO: send to the server!!!
-                console.log(data);
+                await editFaculty({
+                  variables: {
+                    data: {
+                      ...data,
+                      id: faculty.id as string,
+                    },
+                  },
+                });
+
+                handleClose();
               })}
             >
               <FormControl
@@ -199,7 +210,7 @@ function Row(props: { faculty: Faculty }) {
                     marginLeft: '1rem',
                   }}
                 >
-                  Save
+                  {loading ? <CircularProgress color="inherit" /> : 'Save'}
                 </Button>
               </FormControl>
             </form>
@@ -226,8 +237,6 @@ const Faculties = () => {
 
   const schoolId = watch('schoolId');
 
-  console.log(schoolId, facultiesData)
-
   useEffect(() => {
     if (schoolId) {
       getSchoolFaculties({
@@ -247,7 +256,7 @@ const Faculties = () => {
   }, [schoolsLoading]);
 
   return (
-    <Box sx={{ padding: '1rem' }}>
+    <Box sx={{ paddingRight: '1rem' }}>
       <Stack justifyContent="flex-end" sx={{ width: '40%' }}>
         <SelectInput name="schoolId" control={control}>
           {schoolsData?.getSchools.map((school) => (
