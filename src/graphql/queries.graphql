@@ -41,7 +41,6 @@ query GetAdmin {
   }
 }
 
-
 query GetAdmins {
   getAdmins {
     createdAt
@@ -53,5 +52,103 @@ query GetAdmins {
     status
     profileImage
     lastSeen
+  }
+}
+
+query GetFacultyDepartments($facultyId: ID!) {
+  getFacultyDepartments(facultyId: $facultyId) {
+    id
+    name
+    updatedAt
+    createdAt
+  }
+}
+
+query GetDepartmentCourses($departmentId: ID!) {
+  getDepartmentCourses(departmentId: $departmentId) {
+    id
+    title
+    code
+    updatedAt
+    createdAt
+  }
+}
+
+query GetAdminSchoolRequests {
+  getAdminSchoolRequests {
+    id
+    name
+    fullAddress
+    updatedAt
+    createdAt
+    websiteURL
+    status
+    user {
+      id
+      username
+    }
+  }
+}
+
+query GetAdminFacultyRequests {
+  getAdminFacultyRequests {
+    id
+    name
+    school {
+      id
+      name
+    }
+    updatedAt
+    createdAt
+    status
+    user {
+      username
+      id
+    }
+  }
+}
+
+query GetAdminDepartmentRequests {
+  getAdminDepartmentRequests {
+    id
+    name
+    school {
+      id
+      name
+    }
+    faculty {
+      id
+      name
+    }
+    user {
+      id
+      username
+    }
+    updatedAt
+    createdAt
+    status
+  }
+}
+
+query GetAdminCourseRequests {
+  getAdminCourseRequests {
+    id
+    title
+    code
+    school {
+      id
+      name
+    }
+    department {
+      id
+      name
+    }
+    user {
+      id
+      username
+    }
+    updatedAt
+    createdAt
+    status
   }
 }
