@@ -26,6 +26,7 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Backdrop from '@mui/material/Backdrop';
 import SelectInput, { StyledOption } from '../components/SelectInput';
+import { useTheme } from '@emotion/react';
 
 import { useGetSchoolsQuery } from '../graphql/graphql';
 import { useForm } from 'react-hook-form';
@@ -35,6 +36,7 @@ function Row(props: { department: Department }) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const theme = useTheme();
 
   const [editDepartment, { loading }] = useEditDepartmentMutation();
 
@@ -97,8 +99,12 @@ function Row(props: { department: Department }) {
               left: '50%',
               transform: 'translate(-50%, -50%)',
               width: 400,
-              bgcolor: (t) => t.palette.background.paper,
-              border: '2px solid #fff',
+              bgcolor: (t) => {
+                //@ts-ignore
+                return theme.palette.mode === 'light'
+                  ? '#F0F7FF'
+                  : t.palette.common.black;
+              },
               borderRadius: '17.0956px',
               boxShadow: '0px 34.1912px 119.669px rgba(86, 89, 146, 0.1)',
               p: 4,
@@ -112,6 +118,7 @@ function Row(props: { department: Department }) {
                 fontWeight: 500,
                 fontSize: '20.5147px',
                 lineHeight: '31px',
+                color: (t) => t.palette.text.primary,
               }}
             >
               Edit Department

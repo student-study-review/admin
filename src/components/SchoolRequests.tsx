@@ -8,30 +8,25 @@ import {
   TableHead,
   TableBody,
   Box,
-  Button,
-  FormControl,
-  FormLabel,
-  OutlinedInput,
   IconButton,
   Menu,
   MenuItem,
 } from '@mui/material';
 import React from 'react';
 import {
-  School,
+  AcceptOrReject,
   SchoolRequest,
+  useAcceptRejectSchoolRequestMutation,
   useGetAdminSchoolRequestsQuery,
 } from '../graphql/graphql';
 import CircularProgress from '@mui/material/CircularProgress';
-import Modal from '@mui/material/Modal';
-import Fade from '@mui/material/Fade';
-import Backdrop from '@mui/material/Backdrop';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-
-import { useForm } from 'react-hook-form';
 
 function Row(props: { schoolRequest: SchoolRequest }) {
   const { schoolRequest } = props;
+
+  const [acceptOrReject, { loading, data }] =
+    useAcceptRejectSchoolRequestMutation();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -124,8 +119,39 @@ function Row(props: { schoolRequest: SchoolRequest }) {
               horizontal: 'left',
             }}
           >
-            <MenuItem onClick={handleClose}>Accept</MenuItem>
-            <MenuItem onClick={handleClose}>Reject</MenuItem>
+            <MenuItem
+              onClick={async () => {
+                await acceptOrReject({
+                  variables: {
+                    data: {
+                      id: schoolRequest.id as string,
+                      acceptOrReject: AcceptOrReject.Accept,
+                    },
+                  },
+                });
+                handleClose();
+                window.location.reload()
+              }}
+            >
+              Accept
+            </MenuItem>
+            <MenuItem
+              onClick={async () => {
+                await acceptOrReject({
+                  variables: {
+                    data: {
+                      id: schoolRequest.id as string,
+                      acceptOrReject: AcceptOrReject.Reject,
+                    },
+                  },
+                });
+                handleClose();
+                // fix this
+                window.location.reload()
+              }}
+            >
+              Reject
+            </MenuItem>
           </Menu>
         </TableCell>
       </TableRow>
@@ -136,10 +162,8 @@ function Row(props: { schoolRequest: SchoolRequest }) {
 const SchoolRequests = () => {
   const { data, loading } = useGetAdminSchoolRequestsQuery();
 
-  console.log(data, loading, 'data and loading...');
-
   return (
-    <Box sx={{ padding: '1rem' }}>
+    <Box sx={{ paddingRight: '1rem' }}>
       {loading ? (
         <Box
           sx={{

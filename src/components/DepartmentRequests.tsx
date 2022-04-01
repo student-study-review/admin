@@ -14,7 +14,9 @@ import {
 } from '@mui/material';
 import React from 'react';
 import {
+  AcceptOrReject,
   DepartmentRequest,
+  useAcceptRejectDepartmentRequestMutation,
   useGetAdminDepartmentRequestsQuery,
 } from '../graphql/graphql';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -22,6 +24,9 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 function Row(props: { departmentRequest: DepartmentRequest }) {
   const { departmentRequest } = props;
+
+  const [acceptOrReject, { loading, data }] =
+    useAcceptRejectDepartmentRequestMutation();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -104,8 +109,38 @@ function Row(props: { departmentRequest: DepartmentRequest }) {
               horizontal: 'left',
             }}
           >
-            <MenuItem onClick={handleClose}>Accept</MenuItem>
-            <MenuItem onClick={handleClose}>Reject</MenuItem>
+            <MenuItem
+              onClick={async () => {
+                await acceptOrReject({
+                  variables: {
+                    data: {
+                      id: departmentRequest.id as string,
+                      acceptOrReject: AcceptOrReject.Accept,
+                    },
+                  },
+                });
+                handleClose();
+                window.location.reload();
+              }}
+            >
+              Accept
+            </MenuItem>
+            <MenuItem
+              onClick={async () => {
+                await acceptOrReject({
+                  variables: {
+                    data: {
+                      id: departmentRequest.id as string,
+                      acceptOrReject: AcceptOrReject.Reject,
+                    },
+                  },
+                });
+                handleClose();
+                window.location.reload();
+              }}
+            >
+              Reject
+            </MenuItem>
           </Menu>
         </TableCell>
       </TableRow>
@@ -119,7 +154,7 @@ const DepartmentRequests = () => {
   console.log(data, loading, 'data and loading...');
 
   return (
-    <Box sx={{ padding: '1rem' }}>
+    <Box sx={{ paddingRight: '1rem' }}>
       {loading ? (
         <Box
           sx={{

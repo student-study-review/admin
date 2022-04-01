@@ -14,16 +14,19 @@ import {
 } from '@mui/material';
 import React from 'react';
 import {
-    CourseRequest,
-  DepartmentRequest,
+  AcceptOrReject,
+  CourseRequest,
+  useAcceptRejectCourseRequestMutation,
   useGetAdminCourseRequestsQuery,
-  useGetAdminDepartmentRequestsQuery,
 } from '../graphql/graphql';
 import CircularProgress from '@mui/material/CircularProgress';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 function Row(props: { courseRequest: CourseRequest }) {
   const { courseRequest } = props;
+
+  const [acceptOrReject, { loading, data }] =
+    useAcceptRejectCourseRequestMutation();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -118,8 +121,38 @@ function Row(props: { courseRequest: CourseRequest }) {
               horizontal: 'left',
             }}
           >
-            <MenuItem onClick={handleClose}>Accept</MenuItem>
-            <MenuItem onClick={handleClose}>Reject</MenuItem>
+            <MenuItem
+              onClick={async () => {
+                await acceptOrReject({
+                  variables: {
+                    data: {
+                      id: courseRequest.id as string,
+                      acceptOrReject: AcceptOrReject.Accept,
+                    },
+                  },
+                });
+                handleClose();
+                window.location.reload();
+              }}
+            >
+              Accept
+            </MenuItem>
+            <MenuItem
+              onClick={async () => {
+                await acceptOrReject({
+                  variables: {
+                    data: {
+                      id: courseRequest.id as string,
+                      acceptOrReject: AcceptOrReject.Reject,
+                    },
+                  },
+                });
+                handleClose();
+                window.location.reload();
+              }}
+            >
+              Reject
+            </MenuItem>
           </Menu>
         </TableCell>
       </TableRow>
@@ -128,13 +161,12 @@ function Row(props: { courseRequest: CourseRequest }) {
 }
 
 const CourseRequests = () => {
-
-  const { data, loading } = useGetAdminCourseRequestsQuery()
+  const { data, loading } = useGetAdminCourseRequestsQuery();
 
   console.log(data, loading, 'data and loading...');
 
   return (
-    <Box sx={{ padding: '1rem' }}>
+    <Box sx={{ paddingRight: '1rem' }}>
       {loading ? (
         <Box
           sx={{
@@ -206,13 +238,10 @@ const CourseRequests = () => {
             </TableHead>
             <TableBody>
               {data?.getAdminCourseRequests?.map((courseRequest) => {
-                  return (
-                    <Row
-                      key={courseRequest.id}
-                      courseRequest={courseRequest}
-                    />
-                  );
-                })}
+                return (
+                  <Row key={courseRequest.id} courseRequest={courseRequest} />
+                );
+              })}
             </TableBody>
           </Table>
         </TableContainer>

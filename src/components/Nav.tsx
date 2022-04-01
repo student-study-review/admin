@@ -19,8 +19,10 @@ import UserDropDown from './UserDropdown';
 
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
-const Nav: React.FC<{ title: string, showUserDropDown?: boolean }> = ({ title, showUserDropDown = true }) => {
-
+const Nav: React.FC<{ title: string; showUserDropDown?: boolean }> = ({
+  title,
+  showUserDropDown = true,
+}) => {
   const { toggleColorMode } = React.useContext(ColorModeContext);
 
   return (
@@ -43,7 +45,7 @@ const Nav: React.FC<{ title: string, showUserDropDown?: boolean }> = ({ title, s
               borderRadius: '50px',
               paddingLeft: '1rem',
               paddingRight: '1rem',
-              background: t => t.palette.background.paper,
+              background: (t) => t.palette.background.paper,
               border: '0px',
             }}
             startAdornment={
@@ -74,11 +76,17 @@ const Nav: React.FC<{ title: string, showUserDropDown?: boolean }> = ({ title, s
           justifyContent: 'space-between',
         }}
       >
-        <LightModeIcon color="primary" />
-        <Switch {...label} onChange={toggleColorMode} defaultChecked size="medium" color='primary' />
         <DarkModeIcon color="primary" />
+        <Switch
+          {...label}
+          onChange={toggleColorMode}
+          defaultChecked
+          size="medium"
+          color="primary"
+        />
+        <LightModeIcon color="primary" />
       </Box>
-      {showUserDropDown && <UserDropDown /> }
+      {showUserDropDown && <UserDropDown />}
     </Box>
   );
 };

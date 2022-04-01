@@ -19,18 +19,19 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Backdrop from '@mui/material/Backdrop';
+import { useTheme } from '@emotion/react';
 
 import { useGetSchoolsQuery } from '../graphql/graphql';
 import { useForm } from 'react-hook-form';
 
 function Row(props: { school: School }) {
   const [editSchool, { loading }] = useEditSchoolMutation();
+  const theme = useTheme();
 
   const { school } = props;
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
 
   const { register, handleSubmit, control, reset, watch } = useForm({
     defaultValues: {
@@ -129,8 +130,13 @@ function Row(props: { school: School }) {
               left: '50%',
               transform: 'translate(-50%, -50%)',
               width: 400,
-              bgcolor: (t) => t.palette.background.paper,
-              border: '2px solid #fff',
+              // bgcolor: (t) => t.palette.background.paper,
+              bgcolor: (t) => {
+                //@ts-ignore
+                return theme.palette.mode === 'light'
+                  ? '#F0F7FF'
+                  : t.palette.common.black;
+              },
               borderRadius: '17.0956px',
               boxShadow: '0px 34.1912px 119.669px rgba(86, 89, 146, 0.1)',
               p: 4,
@@ -144,6 +150,7 @@ function Row(props: { school: School }) {
                 fontWeight: 500,
                 fontSize: '20.5147px',
                 lineHeight: '31px',
+                color: (t) => t.palette.text.primary,
               }}
             >
               Edit School
@@ -349,7 +356,7 @@ const Schools = () => {
   const { data, loading } = useGetSchoolsQuery();
 
   return (
-    <Box sx={{paddingRight: "1rem"}}>
+    <Box sx={{ paddingRight: '1rem' }}>
       {loading ? (
         <Box
           sx={{

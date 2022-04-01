@@ -70,7 +70,6 @@ const UserDropDown = () => {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        // width: '25%',
       }}
     >
       <IconButton>
@@ -88,7 +87,6 @@ const UserDropDown = () => {
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
-          background: '#F0F7FF',
           padding: '4px',
           borderRadius: '4px',
         }}
