@@ -1,16 +1,120 @@
-import { Box, Button, Grid, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import {
+  Box,
+  Button,
+  CircularProgress,
+  FormControl,
+  Grid,
+  Select,
+  Stack,
+  Tooltip,
+  Typography,
+} from '@mui/material';
+import React from 'react';
 import Nav from '../components/Nav';
 import UserDropDown from '../components/UserDropdown';
 import VerificationBox from '../components/VerificationBox';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { DateRangePicker } from 'react-date-range';
-import { useGetAdminQuery } from '../graphql/graphql';
+import {
+  useGetAdminQuery,
+  useGetAdminSchoolVerificationRequestsQuery,
+} from '../graphql/graphql';
+import MenuItem from '@mui/material/MenuItem';
+import { useTheme } from '@emotion/react';
+
+import {
+  LineChart,
+  Line,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  ResponsiveContainer,
+  Legend,
+  Tooltip as CTooltip,
+} from 'recharts';
+import { useForm } from 'react-hook-form';
+
+const data = [
+  {
+    name: 'January',
+    requests: 5000,
+    processed: 4909,
+    accepts: 546,
+    reject: 5654,
+  },
+  {
+    name: 'Febuary',
+    requests: 4750,
+    processed: 4355,
+    accepts: 5466,
+    reject: 645,
+  },
+  {
+    name: 'March',
+    requests: 5040,
+    processed: 43545,
+    accepts: 5656,
+    reject: 435,
+  },
+  { name: 'April', requests: 394, processed: 3453, accepts: 6756, reject: 433 },
+  { name: 'May', requests: 2334, processed: 543, accepts: 65765, reject: 439 },
+  { name: 'June', requests: 4334, processed: 4353, accepts: 657, reject: 3453 },
+  { name: 'July', requests: 4343, processed: 65756, accepts: 6575, reject: 43 },
+  {
+    name: 'August',
+    requests: 3443,
+    processed: 65756,
+    accepts: 6577,
+    reject: 43534,
+  },
+  {
+    name: 'September',
+    requests: 3443,
+    processed: 56756,
+    accepts: 657,
+    reject: 4353,
+  },
+  {
+    name: 'October',
+    requests: 3443,
+    processed: 7657,
+    accepts: 6577,
+    reject: 4353,
+  },
+  {
+    name: 'November',
+    requests: 8943,
+    processed: 657,
+    accepts: 56756,
+    reject: 345,
+  },
+  {
+    name: 'Decemeber',
+    requests: 3453,
+    processed: 7483,
+    accepts: 43534,
+    reject: 3443,
+  },
+];
 
 function Overview() {
+  const { data: adminData } = useGetAdminQuery();
 
-  const { data: adminData, loading: adminDataLoading } = useGetAdminQuery();
+  const { data: verificationData, loading: verificationDataLoading } =
+    useGetAdminSchoolVerificationRequestsQuery();
+
+  const theme = useTheme();
+
+  console.log(verificationData, 'verificationData!!!');
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: {},
+  } = useForm();
 
   return (
     <Grid container spacing={2}>
@@ -39,7 +143,10 @@ function Overview() {
                 marginBottom: '1rem',
               }}
             >
-              Welcome back{ adminData && `, ${(adminData.getAdmin.fullName)?.split(" ")[0] }` } 👋
+              Welcome back
+              {adminData &&
+                `, ${adminData.getAdmin.fullName?.split(' ')[0]}`}{' '}
+              👋
             </Typography>
             <Typography
               sx={{
@@ -95,16 +202,18 @@ function Overview() {
         >
           <Box
             sx={{
-              background: (t) => t.palette.background.paper,
+              
+              background: (t) =>
+                //@ts-ignore
+                theme.palette?.mode === 'dark'
+                  ? t.palette.common.black
+                  : t.palette.background.default,
               borderRadius: '10.5747px',
               minWidth: '222px',
               minHeight: '79px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              // boxShadow: "-2px 2px 7px 1px rgb(51 51 51 / 74%)"
-
-              // border: t => `1px solid ${t.palette.background.paper}`
             }}
           >
             <span>
@@ -152,9 +261,12 @@ function Overview() {
 
           <Box
             sx={{
-              // background: t => t.palette.background.default,
-              background: (t) => t.palette.background.paper,
-              // boxShadow: "-2px 2px 7px 1px rgb(51 51 51 / 74%)",
+              //@ts-ignore
+              background: (t) =>
+                //@ts-ignore
+                theme.palette?.mode === 'dark'
+                  ? t.palette.common.black
+                  : t.palette.background.default,
               borderRadius: '10.5747px',
               minWidth: '222px',
               minHeight: '79px',
@@ -207,7 +319,12 @@ function Overview() {
           </Box>
           <Box
             sx={{
-              background: (t) => t.palette.background.paper,
+              //@ts-ignore
+              background: (t) =>
+                //@ts-ignore
+                theme.palette?.mode === 'dark'
+                  ? t.palette.common.black
+                  : t.palette.background.default,
               // boxShadow: "-2px 2px 7px 1px rgb(51 51 51 / 74%)",
               borderRadius: '10.5747px',
               minWidth: '222px',
@@ -260,6 +377,77 @@ function Overview() {
             </svg>
           </Box>
         </Box>
+        <Stack
+          direction="column"
+          sx={{
+            background: (t) => t.palette.background.paper,
+            height: '350px',
+            boxShadow:
+              'box-shadow: 0px 6.30065px 15.7516px rgba(0, 0, 0, 0.02)',
+            borderRadius: '15.7516px',
+          }}
+        >
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between"
+            padding="1rem 1.5rem"
+          >
+            <Typography
+              sx={{
+                fontWeight: 600,
+                fontSize: '18.9px',
+                color: (t) => t.palette.text.primary,
+              }}
+            >
+              Yearly Requests
+            </Typography>
+            <FormControl sx={{ flexBasis: '20%' }} size="small">
+              <Select
+                // value={age}
+                // onChange={handleChange}
+                displayEmpty
+                inputProps={{ 'aria-label': 'Without label' }}
+                defaultValue="Yearly"
+              >
+                <MenuItem selected value="Yearly">
+                  {' '}
+                  Yearly{' '}
+                </MenuItem>
+                <MenuItem value="Monthly"> Monthly </MenuItem>
+                <MenuItem value="Weekly"> Weekly </MenuItem>
+              </Select>
+            </FormControl>
+          </Stack>
+          <ResponsiveContainer width="100%" height="80%">
+            <LineChart
+              width={500}
+              height={800}
+              data={data}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <CTooltip />
+              <Legend />
+              <Line
+                type="monotone"
+                dataKey="requests"
+                stroke="#8884d8"
+                activeDot={{ r: 8 }}
+              />
+              <Line type="monotone" dataKey="processed" stroke="#82ca9d" />
+              <Line type="monotone" dataKey="accepts" stroke="#34768f" />
+              <Line type="monotone" dataKey="reject" stroke="#34fd3f" />
+            </LineChart>
+          </ResponsiveContainer>
+        </Stack>
       </Grid>
       <Grid
         item
@@ -272,7 +460,8 @@ function Overview() {
         }}
       >
         <UserDropDown />
-        <Box>
+        <Stack direction="column" justifyContent="space-between" height="92%" >
+          <Box>
           <Box
             sx={{
               display: 'flex',
@@ -296,20 +485,31 @@ function Overview() {
           <Box
             sx={{
               maxHeight: '35vh',
+              // minHeight: '35vh',
               overflowY: 'scroll',
               marginTop: '1rem',
             }}
           >
-            <VerificationBox />
-            <VerificationBox />
-            <VerificationBox />
-            <VerificationBox />
-            <VerificationBox />
-            <VerificationBox />
-            <VerificationBox />
-            <VerificationBox />
+            {verificationDataLoading ? (
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <CircularProgress />
+              </Box>
+            ) : (
+              verificationData?.getAdminSchoolVerificationRequests?.map(
+                (request) => {
+                  return <VerificationBox verificationRequest={request}  />;
+                }
+              )
+            )}
           </Box>
-          <Box sx={{ width: '100%', overflowX: 'hidden' }}>
+          </Box>
+          <Box sx={{ width: '100%', overflowX: 'hidden', paddingTop: '2rem' }}>
             <DateRangePicker
               ranges={[
                 {
@@ -325,7 +525,7 @@ function Overview() {
               // showMonthAndYearPickers={false}
             />
           </Box>
-        </Box>
+        </Stack>
       </Grid>
     </Grid>
   );

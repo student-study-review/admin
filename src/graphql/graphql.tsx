@@ -288,9 +288,10 @@ export type CreateSchoolRequestMutationResponse = MutationResponse & {
   success: Scalars['Boolean'];
 };
 
-export type CreateSchoolVerificationRequest = {
+export type CreateSchoolVerificationRequestInput = {
   proofImage: Scalars['Upload'];
   proofType: SchoolProofType;
+  schoolId: Scalars['ID'];
 };
 
 export type DeleteCourseMutationResponse = MutationResponse & {
@@ -461,10 +462,10 @@ export type MakeSuperAdminMutationResponse = MutationResponse & {
 export type Mutation = {
   __typename?: 'Mutation';
   acceptInvite: AcceptInviteMutationResponse;
-  acceptRejectCourseRequest?: Maybe<AcceptRejectCourseRequestMutationResponse>;
-  acceptRejectDepartmentRequest?: Maybe<AcceptRejectDepartmentRequestMutationResponse>;
-  acceptRejectFacultyRequest?: Maybe<AcceptRequestFacultyRequestMutationResponse>;
-  acceptRejectSchoolRequest?: Maybe<AcceptRejectSchoolRequestMutationResponse>;
+  acceptRejectCourseRequest: CourseRequest;
+  acceptRejectDepartmentRequest: DepartmentRequest;
+  acceptRejectFacultyRequest: FacultyRequest;
+  acceptRejectSchoolRequest: SchoolRequest;
   acceptRejectSchoolVerificationRequest: SchoolVerificationRequest;
   accountLogin: AccountLoginMutationResponse;
   adminLogin: AdminLoginMutationResponse;
@@ -588,7 +589,7 @@ export type MutationCreateSchoolRequestArgs = {
 
 
 export type MutationCreateSchoolVerificationRequestArgs = {
-  data: CreateSchoolVerificationRequest;
+  data: CreateSchoolVerificationRequestInput;
 };
 
 
@@ -845,8 +846,10 @@ export type SchoolVerificationRequest = {
   id?: Maybe<Scalars['ID']>;
   proofImage?: Maybe<Scalars['String']>;
   proofType?: Maybe<SchoolProofType>;
+  school?: Maybe<School>;
   status?: Maybe<RequestStatus>;
   updatedAt?: Maybe<Scalars['Date']>;
+  user?: Maybe<User>;
 };
 
 export type SendInviteInput = {
@@ -1061,6 +1064,41 @@ export type EditCourseMutationVariables = Exact<{
 
 export type EditCourseMutation = { __typename?: 'Mutation', editCourse: { __typename?: 'Course', id?: string | null, title?: string | null, code?: string | null, updatedAt?: any | null, createdAt?: any | null } };
 
+export type AcceptRejectSchoolRequestMutationVariables = Exact<{
+  data: AcceptRejectRequestInput;
+}>;
+
+
+export type AcceptRejectSchoolRequestMutation = { __typename?: 'Mutation', acceptRejectSchoolRequest: { __typename?: 'SchoolRequest', id?: string | null, name?: string | null, fullAddress?: string | null, updatedAt?: any | null, createdAt?: any | null, websiteURL?: string | null, emailSuffix?: string | null, status?: RequestStatus | null } };
+
+export type AcceptRejectFacultyRequestMutationVariables = Exact<{
+  data: AcceptRejectRequestInput;
+}>;
+
+
+export type AcceptRejectFacultyRequestMutation = { __typename?: 'Mutation', acceptRejectFacultyRequest: { __typename?: 'FacultyRequest', id?: string | null, name?: string | null, updatedAt?: any | null, createdAt?: any | null, status?: RequestStatus | null } };
+
+export type AcceptRejectDepartmentRequestMutationVariables = Exact<{
+  data: AcceptRejectRequestInput;
+}>;
+
+
+export type AcceptRejectDepartmentRequestMutation = { __typename?: 'Mutation', acceptRejectDepartmentRequest: { __typename?: 'DepartmentRequest', id?: string | null, name?: string | null, updatedAt?: any | null, createdAt?: any | null, status?: RequestStatus | null } };
+
+export type AcceptRejectCourseRequestMutationVariables = Exact<{
+  data: AcceptRejectRequestInput;
+}>;
+
+
+export type AcceptRejectCourseRequestMutation = { __typename?: 'Mutation', acceptRejectCourseRequest: { __typename?: 'CourseRequest', id?: string | null, title?: string | null, code?: string | null, updatedAt?: any | null, createdAt?: any | null, status?: RequestStatus | null } };
+
+export type AcceptRejectSchoolVerificationRequestMutationVariables = Exact<{
+  data: AcceptRejectRequestInput;
+}>;
+
+
+export type AcceptRejectSchoolVerificationRequestMutation = { __typename?: 'Mutation', acceptRejectSchoolVerificationRequest: { __typename?: 'SchoolVerificationRequest', id?: string | null, status?: RequestStatus | null, updatedAt?: any | null, createdAt?: any | null, proofImage?: string | null, proofType?: SchoolProofType | null, user?: { __typename?: 'User', id?: string | null, username?: string | null } | null, school?: { __typename?: 'School', id?: string | null, name?: string | null, fullAddress?: string | null, lat?: number | null, lng?: number | null, websiteURL?: string | null, emailSuffix?: string | null, updatedAt?: any | null, createdAt?: any | null } | null } };
+
 export type GetSchoolsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1116,6 +1154,11 @@ export type GetAdminCourseRequestsQueryVariables = Exact<{ [key: string]: never;
 
 
 export type GetAdminCourseRequestsQuery = { __typename?: 'Query', getAdminCourseRequests?: Array<{ __typename?: 'CourseRequest', id?: string | null, title?: string | null, code?: string | null, updatedAt?: any | null, createdAt?: any | null, status?: RequestStatus | null, school?: { __typename?: 'School', id?: string | null, name?: string | null } | null, department?: { __typename?: 'Department', id?: string | null, name?: string | null } | null, user?: { __typename?: 'User', id?: string | null, username?: string | null } | null }> | null };
+
+export type GetAdminSchoolVerificationRequestsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAdminSchoolVerificationRequestsQuery = { __typename?: 'Query', getAdminSchoolVerificationRequests?: Array<{ __typename?: 'SchoolVerificationRequest', id?: string | null, status?: RequestStatus | null, updatedAt?: any | null, createdAt?: any | null, proofImage?: string | null, proofType?: SchoolProofType | null, user?: { __typename?: 'User', username?: string | null, id?: string | null } | null, school?: { __typename?: 'School', id?: string | null, name?: string | null } | null }> | null };
 
 
 export const AdminLoginDocument = gql`
@@ -1655,6 +1698,211 @@ export function useEditCourseMutation(baseOptions?: Apollo.MutationHookOptions<E
 export type EditCourseMutationHookResult = ReturnType<typeof useEditCourseMutation>;
 export type EditCourseMutationResult = Apollo.MutationResult<EditCourseMutation>;
 export type EditCourseMutationOptions = Apollo.BaseMutationOptions<EditCourseMutation, EditCourseMutationVariables>;
+export const AcceptRejectSchoolRequestDocument = gql`
+    mutation AcceptRejectSchoolRequest($data: AcceptRejectRequestInput!) {
+  acceptRejectSchoolRequest(data: $data) {
+    id
+    name
+    fullAddress
+    updatedAt
+    createdAt
+    websiteURL
+    emailSuffix
+    status
+  }
+}
+    `;
+export type AcceptRejectSchoolRequestMutationFn = Apollo.MutationFunction<AcceptRejectSchoolRequestMutation, AcceptRejectSchoolRequestMutationVariables>;
+
+/**
+ * __useAcceptRejectSchoolRequestMutation__
+ *
+ * To run a mutation, you first call `useAcceptRejectSchoolRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAcceptRejectSchoolRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [acceptRejectSchoolRequestMutation, { data, loading, error }] = useAcceptRejectSchoolRequestMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useAcceptRejectSchoolRequestMutation(baseOptions?: Apollo.MutationHookOptions<AcceptRejectSchoolRequestMutation, AcceptRejectSchoolRequestMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AcceptRejectSchoolRequestMutation, AcceptRejectSchoolRequestMutationVariables>(AcceptRejectSchoolRequestDocument, options);
+      }
+export type AcceptRejectSchoolRequestMutationHookResult = ReturnType<typeof useAcceptRejectSchoolRequestMutation>;
+export type AcceptRejectSchoolRequestMutationResult = Apollo.MutationResult<AcceptRejectSchoolRequestMutation>;
+export type AcceptRejectSchoolRequestMutationOptions = Apollo.BaseMutationOptions<AcceptRejectSchoolRequestMutation, AcceptRejectSchoolRequestMutationVariables>;
+export const AcceptRejectFacultyRequestDocument = gql`
+    mutation AcceptRejectFacultyRequest($data: AcceptRejectRequestInput!) {
+  acceptRejectFacultyRequest(data: $data) {
+    id
+    name
+    updatedAt
+    createdAt
+    status
+  }
+}
+    `;
+export type AcceptRejectFacultyRequestMutationFn = Apollo.MutationFunction<AcceptRejectFacultyRequestMutation, AcceptRejectFacultyRequestMutationVariables>;
+
+/**
+ * __useAcceptRejectFacultyRequestMutation__
+ *
+ * To run a mutation, you first call `useAcceptRejectFacultyRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAcceptRejectFacultyRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [acceptRejectFacultyRequestMutation, { data, loading, error }] = useAcceptRejectFacultyRequestMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useAcceptRejectFacultyRequestMutation(baseOptions?: Apollo.MutationHookOptions<AcceptRejectFacultyRequestMutation, AcceptRejectFacultyRequestMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AcceptRejectFacultyRequestMutation, AcceptRejectFacultyRequestMutationVariables>(AcceptRejectFacultyRequestDocument, options);
+      }
+export type AcceptRejectFacultyRequestMutationHookResult = ReturnType<typeof useAcceptRejectFacultyRequestMutation>;
+export type AcceptRejectFacultyRequestMutationResult = Apollo.MutationResult<AcceptRejectFacultyRequestMutation>;
+export type AcceptRejectFacultyRequestMutationOptions = Apollo.BaseMutationOptions<AcceptRejectFacultyRequestMutation, AcceptRejectFacultyRequestMutationVariables>;
+export const AcceptRejectDepartmentRequestDocument = gql`
+    mutation AcceptRejectDepartmentRequest($data: AcceptRejectRequestInput!) {
+  acceptRejectDepartmentRequest(data: $data) {
+    id
+    name
+    updatedAt
+    createdAt
+    status
+  }
+}
+    `;
+export type AcceptRejectDepartmentRequestMutationFn = Apollo.MutationFunction<AcceptRejectDepartmentRequestMutation, AcceptRejectDepartmentRequestMutationVariables>;
+
+/**
+ * __useAcceptRejectDepartmentRequestMutation__
+ *
+ * To run a mutation, you first call `useAcceptRejectDepartmentRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAcceptRejectDepartmentRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [acceptRejectDepartmentRequestMutation, { data, loading, error }] = useAcceptRejectDepartmentRequestMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useAcceptRejectDepartmentRequestMutation(baseOptions?: Apollo.MutationHookOptions<AcceptRejectDepartmentRequestMutation, AcceptRejectDepartmentRequestMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AcceptRejectDepartmentRequestMutation, AcceptRejectDepartmentRequestMutationVariables>(AcceptRejectDepartmentRequestDocument, options);
+      }
+export type AcceptRejectDepartmentRequestMutationHookResult = ReturnType<typeof useAcceptRejectDepartmentRequestMutation>;
+export type AcceptRejectDepartmentRequestMutationResult = Apollo.MutationResult<AcceptRejectDepartmentRequestMutation>;
+export type AcceptRejectDepartmentRequestMutationOptions = Apollo.BaseMutationOptions<AcceptRejectDepartmentRequestMutation, AcceptRejectDepartmentRequestMutationVariables>;
+export const AcceptRejectCourseRequestDocument = gql`
+    mutation AcceptRejectCourseRequest($data: AcceptRejectRequestInput!) {
+  acceptRejectCourseRequest(data: $data) {
+    id
+    title
+    code
+    updatedAt
+    createdAt
+    status
+  }
+}
+    `;
+export type AcceptRejectCourseRequestMutationFn = Apollo.MutationFunction<AcceptRejectCourseRequestMutation, AcceptRejectCourseRequestMutationVariables>;
+
+/**
+ * __useAcceptRejectCourseRequestMutation__
+ *
+ * To run a mutation, you first call `useAcceptRejectCourseRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAcceptRejectCourseRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [acceptRejectCourseRequestMutation, { data, loading, error }] = useAcceptRejectCourseRequestMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useAcceptRejectCourseRequestMutation(baseOptions?: Apollo.MutationHookOptions<AcceptRejectCourseRequestMutation, AcceptRejectCourseRequestMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AcceptRejectCourseRequestMutation, AcceptRejectCourseRequestMutationVariables>(AcceptRejectCourseRequestDocument, options);
+      }
+export type AcceptRejectCourseRequestMutationHookResult = ReturnType<typeof useAcceptRejectCourseRequestMutation>;
+export type AcceptRejectCourseRequestMutationResult = Apollo.MutationResult<AcceptRejectCourseRequestMutation>;
+export type AcceptRejectCourseRequestMutationOptions = Apollo.BaseMutationOptions<AcceptRejectCourseRequestMutation, AcceptRejectCourseRequestMutationVariables>;
+export const AcceptRejectSchoolVerificationRequestDocument = gql`
+    mutation AcceptRejectSchoolVerificationRequest($data: AcceptRejectRequestInput!) {
+  acceptRejectSchoolVerificationRequest(data: $data) {
+    id
+    status
+    updatedAt
+    createdAt
+    proofImage
+    proofType
+    user {
+      id
+      username
+    }
+    school {
+      id
+      name
+      fullAddress
+      lat
+      lng
+      websiteURL
+      emailSuffix
+      updatedAt
+      createdAt
+    }
+  }
+}
+    `;
+export type AcceptRejectSchoolVerificationRequestMutationFn = Apollo.MutationFunction<AcceptRejectSchoolVerificationRequestMutation, AcceptRejectSchoolVerificationRequestMutationVariables>;
+
+/**
+ * __useAcceptRejectSchoolVerificationRequestMutation__
+ *
+ * To run a mutation, you first call `useAcceptRejectSchoolVerificationRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAcceptRejectSchoolVerificationRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [acceptRejectSchoolVerificationRequestMutation, { data, loading, error }] = useAcceptRejectSchoolVerificationRequestMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useAcceptRejectSchoolVerificationRequestMutation(baseOptions?: Apollo.MutationHookOptions<AcceptRejectSchoolVerificationRequestMutation, AcceptRejectSchoolVerificationRequestMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AcceptRejectSchoolVerificationRequestMutation, AcceptRejectSchoolVerificationRequestMutationVariables>(AcceptRejectSchoolVerificationRequestDocument, options);
+      }
+export type AcceptRejectSchoolVerificationRequestMutationHookResult = ReturnType<typeof useAcceptRejectSchoolVerificationRequestMutation>;
+export type AcceptRejectSchoolVerificationRequestMutationResult = Apollo.MutationResult<AcceptRejectSchoolVerificationRequestMutation>;
+export type AcceptRejectSchoolVerificationRequestMutationOptions = Apollo.BaseMutationOptions<AcceptRejectSchoolVerificationRequestMutation, AcceptRejectSchoolVerificationRequestMutationVariables>;
 export const GetSchoolsDocument = gql`
     query GetSchools {
   getSchools {
@@ -2093,3 +2341,50 @@ export function useGetAdminCourseRequestsLazyQuery(baseOptions?: Apollo.LazyQuer
 export type GetAdminCourseRequestsQueryHookResult = ReturnType<typeof useGetAdminCourseRequestsQuery>;
 export type GetAdminCourseRequestsLazyQueryHookResult = ReturnType<typeof useGetAdminCourseRequestsLazyQuery>;
 export type GetAdminCourseRequestsQueryResult = Apollo.QueryResult<GetAdminCourseRequestsQuery, GetAdminCourseRequestsQueryVariables>;
+export const GetAdminSchoolVerificationRequestsDocument = gql`
+    query GetAdminSchoolVerificationRequests {
+  getAdminSchoolVerificationRequests {
+    id
+    status
+    updatedAt
+    createdAt
+    proofImage
+    proofType
+    user {
+      username
+      id
+    }
+    school {
+      id
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetAdminSchoolVerificationRequestsQuery__
+ *
+ * To run a query within a React component, call `useGetAdminSchoolVerificationRequestsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAdminSchoolVerificationRequestsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAdminSchoolVerificationRequestsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAdminSchoolVerificationRequestsQuery(baseOptions?: Apollo.QueryHookOptions<GetAdminSchoolVerificationRequestsQuery, GetAdminSchoolVerificationRequestsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAdminSchoolVerificationRequestsQuery, GetAdminSchoolVerificationRequestsQueryVariables>(GetAdminSchoolVerificationRequestsDocument, options);
+      }
+export function useGetAdminSchoolVerificationRequestsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAdminSchoolVerificationRequestsQuery, GetAdminSchoolVerificationRequestsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAdminSchoolVerificationRequestsQuery, GetAdminSchoolVerificationRequestsQueryVariables>(GetAdminSchoolVerificationRequestsDocument, options);
+        }
+export type GetAdminSchoolVerificationRequestsQueryHookResult = ReturnType<typeof useGetAdminSchoolVerificationRequestsQuery>;
+export type GetAdminSchoolVerificationRequestsLazyQueryHookResult = ReturnType<typeof useGetAdminSchoolVerificationRequestsLazyQuery>;
+export type GetAdminSchoolVerificationRequestsQueryResult = Apollo.QueryResult<GetAdminSchoolVerificationRequestsQuery, GetAdminSchoolVerificationRequestsQueryVariables>;

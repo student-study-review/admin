@@ -156,3 +156,75 @@ mutation EditCourse($data: EditCourseInput!) {
     createdAt
   }
 }
+
+mutation AcceptRejectSchoolRequest($data: AcceptRejectRequestInput!) {
+  acceptRejectSchoolRequest(data: $data) {
+    id
+    name
+    fullAddress
+    updatedAt
+    createdAt
+    websiteURL
+    emailSuffix
+    status
+  }
+}
+
+mutation AcceptRejectFacultyRequest($data: AcceptRejectRequestInput!) {
+  acceptRejectFacultyRequest(data: $data) {
+    id
+    name
+    updatedAt
+    createdAt
+    status
+  }
+}
+
+mutation AcceptRejectDepartmentRequest($data: AcceptRejectRequestInput!) {
+  acceptRejectDepartmentRequest(data: $data) {
+    id
+    name
+    updatedAt
+    createdAt
+    status
+  }
+}
+
+mutation AcceptRejectCourseRequest($data: AcceptRejectRequestInput!) {
+  acceptRejectCourseRequest(data: $data) {
+    id
+    title
+    code
+    updatedAt
+    createdAt
+    status
+  }
+}
+
+mutation AcceptRejectSchoolVerificationRequest(
+  $data: AcceptRejectRequestInput!
+) {
+  acceptRejectSchoolVerificationRequest(data: $data) {
+    id
+    status
+    updatedAt
+    createdAt
+    proofImage
+    proofType
+    user {
+      id
+      username
+    }
+    school {
+      id
+      name
+      fullAddress
+      lat
+      lng
+      websiteURL
+      emailSuffix
+      updatedAt
+      createdAt
+    }
+  }
+}

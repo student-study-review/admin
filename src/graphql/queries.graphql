@@ -152,3 +152,22 @@ query GetAdminCourseRequests {
     status
   }
 }
+
+query GetAdminSchoolVerificationRequests {
+  getAdminSchoolVerificationRequests {
+    id
+    status
+    updatedAt
+    createdAt
+    proofImage
+    proofType
+    user {
+      username
+      id
+    }
+    school {
+      id
+      name
+    }
+  }
+}

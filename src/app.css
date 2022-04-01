@@ -36,3 +36,12 @@
 /* fieldset {
   border: 0px !important;
 } */
+
+.css-1d3z3hw-MuiOutlinedInput-notchedOutline {
+  border: 0px !important;
+}
+
+.rdrCalendarWrapper {
+  background-color: #F0F7FF !important;
+  border-radius: 8px;
+}
