@@ -18,11 +18,13 @@
     "react": "latest",
     "react-alert": "^7.0.3",
     "react-alert-template-basic": "^1.0.2",
+    "react-charts": "^2.0.0-beta.7",
     "react-date-range": "^1.4.0",
     "react-dom": "latest",
     "react-hook-form": "^7.27.1",
     "react-router-dom": "^6.2.2",
     "react-scripts": "latest",
+    "recharts": "^2.1.9",
     "typescript": "latest",
     "validator": "^13.7.0"
   },
