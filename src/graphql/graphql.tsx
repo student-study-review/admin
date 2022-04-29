@@ -73,6 +73,13 @@ export type AcceptRequestFacultyRequestMutationResponse = MutationResponse & {
   success: Scalars['Boolean'];
 };
 
+export type AccessToken = {
+  __typename?: 'AccessToken';
+  access_token: Scalars['String'];
+  access_token_expires_at: Scalars['String'];
+  token_type: Scalars['String'];
+};
+
 export type AccountLoginInput = {
   emailOrUsername: Scalars['String'];
   password: Scalars['String'];
@@ -444,6 +451,25 @@ export type FacultyRequest = {
   user?: Maybe<User>;
 };
 
+export type FollowUserInput = {
+  follow: Scalars['Boolean'];
+  userId: Scalars['ID'];
+};
+
+export type FollowUserMutationResponse = MutationResponse & {
+  __typename?: 'FollowUserMutationResponse';
+  code: Scalars['String'];
+  follower: Follower;
+  message: Scalars['String'];
+  success: Scalars['Boolean'];
+};
+
+export type Follower = {
+  __typename?: 'Follower';
+  followerId: Scalars['ID'];
+  userId: Scalars['ID'];
+};
+
 export type ForgotPasswordMutationResponse = MutationResponse & {
   __typename?: 'ForgotPasswordMutationResponse';
   code: Scalars['String'];
@@ -491,13 +517,15 @@ export type Mutation = {
   editDepartment: Department;
   editFaculty: Faculty;
   editSchool: School;
+  followUser: FollowUserMutationResponse;
   forgotPassword: ForgotPasswordMutationResponse;
   makeSuperAdmin: MakeSuperAdminMutationResponse;
   removeAdmin: RemoveAdminMutationResponse;
   resetPassword: ResetPasswordMutationResponse;
   sendInvite: SendInviteMutationResponse;
+  subscribeToSchool: SubscribeToSchoolMutationResponse;
   updateAdminProfile?: Maybe<Admin>;
-  updateProfile?: Maybe<UserMutationResponse>;
+  updateProfile: UserMutationResponse;
   verifyAccountEmail: UserMutationResponse;
   verifySchoolEmail?: Maybe<UserMutationResponse>;
 };
@@ -653,6 +681,11 @@ export type MutationEditSchoolArgs = {
 };
 
 
+export type MutationFollowUserArgs = {
+  data: FollowUserInput;
+};
+
+
 export type MutationForgotPasswordArgs = {
   email: Scalars['String'];
 };
@@ -675,6 +708,11 @@ export type MutationResetPasswordArgs = {
 
 export type MutationSendInviteArgs = {
   data: SendInviteInput;
+};
+
+
+export type MutationSubscribeToSchoolArgs = {
+  data: SubscribeToSchoolInput;
 };
 
 
@@ -724,6 +762,7 @@ export type Query = {
   getUserSchoolRequests?: Maybe<Array<SchoolRequest>>;
   getUserSchoolVerificationRequests?: Maybe<Array<SchoolVerificationRequest>>;
   myProfile?: Maybe<UserQueryResponse>;
+  refreshToken: AccessToken;
 };
 
 
@@ -751,9 +790,18 @@ export type QueryGetSchoolFacultiesArgs = {
   schoolId: Scalars['ID'];
 };
 
+
+export type QueryRefreshTokenArgs = {
+  data: RefreshTokenInput;
+};
+
 export type QueryResponse = {
   code: Scalars['String'];
   success: Scalars['Boolean'];
+};
+
+export type RefreshTokenInput = {
+  refreshToken: Scalars['String'];
 };
 
 export type RemoveAdminMutationResponse = MutationResponse & {
@@ -865,6 +913,25 @@ export type SendInviteMutationResponse = MutationResponse & {
   success: Scalars['Boolean'];
 };
 
+export type SubscribeToSchoolInput = {
+  schoolId: Scalars['ID'];
+  subscribe: Scalars['Boolean'];
+};
+
+export type SubscribeToSchoolMutationResponse = MutationResponse & {
+  __typename?: 'SubscribeToSchoolMutationResponse';
+  code: Scalars['String'];
+  message: Scalars['String'];
+  subscriber: Subscriber;
+  success: Scalars['Boolean'];
+};
+
+export type Subscriber = {
+  __typename?: 'Subscriber';
+  schoolId: Scalars['ID'];
+  userId: Scalars['ID'];
+};
+
 export type Subscription = {
   __typename?: 'Subscription';
   courseRequestCreated?: Maybe<CourseRequest>;
@@ -926,12 +993,13 @@ export type SubscriptionSchoolRequestDeletedArgs = {
 export type Token = {
   __typename?: 'Token';
   access_token: Scalars['String'];
+  access_token_expires_at: Scalars['String'];
+  refresh_token: Scalars['String'];
+  refresh_token_expires_at: Scalars['String'];
   token_type: Scalars['String'];
 };
 
 export type UpdateProfileInput = {
-  department?: InputMaybe<Scalars['String']>;
-  faculty?: InputMaybe<Scalars['String']>;
   firstName?: InputMaybe<Scalars['String']>;
   lastName?: InputMaybe<Scalars['String']>;
 };

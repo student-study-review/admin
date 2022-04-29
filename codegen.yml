@@ -1,5 +1,5 @@
 overwrite: true
-schema: "https://apidev.universitesi.io/graphql"
+schema: "https://api.universitesi.io/graphql"
 documents: "src/**/*.graphql"
 generates:
   src/graphql/graphql.tsx:
