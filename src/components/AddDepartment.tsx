@@ -24,6 +24,8 @@ const AddDepartment = () => {
   const [getSchoolFaculties, { data: facultiesData }] =
     useGetSchoolFacultiesLazyQuery();
 
+  console.log(facultiesData, '__facultiesData');
+
   const [alert, setAlert] = useState<{
     message: string;
     status: boolean;
@@ -168,7 +170,7 @@ const AddDepartment = () => {
             Department Name{' '}
           </FormLabel>
           <SelectInput name="facultyId" control={control}>
-            {facultiesData?.getSchoolFaculties.faculties?.map((faculty) => (
+            {facultiesData?.getSchoolFaculties?.map((faculty) => (
               <StyledOption value={faculty!.id} key={faculty!.id}>
                 {' '}
                 {faculty!.name}{' '}
@@ -201,7 +203,8 @@ const AddDepartment = () => {
             }}
             // disabled={}
           >
-             <AddCircleOutlineIcon sx={{paddingLeft: ".25rem"}} /> {loading ? 'Adding...' : 'Add Department'}
+            <AddCircleOutlineIcon sx={{ paddingLeft: '.25rem' }} />{' '}
+            {loading ? 'Adding...' : 'Add Department'}
           </Button>
         </FormControl>
       </form>

@@ -310,7 +310,7 @@ const Faculties = () => {
             </TableHead>
             {facultiesData && (
               <TableBody>
-                {facultiesData.getSchoolFaculties.faculties!.map((faculty) => {
+                {facultiesData.getSchoolFaculties.map((faculty) => {
                   return <Row key={faculty!.id} faculty={faculty!} />;
                 })}
               </TableBody>

@@ -14,15 +14,13 @@ query GetSchools {
 
 query GetSchoolFaculties($schoolId: ID!) {
   getSchoolFaculties(schoolId: $schoolId) {
-    faculties {
+    id
+    name
+    updatedAt
+    createdAt
+    departments {
       id
       name
-      updatedAt
-      createdAt
-      departments {
-        id
-        name
-      }
     }
   }
 }

@@ -58,12 +58,12 @@ const AddCourse = () => {
   }, [watch('schoolId')]);
 
   return (
-    <Container sx={{padding: 0}}  >
+    <Container sx={{ padding: 0 }}>
       <form
         style={{ width: '75%', marginTop: '3rem' }}
         onSubmit={handleSubmit(async (data) => {
           console.log(data, '..data..');
-          delete data.facultyId
+          delete data.facultyId;
           try {
             const createSchoolResponse = await createCourse({
               variables: {
@@ -71,14 +71,14 @@ const AddCourse = () => {
               },
             });
 
-            console.log(createSchoolResponse)
+            console.log(createSchoolResponse);
             setAlert({
-              message: "Course created..",
+              message: 'Course created..',
               status: true,
               type: 'success',
             });
             resetField('code');
-            resetField("title");
+            resetField('title');
           } catch (err: any) {
             setAlert({ message: err.message, status: true, type: 'error' });
           }
@@ -104,7 +104,10 @@ const AddCourse = () => {
               fontSize: '1rem',
               fontWeight: '500',
             }}
-          > Course Code </FormLabel>
+          >
+            {' '}
+            Course Code{' '}
+          </FormLabel>
           <OutlinedInput
             fullWidth
             id="code"
@@ -129,12 +132,17 @@ const AddCourse = () => {
           variant="outlined"
           size="small"
         >
-          <FormLabel sx={{
+          <FormLabel
+            sx={{
               flexBasis: '35%',
               color: (t) => t.palette.text.secondary,
               fontSize: '1rem',
               fontWeight: '500',
-            }}> Course Title </FormLabel>
+            }}
+          >
+            {' '}
+            Course Title{' '}
+          </FormLabel>
           <OutlinedInput
             fullWidth
             id="title"
@@ -159,12 +167,17 @@ const AddCourse = () => {
           variant="outlined"
           size="small"
         >
-          <FormLabel sx={{
+          <FormLabel
+            sx={{
               flexBasis: '35%',
               color: (t) => t.palette.text.secondary,
               fontSize: '1rem',
               fontWeight: '500',
-            }}> School Name </FormLabel>
+            }}
+          >
+            {' '}
+            School Name{' '}
+          </FormLabel>
           <SelectInput name="schoolId" control={control}>
             {schoolsData?.getSchools.map((school) => (
               <StyledOption value={school.id} key={school.id}>
@@ -188,14 +201,19 @@ const AddCourse = () => {
           variant="outlined"
           size="small"
         >
-          <FormLabel sx={{
+          <FormLabel
+            sx={{
               flexBasis: '35%',
               color: (t) => t.palette.text.secondary,
               fontSize: '1rem',
               fontWeight: '500',
-            }}> Faculty Name </FormLabel>
+            }}
+          >
+            {' '}
+            Faculty Name{' '}
+          </FormLabel>
           <SelectInput name="facultyId" control={control}>
-            {facultiesData?.getSchoolFaculties.faculties?.map((faculty) => (
+            {facultiesData?.getSchoolFaculties.map((faculty) => (
               <StyledOption value={faculty!.id} key={faculty!.id}>
                 {' '}
                 {faculty!.name}{' '}
@@ -217,14 +235,19 @@ const AddCourse = () => {
           variant="outlined"
           size="small"
         >
-          <FormLabel sx={{
+          <FormLabel
+            sx={{
               flexBasis: '35%',
               color: (t) => t.palette.text.secondary,
               fontSize: '1rem',
               fontWeight: '500',
-            }}> Department Name </FormLabel>
+            }}
+          >
+            {' '}
+            Department Name{' '}
+          </FormLabel>
           <SelectInput name="departmentId" control={control}>
-            {facultiesData?.getSchoolFaculties.faculties
+            {facultiesData?.getSchoolFaculties
               ?.find(
                 (faculty) => (faculty!.id as string) === watch('facultyId')
               )
@@ -260,7 +283,8 @@ const AddCourse = () => {
             }}
             // disabled={}
           >
-            <AddCircleOutlineIcon sx={{paddingLeft: ".25rem"}} /> {loading ? 'Adding...' : 'Add Course'}
+            <AddCircleOutlineIcon sx={{ paddingLeft: '.25rem' }} />{' '}
+            {loading ? 'Adding...' : 'Add Course'}
           </Button>
         </FormControl>
       </form>

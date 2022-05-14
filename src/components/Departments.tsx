@@ -287,7 +287,7 @@ const Departments = () => {
           ))}
         </SelectInput>
         <SelectInput name="facultyId" control={control}>
-          {facultiesData?.getSchoolFaculties.faculties?.map((faculty) => (
+          {facultiesData?.getSchoolFaculties.map((faculty) => (
             <StyledOption value={faculty!.id} key={faculty!.id}>
               {faculty!.name}
             </StyledOption>

@@ -145,6 +145,13 @@ export enum AdminStatus {
   NotAvailable = 'NotAvailable'
 }
 
+export type ConfirmEmailUpdateMutationResponse = MutationResponse & {
+  __typename?: 'ConfirmEmailUpdateMutationResponse';
+  code: Scalars['String'];
+  message: Scalars['String'];
+  success: Scalars['Boolean'];
+};
+
 export type Course = {
   __typename?: 'Course';
   code?: Maybe<Scalars['String']>;
@@ -170,6 +177,7 @@ export type CourseRequest = {
 export type CreateAccountInput = {
   email: Scalars['String'];
   password: Scalars['String'];
+  subscribeToNewsLetter?: InputMaybe<Scalars['Boolean']>;
   username: Scalars['String'];
 };
 
@@ -495,6 +503,7 @@ export type Mutation = {
   acceptRejectSchoolVerificationRequest: SchoolVerificationRequest;
   accountLogin: AccountLoginMutationResponse;
   adminLogin: AdminLoginMutationResponse;
+  confirmEmailUpdate: ConfirmEmailUpdateMutationResponse;
   createAccount: CreateAccountMutationResponse;
   createCourse: CreateCourseMutationResponse;
   createCourseRequest?: Maybe<CourseRequest>;
@@ -525,6 +534,9 @@ export type Mutation = {
   sendInvite: SendInviteMutationResponse;
   subscribeToSchool: SubscribeToSchoolMutationResponse;
   updateAdminProfile?: Maybe<Admin>;
+  updateEmail: UpdateEmailMutationResponse;
+  updatePassword: UpdatePasswordMutationResponse;
+  updatePreference: UpdatePreferenceMutationResponse;
   updateProfile: UserMutationResponse;
   verifyAccountEmail: UserMutationResponse;
   verifySchoolEmail?: Maybe<UserMutationResponse>;
@@ -568,6 +580,11 @@ export type MutationAccountLoginArgs = {
 
 export type MutationAdminLoginArgs = {
   data: AdminLoginInput;
+};
+
+
+export type MutationConfirmEmailUpdateArgs = {
+  resetEmailHash: Scalars['String'];
 };
 
 
@@ -721,6 +738,21 @@ export type MutationUpdateAdminProfileArgs = {
 };
 
 
+export type MutationUpdateEmailArgs = {
+  data: UpdateEmailInput;
+};
+
+
+export type MutationUpdatePasswordArgs = {
+  data: UpdatePasswordInput;
+};
+
+
+export type MutationUpdatePreferenceArgs = {
+  data: UpdatePreferenceInput;
+};
+
+
 export type MutationUpdateProfileArgs = {
   data: UpdateProfileInput;
 };
@@ -741,6 +773,25 @@ export type MutationResponse = {
   success: Scalars['Boolean'];
 };
 
+export type Preference = {
+  __typename?: 'Preference';
+  allowAdvertisersToPromoteAnswers: Scalars['Boolean'];
+  allowAdvertisersToPromoteReviews: Scalars['Boolean'];
+  allowCommentOnAnswers: Scalars['Boolean'];
+  allowCommentOnReviews: Scalars['Boolean'];
+  allowNameSearch: Scalars['Boolean'];
+  nofifyMeOfNewAnswersToASchoolISubscribedTo: Scalars['Boolean'];
+  nofifyMeOfNewReviewsToASchoolISubscribedTo: Scalars['Boolean'];
+  nofifyMeOfQuestionsToMySchool: Scalars['Boolean'];
+  nofityMeOfNewMentions: Scalars['Boolean'];
+  notifyFollowersOfNewAnswers: Scalars['Boolean'];
+  notifyFollowersOfNewReviews: Scalars['Boolean'];
+  notifyMeOfAnswersToMyQuestions: Scalars['Boolean'];
+  notifyMeOfCommentsToMyContents: Scalars['Boolean'];
+  notifyMeOfNewFollowers: Scalars['Boolean'];
+  userId: Scalars['ID'];
+};
+
 export type Query = {
   __typename?: 'Query';
   getAdmin: Admin;
@@ -750,18 +801,18 @@ export type Query = {
   getAdminSchoolRequests?: Maybe<Array<SchoolRequest>>;
   getAdminSchoolVerificationRequests?: Maybe<Array<SchoolVerificationRequest>>;
   getAdmins: Array<Admin>;
-  getDepartmentCourses?: Maybe<Array<Course>>;
-  getFacultyDepartments?: Maybe<Array<Department>>;
-  getSchoolCourses: SchoolCoursesQueryResponse;
-  getSchoolDepartments: SchoolDepartmentsQueryResponse;
-  getSchoolFaculties: SchoolFacultiesQueryResponse;
+  getDepartmentCourses: Array<Course>;
+  getFacultyDepartments: Array<Department>;
+  getSchoolCourses: Array<Course>;
+  getSchoolDepartments: Array<Department>;
+  getSchoolFaculties: Array<Faculty>;
   getSchools: Array<School>;
   getUserCourseRequests?: Maybe<Array<CourseRequest>>;
   getUserDepartmentRequests?: Maybe<Array<DepartmentRequest>>;
   getUserFacultyRequests?: Maybe<Array<FacultyRequest>>;
   getUserSchoolRequests?: Maybe<Array<SchoolRequest>>;
   getUserSchoolVerificationRequests?: Maybe<Array<SchoolVerificationRequest>>;
-  myProfile?: Maybe<UserQueryResponse>;
+  myProfile: User;
   refreshToken: AccessToken;
 };
 
@@ -793,11 +844,6 @@ export type QueryGetSchoolFacultiesArgs = {
 
 export type QueryRefreshTokenArgs = {
   data: RefreshTokenInput;
-};
-
-export type QueryResponse = {
-  code: Scalars['String'];
-  success: Scalars['Boolean'];
 };
 
 export type RefreshTokenInput = {
@@ -841,27 +887,6 @@ export type School = {
   name?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['Date']>;
   websiteURL?: Maybe<Scalars['String']>;
-};
-
-export type SchoolCoursesQueryResponse = QueryResponse & {
-  __typename?: 'SchoolCoursesQueryResponse';
-  code: Scalars['String'];
-  courses?: Maybe<Array<Maybe<Course>>>;
-  success: Scalars['Boolean'];
-};
-
-export type SchoolDepartmentsQueryResponse = QueryResponse & {
-  __typename?: 'SchoolDepartmentsQueryResponse';
-  code: Scalars['String'];
-  departments?: Maybe<Array<Maybe<Department>>>;
-  success: Scalars['Boolean'];
-};
-
-export type SchoolFacultiesQueryResponse = QueryResponse & {
-  __typename?: 'SchoolFacultiesQueryResponse';
-  code: Scalars['String'];
-  faculties?: Maybe<Array<Maybe<Faculty>>>;
-  success: Scalars['Boolean'];
 };
 
 export enum SchoolProofType {
@@ -999,13 +1024,67 @@ export type Token = {
   token_type: Scalars['String'];
 };
 
+export type UpdateEmailInput = {
+  newEmail: Scalars['String'];
+  password: Scalars['String'];
+};
+
+export type UpdateEmailMutationResponse = MutationResponse & {
+  __typename?: 'UpdateEmailMutationResponse';
+  code: Scalars['String'];
+  message: Scalars['String'];
+  resetEmailHash: Scalars['String'];
+  success: Scalars['Boolean'];
+};
+
+export type UpdatePasswordInput = {
+  newPassword: Scalars['String'];
+  oldPassword: Scalars['String'];
+};
+
+export type UpdatePasswordMutationResponse = MutationResponse & {
+  __typename?: 'UpdatePasswordMutationResponse';
+  code: Scalars['String'];
+  message: Scalars['String'];
+  success: Scalars['Boolean'];
+};
+
+export type UpdatePreferenceInput = {
+  allowAdvertisersToPromoteAnswers?: InputMaybe<Scalars['Boolean']>;
+  allowAdvertisersToPromoteReviews?: InputMaybe<Scalars['Boolean']>;
+  allowCommentOnAnswers?: InputMaybe<Scalars['Boolean']>;
+  allowCommentOnReviews?: InputMaybe<Scalars['Boolean']>;
+  allowNameSearch?: InputMaybe<Scalars['Boolean']>;
+  nofifyMeOfNewAnswersToASchoolISubscribedTo?: InputMaybe<Scalars['Boolean']>;
+  nofifyMeOfNewReviewsToASchoolISubscribedTo?: InputMaybe<Scalars['Boolean']>;
+  nofifyMeOfQuestionsToMySchool?: InputMaybe<Scalars['Boolean']>;
+  nofityMeOfNewMentions?: InputMaybe<Scalars['Boolean']>;
+  notifyFollowersOfNewAnswers?: InputMaybe<Scalars['Boolean']>;
+  notifyFollowersOfNewReviews?: InputMaybe<Scalars['Boolean']>;
+  notifyMeOfAnswersToMyQuestions?: InputMaybe<Scalars['Boolean']>;
+  notifyMeOfCommentsToMyContents?: InputMaybe<Scalars['Boolean']>;
+  notifyMeOfNewFollowers?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type UpdatePreferenceMutationResponse = MutationResponse & {
+  __typename?: 'UpdatePreferenceMutationResponse';
+  code: Scalars['String'];
+  message: Scalars['String'];
+  preference: Preference;
+  success: Scalars['Boolean'];
+};
+
 export type UpdateProfileInput = {
+  bio?: InputMaybe<Scalars['String']>;
   firstName?: InputMaybe<Scalars['String']>;
   lastName?: InputMaybe<Scalars['String']>;
+  profileImage?: InputMaybe<Scalars['Upload']>;
+  status?: InputMaybe<Scalars['String']>;
 };
 
 export type User = {
   __typename?: 'User';
+  bio?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['Date']>;
   department?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
@@ -1013,21 +1092,16 @@ export type User = {
   firstName?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['ID']>;
   lastName?: Maybe<Scalars['String']>;
+  profileImage?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
   university?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['Date']>;
+  userPreference?: Maybe<Preference>;
   username?: Maybe<Scalars['String']>;
 };
 
 export type UserMutationResponse = MutationResponse & {
   __typename?: 'UserMutationResponse';
-  code: Scalars['String'];
-  message: Scalars['String'];
-  success: Scalars['Boolean'];
-  user?: Maybe<User>;
-};
-
-export type UserQueryResponse = MutationResponse & {
-  __typename?: 'UserQueryResponse';
   code: Scalars['String'];
   message: Scalars['String'];
   success: Scalars['Boolean'];
@@ -1177,7 +1251,7 @@ export type GetSchoolFacultiesQueryVariables = Exact<{
 }>;
 
 
-export type GetSchoolFacultiesQuery = { __typename?: 'Query', getSchoolFaculties: { __typename?: 'SchoolFacultiesQueryResponse', faculties?: Array<{ __typename?: 'Faculty', id?: string | null, name?: string | null, updatedAt?: any | null, createdAt?: any | null, departments?: Array<{ __typename?: 'Department', id?: string | null, name?: string | null } | null> | null } | null> | null } };
+export type GetSchoolFacultiesQuery = { __typename?: 'Query', getSchoolFaculties: Array<{ __typename?: 'Faculty', id?: string | null, name?: string | null, updatedAt?: any | null, createdAt?: any | null, departments?: Array<{ __typename?: 'Department', id?: string | null, name?: string | null } | null> | null }> };
 
 export type GetAdminQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1194,14 +1268,14 @@ export type GetFacultyDepartmentsQueryVariables = Exact<{
 }>;
 
 
-export type GetFacultyDepartmentsQuery = { __typename?: 'Query', getFacultyDepartments?: Array<{ __typename?: 'Department', id?: string | null, name?: string | null, updatedAt?: any | null, createdAt?: any | null }> | null };
+export type GetFacultyDepartmentsQuery = { __typename?: 'Query', getFacultyDepartments: Array<{ __typename?: 'Department', id?: string | null, name?: string | null, updatedAt?: any | null, createdAt?: any | null }> };
 
 export type GetDepartmentCoursesQueryVariables = Exact<{
   departmentId: Scalars['ID'];
 }>;
 
 
-export type GetDepartmentCoursesQuery = { __typename?: 'Query', getDepartmentCourses?: Array<{ __typename?: 'Course', id?: string | null, title?: string | null, code?: string | null, updatedAt?: any | null, createdAt?: any | null }> | null };
+export type GetDepartmentCoursesQuery = { __typename?: 'Query', getDepartmentCourses: Array<{ __typename?: 'Course', id?: string | null, title?: string | null, code?: string | null, updatedAt?: any | null, createdAt?: any | null }> };
 
 export type GetAdminSchoolRequestsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2016,15 +2090,13 @@ export type GetSchoolsQueryResult = Apollo.QueryResult<GetSchoolsQuery, GetSchoo
 export const GetSchoolFacultiesDocument = gql`
     query GetSchoolFaculties($schoolId: ID!) {
   getSchoolFaculties(schoolId: $schoolId) {
-    faculties {
+    id
+    name
+    updatedAt
+    createdAt
+    departments {
       id
       name
-      updatedAt
-      createdAt
-      departments {
-        id
-        name
-      }
     }
   }
 }
