@@ -145,6 +145,89 @@ export enum AdminStatus {
   NotAvailable = 'NotAvailable'
 }
 
+export type Answer = {
+  __typename?: 'Answer';
+  comments?: Maybe<Array<Maybe<Comment>>>;
+  content?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['Date']>;
+  helpful?: Maybe<Array<Maybe<Helpful>>>;
+  id?: Maybe<Scalars['ID']>;
+  question?: Maybe<Question>;
+  questionId?: Maybe<Scalars['ID']>;
+  updatedAt?: Maybe<Scalars['Date']>;
+  user?: Maybe<User>;
+};
+
+export type AnswerQuestionInput = {
+  content: Scalars['String'];
+  questionId: Scalars['ID'];
+};
+
+export type AnswerQuestionMutationResponse = MutationResponse & {
+  __typename?: 'AnswerQuestionMutationResponse';
+  answer: Answer;
+  code: Scalars['String'];
+  message: Scalars['String'];
+  success: Scalars['Boolean'];
+};
+
+export type AnswerRequest = {
+  __typename?: 'AnswerRequest';
+  question?: Maybe<Question>;
+  questionId?: Maybe<Scalars['ID']>;
+  user?: Maybe<User>;
+  userId?: Maybe<Scalars['ID']>;
+};
+
+export type AskQuestionInput = {
+  content: Scalars['String'];
+  schoolId?: InputMaybe<Scalars['ID']>;
+  tags?: InputMaybe<Array<Scalars['String']>>;
+  whoCanAnswer: WhoCanAnswer;
+};
+
+export type AskQuestionMutationResponse = MutationResponse & {
+  __typename?: 'AskQuestionMutationResponse';
+  code: Scalars['String'];
+  message: Scalars['String'];
+  question: Question;
+  success: Scalars['Boolean'];
+};
+
+export type Comment = {
+  __typename?: 'Comment';
+  answer?: Maybe<Answer>;
+  answerId?: Maybe<Scalars['ID']>;
+  content?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['Date']>;
+  helpful?: Maybe<Array<Maybe<Helpful>>>;
+  id?: Maybe<Scalars['ID']>;
+  replies?: Maybe<Array<Maybe<Reply>>>;
+  review?: Maybe<Review>;
+  reviewId?: Maybe<Scalars['ID']>;
+  updatedAt?: Maybe<Scalars['Date']>;
+  user?: Maybe<User>;
+  userId?: Maybe<Scalars['ID']>;
+};
+
+export type CommentMutationResponse = MutationResponse & {
+  __typename?: 'CommentMutationResponse';
+  code: Scalars['String'];
+  comment: Comment;
+  message: Scalars['String'];
+  success: Scalars['Boolean'];
+};
+
+export type CommentOnAnswerInput = {
+  answerId: Scalars['ID'];
+  content: Scalars['String'];
+};
+
+export type CommentOnReviewInput = {
+  content: Scalars['String'];
+  reviewId: Scalars['ID'];
+};
+
 export type ConfirmEmailUpdateMutationResponse = MutationResponse & {
   __typename?: 'ConfirmEmailUpdateMutationResponse';
   code: Scalars['String'];
@@ -176,6 +259,7 @@ export type CourseRequest = {
 
 export type CreateAccountInput = {
   email: Scalars['String'];
+  fullName: Scalars['String'];
   password: Scalars['String'];
   subscribeToNewsLetter?: InputMaybe<Scalars['Boolean']>;
   username: Scalars['String'];
@@ -270,6 +354,33 @@ export type CreateFacultyRequestMutationResponse = MutationResponse & {
   code: Scalars['String'];
   facultyRequest?: Maybe<FacultyRequest>;
   message: Scalars['String'];
+  success: Scalars['Boolean'];
+};
+
+export type CreateReviewInput = {
+  content: Scalars['String'];
+  courseId: Scalars['ID'];
+  rating: Scalars['Int'];
+};
+
+export type CreateReviewMutationResponse = MutationResponse & {
+  __typename?: 'CreateReviewMutationResponse';
+  code: Scalars['String'];
+  message: Scalars['String'];
+  review: Review;
+  success: Scalars['Boolean'];
+};
+
+export type CreateSchoolEmailVerificationRequestInput = {
+  email: Scalars['String'];
+  schoolId: Scalars['ID'];
+};
+
+export type CreateSchoolEmailVerificationRequestMutationResponse = MutationResponse & {
+  __typename?: 'CreateSchoolEmailVerificationRequestMutationResponse';
+  code: Scalars['String'];
+  message: Scalars['String'];
+  schoolEmailVerificationRequest?: Maybe<SchoolEmailVerificationRequest>;
   success: Scalars['Boolean'];
 };
 
@@ -383,6 +494,19 @@ export type DepartmentRequest = {
   user?: Maybe<User>;
 };
 
+export type EditAnswerInput = {
+  answerId: Scalars['ID'];
+  content: Scalars['String'];
+};
+
+export type EditAnswerMutationResponse = MutationResponse & {
+  __typename?: 'EditAnswerMutationResponse';
+  answer: Answer;
+  code: Scalars['String'];
+  message: Scalars['String'];
+  success: Scalars['Boolean'];
+};
+
 export type EditCourseInput = {
   code?: InputMaybe<Scalars['String']>;
   id: Scalars['ID'];
@@ -428,6 +552,7 @@ export type EditSchoolInput = {
   fullAddress?: InputMaybe<Scalars['String']>;
   id: Scalars['ID'];
   name?: InputMaybe<Scalars['String']>;
+  published?: InputMaybe<Scalars['Boolean']>;
   websiteURL?: InputMaybe<Scalars['String']>;
 };
 
@@ -474,7 +599,10 @@ export type FollowUserMutationResponse = MutationResponse & {
 
 export type Follower = {
   __typename?: 'Follower';
+  createdAt?: Maybe<Scalars['Date']>;
+  follower?: Maybe<UserPublic>;
   followerId: Scalars['ID'];
+  following?: Maybe<UserPublic>;
   userId: Scalars['ID'];
 };
 
@@ -484,6 +612,80 @@ export type ForgotPasswordMutationResponse = MutationResponse & {
   message: Scalars['String'];
   resetPasswordHash: Scalars['String'];
   success: Scalars['Boolean'];
+};
+
+export type GetUserInput = {
+  id?: InputMaybe<Scalars['ID']>;
+  username?: InputMaybe<Scalars['String']>;
+};
+
+export type Helpful = {
+  __typename?: 'Helpful';
+  answer?: Maybe<Answer>;
+  answerId?: Maybe<Scalars['ID']>;
+  comment?: Maybe<Comment>;
+  commentId?: Maybe<Scalars['ID']>;
+  createdAt?: Maybe<Scalars['Date']>;
+  id?: Maybe<Scalars['ID']>;
+  reply?: Maybe<Reply>;
+  replyId?: Maybe<Scalars['ID']>;
+  review?: Maybe<Review>;
+  reviewId?: Maybe<Scalars['ID']>;
+  updatedAt?: Maybe<Scalars['Date']>;
+  user?: Maybe<User>;
+  userId?: Maybe<Scalars['ID']>;
+};
+
+export type HelpfulUnHelpfulAnswerInput = {
+  answerId: Scalars['ID'];
+  isHelpful: Scalars['Boolean'];
+};
+
+export type HelpfulUnHelpfulAnswerMutationResponse = MutationResponse & {
+  __typename?: 'HelpfulUnHelpfulAnswerMutationResponse';
+  answer: Answer;
+  code: Scalars['String'];
+  message: Scalars['String'];
+  success: Scalars['Boolean'];
+};
+
+export type HelpfulUnHelpfulCommentInput = {
+  commentId: Scalars['ID'];
+  isHelpful: Scalars['Boolean'];
+};
+
+export type HelpfulUnHelpfulCommentMutationResponse = MutationResponse & {
+  __typename?: 'HelpfulUnHelpfulCommentMutationResponse';
+  code: Scalars['String'];
+  comment: Comment;
+  message: Scalars['String'];
+  success: Scalars['Boolean'];
+};
+
+export type HelpfulUnHelpfulMutationResponse = MutationResponse & {
+  __typename?: 'HelpfulUnHelpfulMutationResponse';
+  code: Scalars['String'];
+  helpful?: Maybe<Helpful>;
+  message: Scalars['String'];
+  success: Scalars['Boolean'];
+};
+
+export type HelpfulUnHelpfulReplyInput = {
+  isHelpful: Scalars['Boolean'];
+  replyId: Scalars['ID'];
+};
+
+export type HelpfulUnHelpfulReplyMutationResponse = MutationResponse & {
+  __typename?: 'HelpfulUnHelpfulReplyMutationResponse';
+  code: Scalars['String'];
+  message: Scalars['String'];
+  reply: Reply;
+  success: Scalars['Boolean'];
+};
+
+export type HelpfulUnHelpfulReviewInput = {
+  isHelpful: Scalars['Boolean'];
+  reviewId: Scalars['ID'];
 };
 
 export type MakeSuperAdminMutationResponse = MutationResponse & {
@@ -503,6 +705,10 @@ export type Mutation = {
   acceptRejectSchoolVerificationRequest: SchoolVerificationRequest;
   accountLogin: AccountLoginMutationResponse;
   adminLogin: AdminLoginMutationResponse;
+  answerQuestion: AnswerQuestionMutationResponse;
+  askQuestion: AskQuestionMutationResponse;
+  commentOnAnswer: CommentMutationResponse;
+  commentOnReview: CommentMutationResponse;
   confirmEmailUpdate: ConfirmEmailUpdateMutationResponse;
   createAccount: CreateAccountMutationResponse;
   createCourse: CreateCourseMutationResponse;
@@ -511,9 +717,11 @@ export type Mutation = {
   createDepartmentRequest?: Maybe<DepartmentRequest>;
   createFaculty: CreateFacultyMutationResponse;
   createFacultyRequest?: Maybe<FacultyRequest>;
+  createReview: CreateReviewMutationResponse;
   createSchool: CreateSchoolMutationResponse;
+  createSchoolEmailVerificationRequest: CreateSchoolEmailVerificationRequestMutationResponse;
   createSchoolRequest?: Maybe<CreateSchoolRequestMutationResponse>;
-  createSchoolVerificationRequest: SchoolVerificationRequest;
+  createSchoolVerificationRequest: SchoolVerificationRequestMutationResponse;
   deleteCourse: DeleteCourseMutationResponse;
   deleteCourseRequest?: Maybe<DeleteCourseRequestMutationResponse>;
   deleteDepartment: DeleteDepartmentMutationResponse;
@@ -522,14 +730,21 @@ export type Mutation = {
   deleteFacultyRequest?: Maybe<DeleteFacultyRequestMutationResponse>;
   deleteSchoolRequest?: Maybe<DeleteSchoolRequestMutationResponse>;
   deleteSchoolVerificationRequest: SchoolVerificationRequest;
+  editAnswer: EditAnswerMutationResponse;
   editCourse: Course;
   editDepartment: Department;
   editFaculty: Faculty;
   editSchool: School;
   followUser: FollowUserMutationResponse;
   forgotPassword: ForgotPasswordMutationResponse;
+  helpfulUnHelpfulAnswer: HelpfulUnHelpfulAnswerMutationResponse;
+  helpfulUnHelpfulComment: HelpfulUnHelpfulCommentMutationResponse;
+  helpfulUnHelpfulReply: HelpfulUnHelpfulReplyMutationResponse;
   makeSuperAdmin: MakeSuperAdminMutationResponse;
   removeAdmin: RemoveAdminMutationResponse;
+  replyComment: ReplyCommentMutationResponse;
+  reportQuestion: ReportQuestionMutationResponse;
+  requestAnswer: RequestAnswerMutationResponse;
   resetPassword: ResetPasswordMutationResponse;
   sendInvite: SendInviteMutationResponse;
   subscribeToSchool: SubscribeToSchoolMutationResponse;
@@ -538,8 +753,8 @@ export type Mutation = {
   updatePassword: UpdatePasswordMutationResponse;
   updatePreference: UpdatePreferenceMutationResponse;
   updateProfile: UserMutationResponse;
-  verifyAccountEmail: UserMutationResponse;
-  verifySchoolEmail?: Maybe<UserMutationResponse>;
+  verifyAccountEmail: UserMutationMessageResponse;
+  verifySchoolEmail: UserMutationMessageResponse;
 };
 
 
@@ -583,6 +798,26 @@ export type MutationAdminLoginArgs = {
 };
 
 
+export type MutationAnswerQuestionArgs = {
+  data: AnswerQuestionInput;
+};
+
+
+export type MutationAskQuestionArgs = {
+  data: AskQuestionInput;
+};
+
+
+export type MutationCommentOnAnswerArgs = {
+  data: CommentOnAnswerInput;
+};
+
+
+export type MutationCommentOnReviewArgs = {
+  data: CommentOnReviewInput;
+};
+
+
 export type MutationConfirmEmailUpdateArgs = {
   resetEmailHash: Scalars['String'];
 };
@@ -623,8 +858,18 @@ export type MutationCreateFacultyRequestArgs = {
 };
 
 
+export type MutationCreateReviewArgs = {
+  data: CreateReviewInput;
+};
+
+
 export type MutationCreateSchoolArgs = {
   data: CreateSchoolInput;
+};
+
+
+export type MutationCreateSchoolEmailVerificationRequestArgs = {
+  data: CreateSchoolEmailVerificationRequestInput;
 };
 
 
@@ -678,6 +923,11 @@ export type MutationDeleteSchoolVerificationRequestArgs = {
 };
 
 
+export type MutationEditAnswerArgs = {
+  data: EditAnswerInput;
+};
+
+
 export type MutationEditCourseArgs = {
   data: EditCourseInput;
 };
@@ -708,6 +958,21 @@ export type MutationForgotPasswordArgs = {
 };
 
 
+export type MutationHelpfulUnHelpfulAnswerArgs = {
+  data: HelpfulUnHelpfulAnswerInput;
+};
+
+
+export type MutationHelpfulUnHelpfulCommentArgs = {
+  data: HelpfulUnHelpfulCommentInput;
+};
+
+
+export type MutationHelpfulUnHelpfulReplyArgs = {
+  data: HelpfulUnHelpfulReplyInput;
+};
+
+
 export type MutationMakeSuperAdminArgs = {
   adminId: Scalars['ID'];
 };
@@ -715,6 +980,21 @@ export type MutationMakeSuperAdminArgs = {
 
 export type MutationRemoveAdminArgs = {
   adminId: Scalars['ID'];
+};
+
+
+export type MutationReplyCommentArgs = {
+  data: ReplyCommentInput;
+};
+
+
+export type MutationReportQuestionArgs = {
+  data: ReportQuestionInput;
+};
+
+
+export type MutationRequestAnswerArgs = {
+  data: RequestAnswerInput;
 };
 
 
@@ -759,12 +1039,12 @@ export type MutationUpdateProfileArgs = {
 
 
 export type MutationVerifyAccountEmailArgs = {
-  verificationId: Scalars['String'];
+  verificationHash: Scalars['String'];
 };
 
 
 export type MutationVerifySchoolEmailArgs = {
-  email: Scalars['String'];
+  verificationHash: Scalars['String'];
 };
 
 export type MutationResponse = {
@@ -801,19 +1081,28 @@ export type Query = {
   getAdminSchoolRequests?: Maybe<Array<SchoolRequest>>;
   getAdminSchoolVerificationRequests?: Maybe<Array<SchoolVerificationRequest>>;
   getAdmins: Array<Admin>;
+  getAnswer: Answer;
   getDepartmentCourses: Array<Course>;
   getFacultyDepartments: Array<Department>;
+  getPopularTags: Array<Tag>;
+  getQuestion: Question;
   getSchoolCourses: Array<Course>;
   getSchoolDepartments: Array<Department>;
   getSchoolFaculties: Array<Faculty>;
   getSchools: Array<School>;
+  getUser: UserPublic;
   getUserCourseRequests?: Maybe<Array<CourseRequest>>;
   getUserDepartmentRequests?: Maybe<Array<DepartmentRequest>>;
   getUserFacultyRequests?: Maybe<Array<FacultyRequest>>;
   getUserSchoolRequests?: Maybe<Array<SchoolRequest>>;
   getUserSchoolVerificationRequests?: Maybe<Array<SchoolVerificationRequest>>;
   myProfile: User;
-  refreshToken: AccessToken;
+  questionFeed: QuestionFeed;
+};
+
+
+export type QueryGetAnswerArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -824,6 +1113,16 @@ export type QueryGetDepartmentCoursesArgs = {
 
 export type QueryGetFacultyDepartmentsArgs = {
   facultyId: Scalars['ID'];
+};
+
+
+export type QueryGetPopularTagsArgs = {
+  total: Scalars['Int'];
+};
+
+
+export type QueryGetQuestionArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -842,8 +1141,60 @@ export type QueryGetSchoolFacultiesArgs = {
 };
 
 
-export type QueryRefreshTokenArgs = {
-  data: RefreshTokenInput;
+export type QueryGetUserArgs = {
+  data: GetUserInput;
+};
+
+
+export type QueryQuestionFeedArgs = {
+  filters: QuestionFilters;
+};
+
+export type Question = {
+  __typename?: 'Question';
+  answerRequests?: Maybe<Array<AnswerRequest>>;
+  answers?: Maybe<Array<Maybe<Answer>>>;
+  content?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['Date']>;
+  id?: Maybe<Scalars['ID']>;
+  questionTags?: Maybe<Array<Maybe<QuestionTag>>>;
+  reports?: Maybe<Array<Report>>;
+  school?: Maybe<School>;
+  schoolId?: Maybe<Scalars['ID']>;
+  updatedAt?: Maybe<Scalars['Date']>;
+  user?: Maybe<User>;
+  userId?: Maybe<Scalars['ID']>;
+  whoCanAnswer?: Maybe<WhoCanAnswer>;
+};
+
+export type QuestionFeed = {
+  __typename?: 'QuestionFeed';
+  cursor?: Maybe<Scalars['String']>;
+  questions: Array<Question>;
+};
+
+export type QuestionFilters = {
+  after?: InputMaybe<Scalars['String']>;
+  schoolId?: InputMaybe<Scalars['ID']>;
+  status?: InputMaybe<QuestionStatus>;
+  whoCanAnswer?: InputMaybe<WhoCanAnswer>;
+};
+
+export enum QuestionStatus {
+  All = 'ALL',
+  Answered = 'ANSWERED',
+  Unanswered = 'UNANSWERED'
+}
+
+export type QuestionTag = {
+  __typename?: 'QuestionTag';
+  createdAt?: Maybe<Scalars['Date']>;
+  id?: Maybe<Scalars['ID']>;
+  question?: Maybe<Question>;
+  questionId?: Maybe<Scalars['ID']>;
+  tag?: Maybe<Tag>;
+  tagId?: Maybe<Scalars['ID']>;
+  updatedAt?: Maybe<Scalars['Date']>;
 };
 
 export type RefreshTokenInput = {
@@ -854,6 +1205,70 @@ export type RemoveAdminMutationResponse = MutationResponse & {
   __typename?: 'RemoveAdminMutationResponse';
   code: Scalars['String'];
   message: Scalars['String'];
+  success: Scalars['Boolean'];
+};
+
+export type Reply = {
+  __typename?: 'Reply';
+  comment?: Maybe<Comment>;
+  commentId?: Maybe<Scalars['ID']>;
+  content?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['Date']>;
+  helpful?: Maybe<Array<Maybe<Helpful>>>;
+  id?: Maybe<Scalars['ID']>;
+  updatedAt?: Maybe<Scalars['Date']>;
+  user?: Maybe<User>;
+  userId?: Maybe<Scalars['ID']>;
+};
+
+export type ReplyCommentInput = {
+  commentId: Scalars['ID'];
+  content: Scalars['String'];
+};
+
+export type ReplyCommentMutationResponse = MutationResponse & {
+  __typename?: 'ReplyCommentMutationResponse';
+  code: Scalars['String'];
+  message: Scalars['String'];
+  reply?: Maybe<Reply>;
+  success: Scalars['Boolean'];
+};
+
+export type Report = {
+  __typename?: 'Report';
+  createdAt?: Maybe<Scalars['Date']>;
+  id?: Maybe<Scalars['ID']>;
+  question?: Maybe<Question>;
+  questionId?: Maybe<Scalars['ID']>;
+  reason?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['Date']>;
+  user?: Maybe<User>;
+  userId?: Maybe<Scalars['ID']>;
+};
+
+export type ReportQuestionInput = {
+  questionId: Scalars['ID'];
+  reason: Scalars['String'];
+};
+
+export type ReportQuestionMutationResponse = MutationResponse & {
+  __typename?: 'ReportQuestionMutationResponse';
+  code: Scalars['String'];
+  message: Scalars['String'];
+  report?: Maybe<Report>;
+  success: Scalars['Boolean'];
+};
+
+export type RequestAnswerInput = {
+  questionId: Scalars['ID'];
+  request: Scalars['Boolean'];
+};
+
+export type RequestAnswerMutationResponse = MutationResponse & {
+  __typename?: 'RequestAnswerMutationResponse';
+  code: Scalars['String'];
+  message: Scalars['String'];
+  question: Question;
   success: Scalars['Boolean'];
 };
 
@@ -875,6 +1290,23 @@ export type ResetPasswordMutationResponse = MutationResponse & {
   success: Scalars['Boolean'];
 };
 
+export type Review = {
+  __typename?: 'Review';
+  comments?: Maybe<Array<Maybe<Comment>>>;
+  content?: Maybe<Scalars['String']>;
+  course?: Maybe<Course>;
+  courseId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['Date']>;
+  helpful?: Maybe<Array<Maybe<Helpful>>>;
+  id?: Maybe<Scalars['ID']>;
+  rating?: Maybe<Scalars['Int']>;
+  school?: Maybe<School>;
+  schoolId?: Maybe<Scalars['Int']>;
+  updatedAt?: Maybe<Scalars['Date']>;
+  user?: Maybe<User>;
+  userId?: Maybe<Scalars['ID']>;
+};
+
 export type School = {
   __typename?: 'School';
   createdAt?: Maybe<Scalars['Date']>;
@@ -885,8 +1317,23 @@ export type School = {
   lat?: Maybe<Scalars['Float']>;
   lng?: Maybe<Scalars['Float']>;
   name?: Maybe<Scalars['String']>;
+  published?: Maybe<Scalars['Boolean']>;
   updatedAt?: Maybe<Scalars['Date']>;
   websiteURL?: Maybe<Scalars['String']>;
+};
+
+export type SchoolEmailVerificationRequest = {
+  __typename?: 'SchoolEmailVerificationRequest';
+  createdAt?: Maybe<Scalars['Date']>;
+  email?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['ID']>;
+  school?: Maybe<School>;
+  schoolId?: Maybe<Scalars['ID']>;
+  status?: Maybe<RequestStatus>;
+  updatedAt?: Maybe<Scalars['Date']>;
+  user?: Maybe<User>;
+  userId?: Maybe<Scalars['ID']>;
+  verificationHash?: Maybe<Scalars['String']>;
 };
 
 export enum SchoolProofType {
@@ -925,6 +1372,14 @@ export type SchoolVerificationRequest = {
   user?: Maybe<User>;
 };
 
+export type SchoolVerificationRequestMutationResponse = MutationResponse & {
+  __typename?: 'SchoolVerificationRequestMutationResponse';
+  code: Scalars['String'];
+  message: Scalars['String'];
+  schoolVerificationRequest?: Maybe<SchoolVerificationRequest>;
+  success: Scalars['Boolean'];
+};
+
 export type SendInviteInput = {
   email: Scalars['String'];
   role: AdminRole;
@@ -959,6 +1414,8 @@ export type Subscriber = {
 
 export type Subscription = {
   __typename?: 'Subscription';
+  answerHelpful: Answer;
+  answerRequested: Question;
   courseRequestCreated?: Maybe<CourseRequest>;
   courseRequestDeleted?: Maybe<CourseRequest>;
   departmentRequestCreated?: Maybe<DepartmentRequest>;
@@ -968,6 +1425,16 @@ export type Subscription = {
   profileUpdated?: Maybe<User>;
   schoolRequestCreated?: Maybe<SchoolRequest>;
   schoolRequestDeleted?: Maybe<SchoolRequest>;
+};
+
+
+export type SubscriptionAnswerHelpfulArgs = {
+  answerId: Scalars['ID'];
+};
+
+
+export type SubscriptionAnswerRequestedArgs = {
+  questionId: Scalars['ID'];
 };
 
 
@@ -1013,6 +1480,15 @@ export type SubscriptionSchoolRequestCreatedArgs = {
 
 export type SubscriptionSchoolRequestDeletedArgs = {
   userId: Scalars['ID'];
+};
+
+export type Tag = {
+  __typename?: 'Tag';
+  createdAt?: Maybe<Scalars['Date']>;
+  id?: Maybe<Scalars['ID']>;
+  questionTags?: Maybe<Array<Maybe<QuestionTag>>>;
+  title?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['Date']>;
 };
 
 export type Token = {
@@ -1076,28 +1552,37 @@ export type UpdatePreferenceMutationResponse = MutationResponse & {
 
 export type UpdateProfileInput = {
   bio?: InputMaybe<Scalars['String']>;
-  firstName?: InputMaybe<Scalars['String']>;
-  lastName?: InputMaybe<Scalars['String']>;
+  fullName?: InputMaybe<Scalars['String']>;
   profileImage?: InputMaybe<Scalars['Upload']>;
-  status?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
 };
 
 export type User = {
   __typename?: 'User';
+  answers?: Maybe<Array<Answer>>;
   bio?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['Date']>;
   department?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
   faculty?: Maybe<Scalars['String']>;
-  firstName?: Maybe<Scalars['String']>;
+  fullName?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['ID']>;
-  lastName?: Maybe<Scalars['String']>;
   profileImage?: Maybe<Scalars['String']>;
+  school?: Maybe<School>;
+  schoolId?: Maybe<Scalars['ID']>;
+  schoolVerified?: Maybe<Scalars['Boolean']>;
   status?: Maybe<Scalars['String']>;
   university?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['Date']>;
   userPreference?: Maybe<Preference>;
   username?: Maybe<Scalars['String']>;
+};
+
+export type UserMutationMessageResponse = MutationResponse & {
+  __typename?: 'UserMutationMessageResponse';
+  code: Scalars['String'];
+  message: Scalars['String'];
+  success: Scalars['Boolean'];
 };
 
 export type UserMutationResponse = MutationResponse & {
@@ -1107,6 +1592,31 @@ export type UserMutationResponse = MutationResponse & {
   success: Scalars['Boolean'];
   user?: Maybe<User>;
 };
+
+export type UserPublic = {
+  __typename?: 'UserPublic';
+  answers?: Maybe<Array<Answer>>;
+  bio?: Maybe<Scalars['String']>;
+  comments?: Maybe<Array<Comment>>;
+  createdAt?: Maybe<Scalars['Date']>;
+  followers?: Maybe<Array<Follower>>;
+  followings?: Maybe<Array<Follower>>;
+  fullName?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['ID']>;
+  profileImage?: Maybe<Scalars['String']>;
+  questions?: Maybe<Array<Question>>;
+  reviews?: Maybe<Array<Review>>;
+  school?: Maybe<School>;
+  schoolVerified?: Maybe<Scalars['Boolean']>;
+  status?: Maybe<Scalars['String']>;
+  username?: Maybe<Scalars['String']>;
+};
+
+export enum WhoCanAnswer {
+  Everyone = 'EVERYONE',
+  Students = 'STUDENTS',
+  StudentsOfAParticularSchool = 'STUDENTS_OF_A_PARTICULAR_SCHOOL'
+}
 
 export type AdminLoginMutationVariables = Exact<{
   data: AdminLoginInput;
@@ -1120,7 +1630,7 @@ export type CreateSchoolMutationVariables = Exact<{
 }>;
 
 
-export type CreateSchoolMutation = { __typename?: 'Mutation', createSchool: { __typename?: 'CreateSchoolMutationResponse', message: string, success: boolean, code: string, school?: { __typename?: 'School', id?: string | null, name?: string | null, emailSuffix?: string | null, websiteURL?: string | null, lat?: number | null, lng?: number | null, updatedAt?: any | null, createdAt?: any | null } | null } };
+export type CreateSchoolMutation = { __typename?: 'Mutation', createSchool: { __typename?: 'CreateSchoolMutationResponse', message: string, success: boolean, code: string, school?: { __typename?: 'School', id?: string | null, name?: string | null, emailSuffix?: string | null, websiteURL?: string | null, published?: boolean | null, lat?: number | null, lng?: number | null, updatedAt?: any | null, createdAt?: any | null } | null } };
 
 export type CreateFacultyMutationVariables = Exact<{
   data: CreateFacultyInput;
@@ -1183,7 +1693,7 @@ export type EditSchoolMutationVariables = Exact<{
 }>;
 
 
-export type EditSchoolMutation = { __typename?: 'Mutation', editSchool: { __typename?: 'School', id?: string | null, name?: string | null, fullAddress?: string | null, lat?: number | null, lng?: number | null, websiteURL?: string | null, emailSuffix?: string | null, updatedAt?: any | null, createdAt?: any | null } };
+export type EditSchoolMutation = { __typename?: 'Mutation', editSchool: { __typename?: 'School', id?: string | null, name?: string | null, fullAddress?: string | null, lat?: number | null, lng?: number | null, published?: boolean | null, websiteURL?: string | null, emailSuffix?: string | null, updatedAt?: any | null, createdAt?: any | null } };
 
 export type EditFacultyMutationVariables = Exact<{
   data: EditFacultyInput;
@@ -1244,7 +1754,7 @@ export type AcceptRejectSchoolVerificationRequestMutation = { __typename?: 'Muta
 export type GetSchoolsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetSchoolsQuery = { __typename?: 'Query', getSchools: Array<{ __typename?: 'School', id?: string | null, name?: string | null, fullAddress?: string | null, lat?: number | null, lng?: number | null, websiteURL?: string | null, emailSuffix?: string | null, updatedAt?: any | null, createdAt?: any | null }> };
+export type GetSchoolsQuery = { __typename?: 'Query', getSchools: Array<{ __typename?: 'School', id?: string | null, name?: string | null, fullAddress?: string | null, lat?: number | null, lng?: number | null, websiteURL?: string | null, emailSuffix?: string | null, published?: boolean | null, updatedAt?: any | null, createdAt?: any | null }> };
 
 export type GetSchoolFacultiesQueryVariables = Exact<{
   schoolId: Scalars['ID'];
@@ -1353,6 +1863,7 @@ export const CreateSchoolDocument = gql`
       name
       emailSuffix
       websiteURL
+      published
       lat
       lng
       updatedAt
@@ -1698,6 +2209,7 @@ export const EditSchoolDocument = gql`
     fullAddress
     lat
     lng
+    published
     websiteURL
     emailSuffix
     updatedAt
@@ -2055,8 +2567,10 @@ export const GetSchoolsDocument = gql`
     lng
     websiteURL
     emailSuffix
+    published
     updatedAt
     createdAt
+    published
   }
 }
     `;

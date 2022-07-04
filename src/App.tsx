@@ -34,7 +34,6 @@ export default function App() {
 
   const colorMode = React.useMemo(
     () => ({
-      // The dark mode switch would invoke this method
       toggleColorMode: () => {
         setMode((prevMode: PaletteMode) =>
           prevMode === 'light' ? 'dark' : 'light'

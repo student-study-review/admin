@@ -13,7 +13,6 @@ import { useForm } from 'react-hook-form';
 import SelectInput, { StyledOption } from '../components/SelectInput';
 import { AdminRole, useSendInviteMutation } from '../graphql/graphql';
 import MuiAlert from '@mui/material/Alert';
-// import isEmail from 'validator/lib/isEmail';
 
 function NewAdmin() {
   const [sendInvite, { loading }] = useSendInviteMutation();

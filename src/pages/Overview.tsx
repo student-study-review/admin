@@ -6,7 +6,6 @@ import {
   Grid,
   Select,
   Stack,
-  Tooltip,
   Typography,
 } from '@mui/material';
 import React from 'react';
@@ -33,7 +32,6 @@ import {
   Legend,
   Tooltip as CTooltip,
 } from 'recharts';
-import { useForm } from 'react-hook-form';
 
 const data = [
   {
@@ -105,16 +103,6 @@ function Overview() {
     useGetAdminSchoolVerificationRequestsQuery();
 
   const theme = useTheme();
-
-  console.log(verificationData, 'verificationData!!!');
-
-  const {
-    register,
-    handleSubmit,
-    control,
-    reset,
-    formState: {},
-  } = useForm();
 
   return (
     <Grid container spacing={2}>
@@ -202,7 +190,6 @@ function Overview() {
         >
           <Box
             sx={{
-              
               background: (t) =>
                 //@ts-ignore
                 theme.palette?.mode === 'dark'
@@ -460,54 +447,54 @@ function Overview() {
         }}
       >
         <UserDropDown />
-        <Stack direction="column" justifyContent="space-between" height="92%" >
+        <Stack direction="column" justifyContent="space-between" height="92%">
           <Box>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              paddingTop: '2rem',
-            }}
-          >
-            <Typography
+            <Box
               sx={{
-                color: (t) => t.palette.text.secondary,
-                fontWeight: 700,
-                fontSize: '20px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                paddingTop: '2rem',
               }}
             >
-              Pending Verifications
-            </Typography>
-            <Button sx={{ textTransform: 'none' }}>See all</Button>
-          </Box>
-
-          <Box
-            sx={{
-              maxHeight: '35vh',
-              // minHeight: '35vh',
-              overflowY: 'scroll',
-              marginTop: '1rem',
-            }}
-          >
-            {verificationDataLoading ? (
-              <Box
+              <Typography
                 sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                  color: (t) => t.palette.text.secondary,
+                  fontWeight: 700,
+                  fontSize: '20px',
                 }}
               >
-                <CircularProgress />
-              </Box>
-            ) : (
-              verificationData?.getAdminSchoolVerificationRequests?.map(
-                (request) => {
-                  return <VerificationBox verificationRequest={request}  />;
-                }
-              )
-            )}
-          </Box>
+                Pending Verifications
+              </Typography>
+              <Button sx={{ textTransform: 'none' }}>See all</Button>
+            </Box>
+
+            <Box
+              sx={{
+                maxHeight: '35vh',
+                // minHeight: '35vh',
+                overflowY: 'scroll',
+                marginTop: '1rem',
+              }}
+            >
+              {verificationDataLoading ? (
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <CircularProgress />
+                </Box>
+              ) : (
+                verificationData?.getAdminSchoolVerificationRequests?.map(
+                  (request) => {
+                    return <VerificationBox verificationRequest={request} />;
+                  }
+                )
+              )}
+            </Box>
           </Box>
           <Box sx={{ width: '100%', overflowX: 'hidden', paddingTop: '2rem' }}>
             <DateRangePicker

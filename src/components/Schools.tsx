@@ -20,9 +20,12 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Backdrop from '@mui/material/Backdrop';
 import { useTheme } from '@emotion/react';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 import { useGetSchoolsQuery } from '../graphql/graphql';
 import { useForm } from 'react-hook-form';
+import SelectInput, { StyledOption } from '../components/SelectInput';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 function Row(props: { school: School }) {
   const [editSchool, { loading }] = useEditSchoolMutation();
@@ -39,6 +42,7 @@ function Row(props: { school: School }) {
       name: school.name,
       fullAddress: school.fullAddress,
       emailSuffix: school.emailSuffix,
+      published: school.published ? 'Yes' : 'No',
     },
   });
 
@@ -92,6 +96,22 @@ function Row(props: { school: School }) {
             }}
           >
             {school.emailSuffix}
+          </Typography>
+        </TableCell>
+        <TableCell sx={{ borderBottom: '0px' }}>
+          <Typography
+            sx={{
+              color: (t) => t.palette.text.disabled,
+              fontSize: '13px',
+              fontWeight: '400',
+              textAlign: 'center',
+            }}
+          >
+            {school.published ? (
+              <CheckCircleIcon color="success" />
+            ) : (
+              <HighlightOffIcon color="error" />
+            )}
           </Typography>
         </TableCell>
 
@@ -170,9 +190,14 @@ function Row(props: { school: School }) {
               onSubmit={handleSubmit(async (data) => {
                 await editSchool({
                   variables: {
-                    data: { ...data, id: school.id as string },
+                    data: {
+                      ...data,
+                      published: data.published.includes('Yes') ? true : false,
+                      id: school.id as string,
+                    },
                   },
                 });
+
                 handleClose();
               })}
             >
@@ -305,6 +330,35 @@ function Row(props: { school: School }) {
               </FormControl>
               <FormControl
                 sx={{
+                  my: 1,
+                  mb: 3,
+                  width: '100%',
+                }}
+                variant="outlined"
+                size="small"
+              >
+                <FormLabel
+                  sx={{
+                    fontSize: '14px',
+                    fontWeight: '500',
+                    color: (t) => t.palette.text.secondary,
+                  }}
+                >
+                  Published
+                </FormLabel>
+                <SelectInput name="published" control={control}>
+                  {[
+                    { id: '1', name: 'Yes' },
+                    { id: '2', name: 'No' },
+                  ].map((admin) => (
+                    <StyledOption value={admin.name} key={admin.id}>
+                      {admin.name}
+                    </StyledOption>
+                  ))}
+                </SelectInput>
+              </FormControl>
+              <FormControl
+                sx={{
                   mb: 3,
                   width: '100%',
                   display: 'flex',
@@ -411,6 +465,16 @@ const Schools = () => {
                 >
                   Email Suffix
                 </TableCell>
+                <TableCell
+                  sx={{
+                    color: (t) => t.palette.text.disabled,
+                    fontWeight: '500',
+                    fontSize: '14px',
+                  }}
+                >
+                  Published
+                </TableCell>
+
                 <TableCell align="right">
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </TableCell>

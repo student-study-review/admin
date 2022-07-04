@@ -20,6 +20,7 @@ mutation CreateSchool($data: CreateSchoolInput!) {
       name
       emailSuffix
       websiteURL
+      published
       lat
       lng
       updatedAt
@@ -122,6 +123,7 @@ mutation EditSchool($data: EditSchoolInput!) {
     fullAddress
     lat
     lng
+    published 
     websiteURL
     emailSuffix
     updatedAt

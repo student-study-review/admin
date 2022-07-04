@@ -69,15 +69,7 @@ function Row(props: { school: School }) {
 }
 
 export default function CollapsibleTable() {
-  // const { data, loading } = useGetSchoolsQuery();
-
   const [value, setValue] = React.useState(0);
-
-  // console.log(data?.getSchools);
-
-  // if (loading) {
-  //   return <p>Loading...</p>;
-  // }
 
   return (
     <>
@@ -143,28 +135,6 @@ export default function CollapsibleTable() {
       ) : (
         <Courses />
       )}
-
-      {/* <TableContainer component={Paper} sx={{ marginTop: '1.5rem' }}>
-        <Table aria-label="collapsible table">
-          <TableHead>
-            <TableRow>
-              <TableCell> School Name </TableCell>
-              <TableCell>Website URL</TableCell>
-              <TableCell> Full Address </TableCell>
-              <TableCell> Email Suffix </TableCell>
-              <TableCell align="right">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.getSchools.map((school) => (
-              <Row key={school.id} school={school} />
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-       */}
     </>
   );
 }

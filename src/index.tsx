@@ -34,11 +34,11 @@ const authLink = setContext((_, { headers }) => {
 });
 
 const httpLink = createUploadLink({
-  uri: 'https://api.universitesi.io/graphql',
+  uri: 'http://localhost:8080/graphql',
 });
 
 const client = new ApolloClient({
-  uri: 'https://api.universitesi.io/graphql',
+  uri: 'http://localhost:8080/graphql',
   cache: new InMemoryCache(),
   link: authLink.concat(httpLink),
 });
