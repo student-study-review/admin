@@ -74,52 +74,9 @@ const Login = () => {
           direction="column"
           alignItems="center"
           justifyContent="center"
-          // sx={{ padding: '1rem' }}
         >
-          <svg
-            width="50"
-            height="49"
-            viewBox="0 0 50 49"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <circle
-              cx="24.6776"
-              cy="25.4671"
-              r="22.2434"
-              fill="url(#paint0_linear_5338_3692)"
-            />
-            <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M5.01318 19.7524L24.6777 9.02637L44.3421 19.7524V34.0539H40.7668V21.701L37.1914 23.6496V34.3757L24.6777 41.2046L12.1639 34.3757V23.6496L5.01318 19.7524ZM26.2895 25.5234L36.8696 19.7524L26.2895 13.9814V11.4142L24.3553 10.3158V13.2781L12.4857 19.7524L24.3553 26.2268V30.3025L15.7393 25.5982V32.2483L24.3553 36.9527V39.9737L26.2895 38.8752V36.2486L33.6161 32.2483V25.5982L26.2895 29.5985V25.5234ZM26.2895 29.5985L24.6777 30.4785L24.3553 30.3025V36.9527L24.6777 37.1287L26.2895 36.2486V29.5985ZM26.2895 25.5234V13.9814L24.6777 13.1023L24.3553 13.2781V26.2268L24.6777 26.4026L26.2895 25.5234Z"
-              fill="white"
-            />
-            <defs>
-              <linearGradient
-                id="paint0_linear_5338_3692"
-                x1="24.6776"
-                y1="3.22363"
-                x2="24.6776"
-                y2="47.7105"
-                gradientUnits="userSpaceOnUse"
-              >
-                <stop stop-color="#0077FF" />
-                <stop offset="1" stop-color="#082CF5" />
-              </linearGradient>
-            </defs>
-          </svg>
-          <Typography
-            sx={{
-              fontWeight: 600,
-              fontSize: '24px',
-              lineHeight: '36px',
-              color: '#0077FF',
-            }}
-          >
-            {' '}
-            Üniversitesi{' '}
-          </Typography>
+          <img width="200" src="https://blog.scoutlage.com/content/images/2022/07/scoutlage_data.png" alt="logo" />
+          
         </Stack>
         <Box>
           <Typography
