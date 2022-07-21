@@ -33,15 +33,23 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
+export const API_URL = `${
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:8080'
+    : 'https://api.scoutlage.com'
+}/graphql`;
+
 const httpLink = createUploadLink({
-  uri: 'https://api.scoutlage.com/graphql',
+  uri: API_URL,
 });
 
 const client = new ApolloClient({
-  uri: 'https://api.scoutlage.com/graphql',
+  uri: API_URL,
   cache: new InMemoryCache(),
   link: authLink.concat(httpLink),
 });
+
+console.log(API_URL, 'API_URL');
 
 ReactDOM.render(
   <BrowserRouter>
